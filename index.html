@@ -1559,6 +1559,49 @@
             text-align: center;
         }
 
+        .auth-telegram-help {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(45, 212, 191, 0.16);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .auth-tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: rgba(45, 212, 191, 0.12);
+            border: 1px solid rgba(45, 212, 191, 0.32);
+            color: var(--turquoise);
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.2s var(--ease-ui);
+        }
+
+        .auth-tg-link:hover {
+            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
+            color: #031714;
+            border-color: #99f6e4;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+        }
+
+        .auth-tg-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
         .auth-loading {
             display: none;
             position: fixed;
@@ -1622,6 +1665,15 @@
 
             <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Кириш</button>
             <div id="authError" class="auth-error" role="alert" aria-live="polite"></div>
+            <div class="auth-telegram-help">
+                <span>Login va parol kerak bo'lsa, yozing:</span>
+                <a href="https://t.me/shadowing_studio_bot" target="_blank" rel="noopener noreferrer" class="auth-tg-link" title="@shadowing_studio_bot">
+                    <svg class="auth-tg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21.94 3.47a1.5 1.5 0 0 0-1.62-.24L2.88 10.38a1.5 1.5 0 0 0 .1 2.8l4.42 1.44 1.67 5.24a1.5 1.5 0 0 0 2.55.56l2.46-2.55 4.24 3.12a1.5 1.5 0 0 0 2.38-.9l2.42-14.9a1.5 1.5 0 0 0-1.23-1.47zM9.45 14.33l8.68-7.79-6.64 9.18-.24 2.75-1.14-3.58-2.97-.97 2.31-3.17z"/>
+                    </svg>
+                    <span>@shadowing_studio_bot</span>
+                </a>
+            </div>
         </form>
     </div>
 
