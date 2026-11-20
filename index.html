@@ -1,0 +1,3407 @@
+<!DOCTYPE html>
+<html lang="uz" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Qur'on tilovati</title>
+    <!-- Islomiy xattotlik (Amiri) va zamonaviy interfeys (Plus Jakarta Sans) shriftlari -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- 1. 604 sahifa koordinatalari bazasi -->
+    <script src="overlays_data.js"></script>
+    <!-- 2. Oyatlar tarjimasi bazasi (translation.txt) -->
+    <script src="translation.js"></script>
+    <!-- 3. Alijon qori: har bir sura uchun bitta audio fayl + oyatlar vaqtlari (ms) -->
+    <script src="Alijon_qori_timings.js"></script>
+
+    <style>
+        /* =========================================================
+           SAMARQAND ZUMRADI — EMERALD, TURQUOISE & GOLD EDITION
+           ========================================================= */
+        :root {
+            --bg-abyss: #051111;
+            --bg-deep: #0a2220;
+            --panel-glass: rgba(9, 28, 27, 0.84);
+            --panel-glass-deep: rgba(5, 17, 17, 0.94);
+            --surface-btn: rgba(20, 56, 53, 0.65);
+            --surface-hover: rgba(29, 78, 74, 0.92);
+
+            --emerald: #10b981;
+            --emerald-bright: #34d399;
+            --turquoise: #2dd4bf;
+            --champagne: #e8c87d;
+            --champagne-soft: rgba(232, 200, 125, 0.25);
+
+            --border-glass: rgba(45, 212, 191, 0.22);
+            --emerald-glow: rgba(16, 185, 129, 0.38);
+
+            --text-main: #f0fdfa;
+            --text-muted: #94b8b3;
+            --ease-ui: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-abyss);
+            /* Chuqur zumrad-firuza fon va nozik Samarqand yulduzcha naqshi */
+            background-image:
+                radial-gradient(ellipse at 50% 30%, rgba(16, 185, 129, 0.16) 0%, rgba(10, 42, 40, 0.55) 45%, rgba(4, 15, 15, 0.98) 100%),
+                radial-gradient(circle at 85% 15%, rgba(232, 200, 125, 0.08) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='76' height='76' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232dd4bf' stroke-width='0.55' stroke-opacity='0.10'%3E%3Cpath d='M32 0L40 13.5L53.5 10.5L50.5 24L64 32L50.5 40L53.5 53.5L40 50.5L32 64L24 50.5L10.5 53.5L13.5 40L0 32L13.5 24L10.5 10.5L24 13.5Z'/%3E%3Ccircle cx='32' cy='32' r='10' stroke='%23e8c87d' stroke-opacity='0.09'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            text-align: center;
+            padding-top: 70px;
+            padding-bottom: 98px;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+
+        /* === SUZUVCHI KAPSULA PANELLAR (TEPA VA PAST) === */
+        .controls,
+        .player-bar {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(155deg, var(--panel-glass), var(--panel-glass-deep));
+            backdrop-filter: blur(22px) saturate(140%);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            border: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            z-index: 3000;
+            box-shadow:
+                0 18px 42px rgba(0, 8, 8, 0.6),
+                0 0 0 1px rgba(232, 200, 125, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            transition: transform 0.36s var(--ease-ui), opacity 0.28s ease;
+        }
+
+        .controls {
+            top: 12px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            gap: 7px;
+            max-width: 96vw;
+        }
+
+        .player-bar {
+            bottom: 14px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            gap: 9px;
+            white-space: nowrap;
+            max-width: 97vw;
+            overflow-x: auto;
+        }
+
+        .controls.yashirin {
+            transform: translateX(-50%) translateY(-100px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .player-bar.yashirin {
+            transform: translateX(-50%) translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        button,
+        select {
+            background: var(--surface-btn);
+            color: var(--text-main);
+            border: 1px solid rgba(45, 212, 191, 0.16);
+            height: 35px;
+            padding: 0 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s var(--ease-ui);
+            outline: none;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 0 32px 0 14px;
+            background-color: rgba(8, 30, 29, 0.92);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232dd4bf' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 11px center;
+        }
+
+        select option {
+            background-color: #081e1d;
+            color: var(--text-main);
+        }
+
+        button:hover,
+        select:hover {
+            background-color: var(--surface-hover);
+            border-color: rgba(45, 212, 191, 0.5);
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Faol tugmalar — yorqin zumrad va firuza jilosi */
+        button.active,
+        .btn-a.active,
+        .btn-b.active {
+            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
+            color: #031714;
+            border-color: #99f6e4;
+            font-weight: 700;
+            box-shadow: 0 0 16px var(--emerald-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .icon-btn {
+            width: 35px;
+            padding: 0;
+        }
+
+        /* Markaziy Play/Pause tugmasi — Zumrad-oltin uyg'unligi */
+        .play-main-btn {
+            background: linear-gradient(135deg, #5eead4 0%, var(--emerald) 65%, #059669 100%);
+            color: #021a15;
+            border-color: #99f6e4;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 14px;
+            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+        }
+
+        .play-main-btn:hover {
+            background: linear-gradient(135deg, #99f6e4 0%, #34d399 100%);
+            color: #021a15;
+            transform: scale(1.07);
+            box-shadow: 0 6px 22px rgba(45, 212, 191, 0.55);
+        }
+
+        .svg-icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .svg-fill {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            stroke: none;
+            flex-shrink: 0;
+        }
+
+        input[type=number] {
+            width: 52px;
+            height: 35px;
+            border-radius: 999px;
+            border: 1px solid var(--border-glass);
+            background: rgba(4, 15, 15, 0.85);
+            color: var(--champagne);
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 13.5px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -moz-appearance: textfield;
+        }
+
+        input[type=number]:focus {
+            border-color: var(--turquoise);
+            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.2);
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .repeat-group {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(4, 15, 15, 0.72);
+            border: 1px solid var(--border-glass);
+            border-radius: 999px;
+            padding: 2px;
+            gap: 3px;
+        }
+
+        .repeat-group button {
+            border: none;
+            height: 31px;
+            width: 33px;
+            transform: none;
+        }
+
+        #inputRepeatNumber {
+            width: 34px;
+            height: 31px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(16, 48, 46, 0.85);
+            color: var(--champagne);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 0 2px;
+        }
+
+        #inputRepeatNumber:focus {
+            background: #13403d;
+            box-shadow: inset 0 0 0 1px var(--turquoise);
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(45, 212, 191, 0.2);
+            height: 4px;
+            border-radius: 99px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        input[type=range]:hover {
+            background: rgba(45, 212, 191, 0.35);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5eead4, var(--emerald));
+            border: 1.5px solid #f0fdfa;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+            transition: transform 0.15s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+
+        #progress {
+            width: 135px;
+        }
+
+        #volume {
+            width: 56px;
+        }
+
+        .time-label {
+            font-size: 11.5px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-muted);
+            min-width: 32px;
+        }
+
+        .divider {
+            width: 1px;
+            height: 22px;
+            background: linear-gradient(to bottom, transparent, rgba(45, 212, 191, 0.35), transparent);
+            margin: 0 2px;
+        }
+
+        .audio-status {
+            font-size: 11.5px;
+            color: var(--champagne);
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(232, 200, 125, 0.12);
+            border: 1px solid rgba(232, 200, 125, 0.3);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .audio-status:empty {
+            display: none;
+        }
+
+        #muteBtn {
+            background: transparent;
+            border-color: transparent;
+            width: 30px;
+            padding: 0;
+            color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        #muteBtn:hover {
+            background: rgba(45, 212, 191, 0.14);
+            color: var(--turquoise);
+            transform: none;
+        }
+
+        /* === KITOB KONTEYNERI === */
+        .viewer {
+            margin-top: 8px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: 0 45px;
+        }
+
+        .book-wrapper {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            align-items: stretch;
+            position: relative;
+            transition: box-shadow 0.35s ease, padding 0.35s ease, border-radius 0.35s ease;
+        }
+
+        /* 1. IKKI SAHIFALI REJIM — ZUMRAD CHARM MUQOVALI MUSHAF */
+        .book-wrapper.two-page {
+            background: #fdfcf7;
+            border-radius: 10px;
+            border: 1.5px solid #ebe5d5;
+            box-shadow:
+                -4px 1px 0 #ede7d8,
+                4px 1px 0 #ede7d8,
+                -8px 2px 0 #ddd5c2,
+                8px 2px 0 #ddd5c2,
+                0 3px 0 13px #0a2b25,
+                0 3px 0 14.5px #d4b26a,
+                0 32px 70px -10px rgba(0, 6, 6, 0.85),
+                0 0 80px rgba(16, 185, 129, 0.12);
+        }
+
+        .book-wrapper.two-page::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 34px;
+            background: linear-gradient(90deg,
+                    rgba(10, 30, 26, 0) 0%,
+                    rgba(10, 30, 26, 0.14) 38%,
+                    rgba(5, 18, 16, 0.34) 50%,
+                    rgba(10, 30, 26, 0.14) 62%,
+                    rgba(10, 30, 26, 0) 100%);
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        /* Zumrad va oltin xatcho'p tasmasi */
+        .book-wrapper.two-page::before {
+            content: "۞";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 6px;
+            font-size: 11px;
+            background: linear-gradient(180deg, #10b981 0%, #065f46 100%);
+            color: #fef3c7;
+            border-left: 1px solid #e8c87d;
+            border-right: 1px solid #e8c87d;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .book-wrapper.two-page .quran-page-container {
+            width: 500px;
+            max-width: 45vw;
+            margin: 0;
+            padding: 4px;
+            border-radius: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .book-wrapper.two-page #rightPageContainer {
+            border-left: 1px solid #c9c3b4;
+            box-shadow: inset 24px 0 32px -16px rgba(10, 35, 30, 0.22);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .book-wrapper.two-page #leftPageContainer {
+            box-shadow: inset -24px 0 32px -16px rgba(10, 35, 30, 0.22);
+            border-radius: 8px 0 0 8px;
+        }
+
+        /* 2. BIR SAHIFALI REJIM — MARVARID VA FIRUZA YOG'DUSI */
+        .book-wrapper.single-page {
+            border-radius: 18px;
+            border: 1.5px solid rgba(45, 212, 191, 0.45);
+            box-shadow:
+                0 30px 70px -10px rgba(0, 8, 8, 0.85),
+                0 0 90px rgba(16, 185, 129, 0.16);
+        }
+
+        .book-wrapper.single-page::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: 16%;
+            right: 16%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--turquoise), var(--champagne), var(--turquoise), transparent);
+            border-radius: 3px;
+            box-shadow: 0 0 14px rgba(45, 212, 191, 0.7);
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .book-wrapper.single-page::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 16%;
+            right: 16%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--champagne), var(--turquoise), var(--champagne), transparent);
+            border-radius: 3px;
+            box-shadow: 0 0 12px rgba(232, 200, 125, 0.5);
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .book-wrapper.single-page .quran-page-container {
+            width: 630px;
+            max-width: 94vw;
+            margin: 0;
+            padding: 10px;
+            border-radius: 17px;
+            background: #fdfcf7;
+            box-shadow: inset 0 0 24px rgba(16, 80, 70, 0.08);
+        }
+
+        .book-wrapper.single-page #leftPageContainer {
+            display: none !important;
+        }
+
+        .quran-page-container {
+            position: relative;
+            background: #fdfcf7;
+            overflow: hidden;
+        }
+
+        .quran-page {
+            position: relative;
+            width: 100%;
+        }
+
+        .page-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            pointer-events: none;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .page-number-footer {
+            display: none !important;
+        }
+
+        /* === 3D VARAQLASH ANIMATSIYASI === */
+        .flip-scene {
+            position: absolute;
+            inset: 0;
+            perspective: 2600px;
+            pointer-events: none;
+            z-index: 60;
+            transform-style: preserve-3d;
+        }
+
+        .flip-underlay {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            background: #fdfcf7;
+            padding: 6px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .flip-underlay.right-side {
+            right: 0;
+            border-radius: 0 8px 8px 0;
+            border-left: 1px solid #c9c3b4;
+            box-shadow: inset 18px 0 26px -14px rgba(10, 35, 30, 0.22);
+        }
+
+        .flip-underlay.left-side {
+            left: 0;
+            border-radius: 8px 0 0 8px;
+            box-shadow: inset -18px 0 26px -14px rgba(10, 35, 30, 0.22);
+        }
+
+        .flip-underlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        .flip-leaf {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transform-style: preserve-3d;
+            z-index: 5;
+            transition: transform 0.68s cubic-bezier(0.645, 0.045, 0.355, 1.000),
+                box-shadow 0.68s ease,
+                opacity 0.68s ease;
+        }
+
+        .flip-leaf.turn-next {
+            left: 0;
+            width: 50%;
+            transform-origin: right center;
+            transform: rotateY(0deg);
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.18);
+        }
+
+        .flip-leaf.turn-next.animate {
+            transform: rotateY(180deg);
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.28);
+        }
+
+        .flip-leaf.turn-prev {
+            right: 0;
+            width: 50%;
+            transform-origin: left center;
+            transform: rotateY(0deg);
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.18);
+        }
+
+        .flip-leaf.turn-prev.animate {
+            transform: rotateY(-180deg);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.28);
+        }
+
+        .flip-leaf.single-next {
+            left: 0;
+            width: 100%;
+            transform-origin: right center;
+            transform: rotateY(0deg);
+            border-radius: 8px;
+        }
+
+        .flip-leaf.single-next.animate {
+            transform: rotateY(110deg);
+            opacity: 0;
+        }
+
+        .flip-leaf.single-prev {
+            left: 0;
+            width: 100%;
+            transform-origin: left center;
+            transform: rotateY(0deg);
+            border-radius: 8px;
+        }
+
+        .flip-leaf.single-prev.animate {
+            transform: rotateY(-110deg);
+            opacity: 0;
+        }
+
+        .flip-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: #fdfcf7;
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .flip-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        .flip-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .flip-leaf.turn-next .flip-face.front {
+            border-radius: 8px 0 0 8px;
+            box-shadow: inset -16px 0 24px -12px rgba(10, 35, 30, 0.24);
+        }
+
+        .flip-leaf.turn-next .flip-face.back {
+            border-radius: 0 8px 8px 0;
+            box-shadow: inset 16px 0 24px -12px rgba(10, 35, 30, 0.24);
+        }
+
+        .flip-leaf.turn-prev .flip-face.front {
+            border-radius: 0 8px 8px 0;
+            box-shadow: inset 16px 0 24px -12px rgba(10, 35, 30, 0.24);
+        }
+
+        .flip-leaf.turn-prev .flip-face.back {
+            border-radius: 8px 0 0 8px;
+            box-shadow: inset -16px 0 24px -12px rgba(10, 35, 30, 0.24);
+        }
+
+        .flip-shade {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(5, 25, 22, 0.04), rgba(5, 25, 22, 0.18));
+            opacity: 0;
+            transition: opacity 0.34s ease;
+            pointer-events: none;
+        }
+
+        .flip-leaf.animate .flip-shade {
+            opacity: 1;
+        }
+
+        /* Chetdagi varaqlash tugmalari */
+        .side-nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--panel-glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: var(--turquoise);
+            border: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 2000;
+            opacity: 0.72;
+            box-shadow: 0 8px 24px rgba(0, 8, 8, 0.5);
+            padding: 0;
+            transition: all 0.22s var(--ease-ui);
+        }
+
+        .side-nav-btn:hover {
+            opacity: 1;
+            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
+            color: #031714;
+            border-color: #99f6e4;
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 10px 26px rgba(16, 185, 129, 0.45);
+        }
+
+        .side-nav-left {
+            left: 16px;
+        }
+
+        .side-nav-right {
+            right: 16px;
+        }
+
+        /* === OYAT QATLAMLARI (ZUMRAD VA FIRUZA BELGILASH) === */
+        .overlaies,
+        .custom-overlaies {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            pointer-events: none;
+            opacity: 0.26 !important;
+            z-index: 10 !important;
+        }
+
+        .overlay {
+            position: absolute !important;
+            display: block !important;
+            background: transparent;
+            cursor: pointer;
+            opacity: 0;
+            z-index: 2;
+            border-radius: 0 !important;
+            border: none !important;
+            outline: none !important;
+            margin: 0 !important;
+            pointer-events: auto;
+            transition: none !important;
+        }
+
+        /* Sichqoncha ustiga kelganda — yumshoq firuza */
+        .overlay.hovered {
+            background: rgb(45, 212, 191) !important;
+            box-shadow: 0 1px 0 0 rgb(45, 212, 191), 0 -1px 0 0 rgb(45, 212, 191) !important;
+            opacity: 1 !important;
+            z-index: 2;
+        }
+
+        /* Belgilangan oyatlar guruhi — chuqur ko'k-firuza */
+        .overlay.range-selected {
+            background: rgb(14, 165, 233) !important;
+            box-shadow: 0 1px 0 0 rgb(14, 165, 233), 0 -1px 0 0 rgb(14, 165, 233) !important;
+            opacity: 1 !important;
+            z-index: 3;
+        }
+
+        /* Hozir o'qilayotgan oyat — yorqin zumrad */
+        .overlay.selected {
+            background: rgb(16, 185, 129) !important;
+            box-shadow: 0 1px 0 0 rgb(16, 185, 129), 0 -1px 0 0 rgb(16, 185, 129) !important;
+            opacity: 1 !important;
+            z-index: 4;
+        }
+
+        /* "🔒 YOPISH" REJIMI */
+        body.memorize-masked .overlaies,
+        body.memorize-masked .custom-overlaies {
+            opacity: 1 !important;
+        }
+
+        body.memorize-masked .overlay:not([data-verse$="-000"]) {
+            background: #fdfcf7 !important;
+            box-shadow: 0 1px 0 1px #fdfcf7, 0 -1px 0 1px #fdfcf7 !important;
+            opacity: 1 !important;
+        }
+
+        body.memorize-masked .overlay.selected,
+        body.memorize-masked .overlay.range-selected,
+        body.memorize-masked .overlay.revealed {
+            background: transparent !important;
+            box-shadow: none !important;
+            opacity: 0 !important;
+            z-index: 4;
+        }
+
+        .separator,
+        .overlay[data-verse$="-000"] {
+            display: none !important;
+            pointer-events: none !important;
+        }
+
+        /* === MODAL OYNA === */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 12, 12, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .modal-content {
+            background: linear-gradient(155deg, rgba(12, 38, 36, 0.98) 0%, rgba(5, 18, 18, 0.99) 100%);
+            border: 1px solid var(--border-glass);
+            padding: 24px 28px;
+            border-radius: 22px;
+            max-width: 480px;
+            width: 92%;
+            text-align: left;
+            box-shadow: 0 28px 64px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-content h3 {
+            margin: 0 0 14px 0;
+            color: var(--turquoise);
+            font-size: 16px;
+            border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 14px;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .shortcut-grid kbd {
+            background: linear-gradient(180deg, #133e3b 0%, #0a2523 100%);
+            color: var(--champagne);
+            padding: 3px 7px;
+            border-radius: 6px;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        html,
+        body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        .yon-panel,
+        #translationContent,
+        .player-bar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(45, 212, 191, 0.3) transparent;
+        }
+
+        .yon-panel::-webkit-scrollbar,
+        #translationContent::-webkit-scrollbar,
+        .player-bar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        .yon-panel::-webkit-scrollbar-track,
+        #translationContent::-webkit-scrollbar-track,
+        .player-bar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .yon-panel::-webkit-scrollbar-thumb,
+        #translationContent::-webkit-scrollbar-thumb,
+        .player-bar::-webkit-scrollbar-thumb {
+            background: rgba(45, 212, 191, 0.3);
+            border-radius: 10px;
+        }
+
+        .yon-panel::-webkit-scrollbar-thumb:hover,
+        #translationContent::-webkit-scrollbar-thumb:hover,
+        .player-bar::-webkit-scrollbar-thumb:hover {
+            background: rgba(45, 212, 191, 0.6);
+        }
+
+        /* === CHAP SUZUVCHI PANEL (SURALAR RO'YXATI) === */
+        .yon-panel {
+            position: fixed;
+            top: 12px;
+            left: -380px;
+            width: 345px;
+            max-width: calc(100vw - 24px);
+            height: calc(100vh - 24px);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.14), transparent 45%),
+                linear-gradient(180deg, rgba(10, 32, 31, 0.96) 0%, rgba(5, 17, 17, 0.98) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            box-shadow: 16px 0 50px rgba(0, 0, 0, 0.65);
+            transition: left 0.36s var(--ease-ui);
+            z-index: 3200;
+            overflow-y: auto;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 24px;
+        }
+
+        .yon-panel.ochiq {
+            left: 12px;
+        }
+
+        .yon-panel-header {
+            padding: 18px 18px 14px 18px;
+            background: rgba(8, 27, 26, 0.96);
+            border-bottom: 1px solid rgba(45, 212, 191, 0.16);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-radius: 22px 22px 0 0;
+        }
+
+        .yon-panel-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--champagne);
+        }
+
+        .surah-search-input {
+            width: 100%;
+            height: 37px;
+            background: rgba(4, 15, 15, 0.85);
+            border: 1px solid rgba(45, 212, 191, 0.24);
+            border-radius: 12px;
+            padding: 0 14px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .surah-search-input::placeholder {
+            color: #6a928d;
+        }
+
+        .surah-search-input:focus {
+            border-color: var(--turquoise);
+            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.18);
+        }
+
+        .yon-panel-yopish {
+            background: rgba(20, 56, 53, 0.6);
+            color: var(--text-muted);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 13px;
+            padding: 0;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yon-panel-yopish:hover {
+            color: #fff;
+            background: #dc2626;
+            border-color: transparent;
+            transform: none;
+        }
+
+        .yon-panel ul {
+            list-style: none;
+            padding: 10px 12px;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .yon-panel li {
+            margin-bottom: 4px;
+        }
+
+        .yon-panel li a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            color: #d5ebe7;
+            text-decoration: none;
+            border-radius: 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.18s ease;
+        }
+
+        .yon-panel li a:hover {
+            background: rgba(45, 212, 191, 0.11);
+            color: #fff;
+        }
+
+        .yon-panel li a.active-surah {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.24) 0%, rgba(232, 200, 125, 0.08) 100%);
+            border-left-color: var(--turquoise);
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+
+        .sura-nomi {
+            font-family: "Amiri", "Plus Jakarta Sans", serif;
+            font-size: 15.5px;
+            line-height: 1.4;
+        }
+
+        .sura-sahifa {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--champagne);
+            background: rgba(4, 15, 15, 0.78);
+            border: 1px solid rgba(232, 200, 125, 0.25);
+            padding: 3px 8px;
+            border-radius: 999px;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        .yon-panel li a.active-surah .sura-sahifa {
+            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
+            color: #031714;
+            border-color: transparent;
+        }
+
+        /* === O'NG SUZUVCHI PANEL (SAHIFA TARJIMASI) === */
+        #translationBox {
+            position: fixed;
+            top: 12px;
+            right: -460px;
+            width: 415px;
+            max-width: calc(100vw - 24px);
+            height: calc(100vh - 24px);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.14), transparent 45%),
+                linear-gradient(180deg, rgba(10, 32, 31, 0.96) 0%, rgba(5, 17, 17, 0.98) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            box-shadow: -16px 0 50px rgba(0, 0, 0, 0.65);
+            transition: right 0.36s var(--ease-ui);
+            z-index: 3200;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        #translationBox.ochiq {
+            right: 12px;
+        }
+
+        .translation-header {
+            padding: 18px 18px 14px 18px;
+            background: rgba(8, 27, 26, 0.96);
+            border-bottom: 1px solid rgba(45, 212, 191, 0.16);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .translation-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--champagne);
+        }
+
+        .translation-tabs {
+            display: flex;
+            background: rgba(4, 15, 15, 0.82);
+            padding: 3px;
+            border-radius: 12px;
+            border: 1px solid rgba(45, 212, 191, 0.18);
+            gap: 4px;
+        }
+
+        .trans-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 600;
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 9px;
+            flex-grow: 1;
+            transition: all 0.18s ease;
+            box-shadow: none;
+        }
+
+        .trans-tab:hover {
+            color: var(--text-main);
+            background: rgba(45, 212, 191, 0.1);
+            transform: none;
+        }
+
+        .trans-tab.active {
+            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
+            color: #031714;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+        }
+
+        #translationContent {
+            padding: 14px 16px 24px 16px;
+            overflow-y: auto;
+            flex-grow: 1;
+            font-size: 14.5px;
+            line-height: 1.75;
+            color: #d8ece9;
+            user-select: text;
+        }
+
+        .trans-page-badge {
+            font-size: 11px;
+            color: var(--champagne);
+            background: rgba(232, 200, 125, 0.14);
+            border: 1px solid rgba(232, 200, 125, 0.32);
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin: 10px 0 8px 0;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .trans-surah-title {
+            font-family: "Amiri", "Plus Jakarta Sans", serif;
+            color: var(--champagne);
+            font-weight: 700;
+            font-size: 16.5px;
+            margin: 12px 0 10px 0;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.14), rgba(232, 200, 125, 0.14), rgba(16, 185, 129, 0.14));
+            border-radius: 12px;
+            border: 1px solid rgba(45, 212, 191, 0.24);
+            text-align: center;
+        }
+
+        .trans-verse-item {
+            padding: 11px 14px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(16, 48, 46, 0.42);
+            border: 1px solid rgba(45, 212, 191, 0.06);
+            border-left: 3px solid transparent;
+            white-space: pre-wrap;
+            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .trans-verse-item:hover {
+            background: rgba(24, 68, 64, 0.7);
+            color: #fff;
+        }
+
+        .trans-verse-item.range-trans {
+            background: rgba(14, 165, 233, 0.16);
+            border-left-color: #38bdf8;
+            color: #f0f9ff;
+        }
+
+        .trans-verse-item.active-trans {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.26) 0%, rgba(16, 48, 46, 0.65) 100%);
+            border-left-color: var(--turquoise);
+            color: #ffffff;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding-top: 64px;
+                padding-bottom: 88px;
+            }
+
+            .controls {
+                top: 8px;
+                padding: 5px 8px;
+                gap: 5px;
+                overflow-x: auto;
+            }
+
+            .book-wrapper.two-page {
+                flex-direction: column;
+            }
+
+            .book-wrapper.two-page .quran-page-container {
+                width: 94vw;
+                max-width: 94vw;
+            }
+
+            .side-nav-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        /* === 3 QISMLI SURALAR RO'YXATI === */
+        .yon-panel li a {
+            display: grid;
+            grid-template-columns: 32px 1fr auto;
+            align-items: center;
+            gap: 11px;
+            padding: 9px 12px;
+        }
+
+        .surah-num-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: rgba(4, 15, 15, 0.78);
+            border: 1px solid rgba(45, 212, 191, 0.25);
+            color: var(--champagne);
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .yon-panel li a.active-surah .surah-num-badge {
+            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
+            color: #031714;
+            border-color: transparent;
+        }
+
+        .surah-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .surah-uz {
+            font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .yon-panel li a.active-surah .surah-uz {
+            color: var(--turquoise);
+        }
+
+        .surah-page-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .surah-ar {
+            font-family: "Amiri", serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--champagne);
+            direction: rtl;
+            line-height: 1.2;
+            padding-left: 4px;
+            flex-shrink: 0;
+        }
+
+        /* === TARJIMA SHRIFT TUGMALARI (A- / A+) VA QIDIRUV HIGHLIGHT === */
+        .trans-header-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .font-size-btn {
+            height: 28px;
+            min-width: 30px;
+            padding: 0 7px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(20, 56, 53, 0.7);
+            color: var(--champagne);
+            border: 1px solid rgba(45, 212, 191, 0.22);
+        }
+
+        .font-size-btn:hover {
+            background: var(--surface-hover);
+            color: #fff;
+            transform: none;
+        }
+
+        mark.search-hl {
+            background: rgba(232, 200, 125, 0.32);
+            color: #fef3c7;
+            padding: 0 3px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- YON PANEL: Suralar ro'yxati -->
+    <nav id="surahMenu" class="yon-panel">
+        <div class="yon-panel-header">
+            <div class="yon-panel-header-top">
+                <span>Суралар рўйхати</span>
+                <button class="yon-panel-yopish" onclick="toggleSurahMenu()">✖</button>
+            </div>
+            <input type="text" id="surahSearchInput" class="surah-search-input" placeholder="Сура номи ёки рақами..."
+                oninput="filterSurahList()">
+        </div>
+        <ul id="surahList"></ul>
+    </nav>
+
+    <!-- O'NG YON PANEL: Sahifa tarjimasi -->
+    <div id="translationBox">
+        <div class="translation-header">
+            <div class="translation-header-top">
+                <span id="transHeaderTitle">Саҳифа таржимаси</span>
+                <div class="trans-header-actions">
+                    <button class="font-size-btn" onclick="changeTransFontSize(-1)" title="Matnni kichraytirish">A-</button>
+                    <button class="font-size-btn" onclick="changeTransFontSize(1)" title="Matnni kattalashtirish">A+</button>
+                    <button class="yon-panel-yopish" onclick="toggleTranslation()">✖</button>
+                </div>
+            </div>
+            <input type="search" id="translationSearchInput" class="surah-search-input"
+                placeholder="Барча оятлар ичидан излаш (матн ёки 2:255)..." oninput="updateTranslationContent()">
+            <div class="translation-tabs">
+                <button class="trans-tab active" onclick="changeTranslation('sodiq')" id="tabSodiq">Ш. Муҳаммад
+                    Содиқ</button>
+                <button class="trans-tab" onclick="changeTranslation('mansur')" id="tabMansur">Алоуддин Мансур</button>
+            </div>
+        </div>
+        <div id="translationContent">
+            Sahifa tarjimasi yuklanmoqda...
+        </div>
+    </div>
+
+    <!-- YUQORI BOSHQARUV PANELI -->
+    <div class="controls">
+        <button id="menuToggleBtn" class="icon-btn" onclick="event.stopPropagation(); toggleSurahMenu()"
+            title="Suralar ro'yxati (R)">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <select id="folderSelect" onchange="changeFolder()">
+            <option value="audios1">Alijon qori (audios1)</option>
+            <option value="audios2">Husary qori (audios2)</option>
+        </select>
+
+        <button class="icon-btn" onclick="stepSpread(-1)" title="Oldingi sahifa">◀</button>
+        <input type="number" id="pageInput" min="1" max="604" title="Sahifa raqami">
+        <button class="icon-btn" onclick="stepSpread(1)" title="Keyingi sahifa">▶</button>
+
+        <button id="bookModeBtn" onclick="toggleBookMode()" title="1 yoki 2 sahifali ko'rinish (B)"></button>
+
+        <button id="transBtn" class="icon-btn" onclick="event.stopPropagation(); toggleTranslation()"
+            title="Sahifa tarjimasi (T)">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <line x1="8" y1="9" x2="16" y2="9"></line>
+                <line x1="8" y1="13" x2="13" y2="13"></line>
+            </svg>
+        </button>
+
+        <button id="memPeekBtn" onclick="memorizeViewHide()" title="Barcha oyatlarni ko'rsatish / yashirish (O)">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
+
+        <button id="memResetBtn" class="icon-btn" onclick="memorizeResetPage()"
+            title="Barcha oyatlarni oppoq maska bilan yopish (L)">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- EKRAN CHETIDAGI VARAQLASH TUGMALARI -->
+    <button class="side-nav-btn side-nav-left" onclick="stepSpread(1)" title="Keyingi sahifa">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+    <button class="side-nav-btn side-nav-right" onclick="stepSpread(-1)" title="Oldingi sahifa">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+
+    <!-- KITOB SAHIFALARI KONTEYNERI -->
+    <div class="viewer">
+        <div class="book-wrapper two-page" id="bookWrapper">
+            <!-- O'ng sahifa -->
+            <div class="quran-page-container" id="rightPageContainer">
+                <div class="quran-page">
+                    <div id="rightOverlayHolder"></div>
+                    <img id="rightPageImage" class="page-img" alt="Qur'on sahifasi (O'ng)">
+                </div>
+                <div class="page-number-footer" id="rightPageNumFooter"></div>
+            </div>
+
+            <!-- Chap sahifa -->
+            <div class="quran-page-container" id="leftPageContainer">
+                <div class="quran-page">
+                    <div id="leftOverlayHolder"></div>
+                    <img id="leftPageImage" class="page-img" alt="Qur'on sahifasi (Chap)">
+                </div>
+                <div class="page-number-footer" id="leftPageNumFooter"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASTKI PLAYER PANELI -->
+    <div class="player-bar">
+        <button class="icon-btn" onclick="prevAudio()" title="Oldingi oyat (←)">
+            <svg class="svg-fill" viewBox="0 0 24 24">
+                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+            </svg>
+        </button>
+        <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn"
+            title="Play / Pause (Space / 5)">
+            <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="icon-btn" onclick="nextAudio()" title="Keyingi oyat (→)">
+            <svg class="svg-fill" viewBox="0 0 24 24">
+                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+            </svg>
+        </button>
+
+        <span id="currTime" class="time-label">0:00</span>
+        <input type="range" id="progress" value="0" step="0.1">
+        <span id="durTime" class="time-label">0:00</span>
+
+        <button onclick="toggleSpeed()" id="speedBtn" title="Tezlik (*)">1x</button>
+
+        <button onclick="toggleMute()" id="muteBtn" title="Ovozni o'chirish (M)"></button>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+
+        <div class="divider"></div>
+
+        <!-- 🔂 Belgilangan oyat(lar)ni takrorlash va takrorlar soni (inputRepeatNumber) -->
+        <div class="repeat-group" title="Belgilangan oyatlarni takrorlash va takrorlar soni">
+            <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
+                title="Belgilangan oyatlarni takrorlash (V)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <polyline points="17 1 21 5 17 9"></polyline>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                    <polyline points="7 23 3 19 7 15"></polyline>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    <path d="M11 10h1v4" stroke-width="2.2"></path>
+                </svg>
+            </button>
+            <input type="number" id="inputRepeatNumber" min="0" max="999" value="3"
+                title="Takrorlar soni (0 = cheksiz)">
+        </div>
+
+        <!-- 🔁 Sahifani takrorlash -->
+        <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Sahifani takrorlash (9)">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+        </button>
+
+        <button onclick="setPointA()" id="btnA" class="btn-a" title="A nuqta (1)">A</button>
+        <button onclick="setPointB()" id="btnB" class="btn-b" title="B nuqta (3)">B</button>
+
+        <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="A-B nuqtalarini tozalash (7)">✕</button>
+
+        <span id="audioStatus" class="audio-status"></span>
+    </div>
+
+    <!-- YORDAM MODAL OYNASI -->
+    <div id="shortcutModal" class="modal" onclick="toggleModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>Klaviatura qisqartmalari</h3>
+            <div class="shortcut-grid">
+                <div><kbd>Space / 5</kbd>Play / Pause</div>
+                <div><kbd>← / →</kbd>Oldingi / Keyingi oyat</div>
+                <div><kbd>, / .</kbd>Oldingi / Keyingi sahifa</div>
+                <div><kbd>H / Backspace</kbd>Asl masshtab</div>
+                <div><kbd>P</kbd>Panellarni yashirish</div>
+                <div><kbd>B</kbd>Kitob (2 bet) / 1 bet</div>
+                <div><kbd>R</kbd>Suralar ro'yxati (Menyu)</div>
+                <div><kbd>T</kbd>Tarjimani ochish/yopish</div>
+                <div><kbd>1</kbd>A nuqtani qo'yish</div>
+                <div><kbd>3</kbd>B nuqtani qo'yish</div>
+                <div><kbd>7</kbd>A-B nuqtalari / tanlovni tozalash</div>
+                <div><kbd>V</kbd>Tanlanganlarni takrorlash</div>
+                <div><kbd>9</kbd>Sahifani takrorlash</div>
+                <div><kbd>4 / 6</kbd>-2s / +2s o'tkazish</div>
+                <div><kbd>8 / 2</kbd>Ovoz baland/past</div>
+                <div><kbd>*</kbd>Tezlikni o'zgartirish</div>
+                <div><kbd>M</kbd>Mute (Ovozni o'chirish)</div>
+                <div><kbd>+ / -</kbd>Zoom (Yaqin/Uzoq)</div>
+                <div><kbd>Y / y</kbd>Yordam oynasi</div>
+            </div>
+        </div>
+    </div>
+    <audio id="audio"></audio>
+
+    <script>
+        const HF_BASE = "https://huggingface.co/datasets/masterclass1997/madina/resolve/main";
+        const ICONS = {
+            play: `<svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>`,
+            pause: `<svg class="svg-fill" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>`,
+            volHigh: `<svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`,
+            volLow: `<svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`,
+            volMute: `<svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
+            twoPage: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="3" width="9" height="18" rx="1.5"></rect><rect x="13" y="3" width="9" height="18" rx="1.5"></rect><text x="6.5" y="15" font-size="9" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">1</text><text x="17.5" y="15" font-size="9" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">2</text></svg>`,
+            onePage: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"></rect><text x="12" y="15.5" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">1</text></svg>`
+        };
+
+        const suralarJSON = {
+            "سورة الفاتحة - 1. Фотиҳа сураси": "page-001",
+            "سورة البقرة - 2. Бақара сураси": "page-002",
+            "سورة آل عمران - 3. Оли Имрон сураси": "page-050",
+            "سورة النساء - 4. Нисо сураси": "page-077",
+            "سورة المائدة - 5. Моида сураси": "page-106",
+            "سورة الأنعام - 6. Анъом сураси": "page-128",
+            "سورة الأعراف - 7. Аъроф сураси": "page-151",
+            "سورة الأنفال - 8. Анфол сураси": "page-177",
+            "سورة التوبة - 9. Тавба сураси": "page-187",
+            "سورة يونس - 10. Юнус сураси": "page-208",
+            "سورة هود - 11. Ҳуд сураси": "page-221",
+            "سورة يوسف - 12. Юсуф сураси": "page-235",
+            "سورة الرعد - 13. Раъд сураси": "page-249",
+            "سورة إبراهيم - 14. Иброҳим сураси": "page-255",
+            "سورة الحجر - 15. Ҳижр сураси": "page-262",
+            "سورة النحل - 16. Наҳл сураси": "page-267",
+            "سورة الإسراء - 17. Исро сураси": "page-282",
+            "سورة الكهف - 18. Каҳф сураси": "page-293",
+            "سورة مريم - 19. Марям сураси": "page-305",
+            "سورة طه - 20. Тоҳа сураси": "page-312",
+            "سورة الأنبياء - 21. Анбия сураси": "page-322",
+            "سورة الحج - 22. Ҳаж сураси": "page-332",
+            "سورة المؤمنون - 23. Мўъминун сураси": "page-342",
+            "سورة النور - 24. Нур сураси": "page-350",
+            "سورة الفرقان - 25. Фурқон сураси": "page-359",
+            "سورة الشعراء - 26. Шуъаро сураси": "page-367",
+            "سورة النمل - 27. Намл сураси": "page-377",
+            "سورة القصص - 28. Қасас сураси": "page-385",
+            "سورة العنكبوت - 29. Анкабут сураси": "page-396",
+            "سورة الروم - 30. Рум сураси": "page-404",
+            "سورة لقمان - 31. Луқмон сураси": "page-411",
+            "سورة السجدة - 32. Сажда сураси": "page-415",
+            "سورة الأحزاب - 33. Аҳзоб сураси": "page-418",
+            "سورة سبأ - 34. Саба сураси": "page-428",
+            "سورة فاطر - 35. Фотир сураси": "page-434",
+            "سورة يس - 36. Ясин сураси": "page-440",
+            "سورة الصافات - 37. Соффат сураси": "page-446",
+            "سورة ص - 38. Сод сураси": "page-453",
+            "سورة الزمر - 39. Зумар сураси": "page-458",
+            "سورة غافر - 40. Ғофир сураси": "page-467",
+            "سورة فصلت - 41. Фуссилат сураси": "page-477",
+            "سورة الشورى - 42. Шуро сураси": "page-483",
+            "سورة الزخرف - 43. Зуҳруф сураси": "page-489",
+            "سورة الدخان - 44. Духон сураси": "page-496",
+            "سورة الجاثية - 45. Жосия сураси": "page-499",
+            "سورة الأحقاف - 46. Аҳқоф сураси": "page-502",
+            "سورة محمد - 47. Муҳаммад сураси": "page-507",
+            "سورة الفتح - 48. Фатҳ сураси": "page-511",
+            "سورة الحجرات - 49. Ҳужурот сураси": "page-515",
+            "سورة ق - 50. Қоф сураси": "page-518",
+            "سورة الذاريات - 51. Зорият сураси": "page-520",
+            "سورة الطور - 52. Тур сураси": "page-523",
+            "سورة النجم - 53. Нажм сураси": "page-526",
+            "سورة القمر - 54. Қамар сураси": "page-528",
+            "سورة الرحمن - 55. Раҳмон сураси": "page-531",
+            "سورة الواقعة - 56. Воқиа сураси": "page-534",
+            "سورة الحديد - 57. Ҳадид сураси": "page-537",
+            "سورة المجادلة - 58. Мужодала сураси": "page-542",
+            "سورة الحشر - 59. Ҳашр сураси": "page-545",
+            "سورة الممتحنة - 60. Мумтаҳина сураси": "page-549",
+            "سورة الصف - 61. Сафф сураси": "page-551",
+            "سورة الجمعة - 62. Жумъа сураси": "page-553",
+            "سورة المنافقون - 63. Мунофиқун сураси": "page-554",
+            "سورة التغابن - 64. Тағобун сураси": "page-556",
+            "سورة الطلاق - 65. Талоқ сураси": "page-558",
+            "سورة التحريم - 66. Таҳрим сураси": "page-560",
+            "سورة الملك - 67. Мулк сураси": "page-562",
+            "سورة القلم - 68. Қалам сураси": "page-564",
+            "سورة الحاقة - 69. Ҳаққо сураси": "page-566",
+            "سورة المعارج - 70. Маориж сураси": "page-568",
+            "سورة نوح - 71. Нуҳ сураси": "page-570",
+            "سورة الجن - 72. Жин сураси": "page-572",
+            "سورة المزمل - 73. Музаммил сураси": "page-574",
+            "سورة المدثر - 74. Муддассир сураси": "page-575",
+            "سورة القيامة - 75. Қиёмат сураси": "page-577",
+            "سورة الإنسان - 76. Инсон сураси": "page-578",
+            "سورة المرسلات - 77. Мурсалат сураси": "page-580",
+            "سورة النبأ - 78. Набаъ сураси": "page-582",
+            "سورة النازعات - 79. Нозиат сураси": "page-583",
+            "سورة عبس - 80. Абаса сураси": "page-585",
+            "سورة التكوير - 81. Таквир сураси": "page-586",
+            "سورة الإنفطار - 82. Инфитор сураси": "page-587",
+            "سورة المطففين - 83. Мутаффифин сураси": "page-587",
+            "سورة الانشقاق - 84. Иншиқоқ сураси": "page-589",
+            "سورة البروج - 85. Буруж сураси": "page-590",
+            "سورة الطارق - 86. Ториқ сураси": "page-591",
+            "سورة الأعلى - 87. Аъло сураси": "page-591",
+            "سورة الغاشية - 88. Ғошия сураси": "page-592",
+            "سورة الفجر - 89. Фажр сураси": "page-593",
+            "سورة البلد - 90. Балад сураси": "page-594",
+            "سورة الشمس - 91. Шамс сураси": "page-595",
+            "سورة الليل - 92. Лайл сураси": "page-595",
+            "سورة الضحى - 93. Зуҳо сураси": "page-596",
+            "سورة الشرح - 94. Шарҳ сураси": "page-596",
+            "سورة التين - 95. Тин сураси": "page-597",
+            "سورة العلق - 96. Алақ сураси": "page-597",
+            "سورة القدر - 97. Қадр сураси": "page-598",
+            "سورة البينة - 98. Баййина сураси": "page-598",
+            "سورة الزلزلة - 99. Залзала сураси": "page-599",
+            "سورة العاديات - 100. Одиёт сураси": "page-599",
+            "سورة القارعة - 101. Қориъа сураси": "page-600",
+            "سورة التكاثر - 102. Такосур сураси": "page-600",
+            "سورة العصر - 103. Аср сураси": "page-601",
+            "سورة الهمزة - 104. Ҳумаза сураси": "page-601",
+            "سورة الفيل - 105. Фил сураси": "page-601",
+            "سورة قريش - 106. Қурайш сураси": "page-602",
+            "سورة الماعون - 107. Маъун сураси": "page-602",
+            "سورة الكوثر - 108. Кавсар сураси": "page-602",
+            "سورة الكافرون - 109. Кофирун сураси": "page-603",
+            "سورة النصر - 110. Наср сураси": "page-603",
+            "سورة المسد - 111. Масад сураси": "page-603",
+            "سورة الإخلاص - 112. Ихлос сураси": "page-604",
+            "سورة الفلق - 113. Фалақ сураси": "page-604",
+            "سورة الناس - 114. Наас сураси": "page-604"
+        };
+
+        const surahNamesByNumber = {};
+        Object.keys(suralarJSON).forEach((fullTitle) => {
+            const parts = fullTitle.split(" - ");
+            const rightPart = parts[1] || fullTitle;
+            const numMatch = rightPart.match(/^(\d+)\./);
+            if (numMatch) {
+                surahNamesByNumber[parseInt(numMatch[1], 10)] = rightPart;
+            }
+        });
+
+        const surahListEl = document.getElementById("surahList");
+        const surahMenu = document.getElementById("surahMenu");
+
+        const translationBox = document.getElementById("translationBox");
+        const translationContent = document.getElementById("translationContent");
+        const translationSearchInput = document.getElementById("translationSearchInput");
+        const transHeaderTitle = document.getElementById("transHeaderTitle");
+        const tabSodiq = document.getElementById("tabSodiq");
+        const tabMansur = document.getElementById("tabMansur");
+        const transBtn = document.getElementById("transBtn");
+        const menuToggleBtn = document.getElementById("menuToggleBtn");
+
+        function pad(n) {
+            return n.toString().padStart(3, "0");
+        }
+
+        // Oyat kodiga (masalan, "002-255") qarab u qaysi sahifada ekanligini topuvchi xarita
+        let versePageMap = null;
+        function getPageForVerse(verseCode) {
+            if (!versePageMap) {
+                versePageMap = {};
+                const regex = /data-verse="(\d{3}-\d{3})"/g;
+                for (let p = 1; p <= 604; p++) {
+                    const html = CUSTOM_PAGES[p] || (typeof QURAN_OVERLAYS !== "undefined" ? QURAN_OVERLAYS[p] : "");
+                    if (!html) continue;
+                    const fixedHtml = p === 601 ? html.replace(/data-verse="103-004"/g, 'data-verse="103-003"') : html;
+                    let match;
+                    while ((match = regex.exec(fixedHtml)) !== null) {
+                        const v = match[1];
+                        if (!v.endsWith("-000") && !versePageMap[v]) {
+                            versePageMap[v] = p;
+                        }
+                    }
+                }
+            }
+            return versePageMap[verseCode] || null;
+        }
+
+        // Boshqaruv panellari va playerni birgalikda yashirish/ko'rsatish
+        function toggleAllPanels() {
+            const controls = document.querySelector(".controls");
+            const playerBar = document.querySelector(".player-bar");
+
+            const isHidden = controls.classList.toggle("yashirin");
+            playerBar.classList.toggle("yashirin", isHidden);
+
+            localStorage.setItem("panelsHidden", isHidden);
+        }
+
+        // Sahifa yuklanganda oldingi holatni saqlab qolish
+        window.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("panelsHidden") === "true") {
+                document.querySelector(".controls").classList.add("yashirin");
+                document.querySelector(".player-bar").classList.add("yashirin");
+            }
+        });
+
+        function toggleSurahMenu() {
+            const isOpen = surahMenu.classList.toggle("ochiq");
+            menuToggleBtn.classList.toggle("active", isOpen);
+            if (isOpen) {
+                const activeEl = surahListEl.querySelector("a.active-surah");
+                if (activeEl) {
+                    setTimeout(() => activeEl.scrollIntoView({behavior: "smooth", block: "center"}), 100);
+                }
+            }
+        }
+
+
+// Lotin va kirill yozuvlarini bir xil shaklga keltiruvchi yordamchi funksiya
+        function normalizeUz(str) {
+            const map = {
+                'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'j','з':'z',
+                'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+                'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sh',
+                'ы':'i','э':'e','ю':'yu','я':'ya','ў':'o','қ':'q','ғ':'g','ҳ':'h'
+            };
+            return str.toLowerCase()
+                .replace(/[ъь'‘’`ʼ]/g, '')
+                .replace(/x/g, 'h')
+                .split('')
+                .map(ch => map[ch] || ch)
+                .join('');
+        }
+
+        function filterSurahList() {
+            const q = normalizeUz(document.getElementById("surahSearchInput").value.trim());
+            const items = surahListEl.querySelectorAll("li");
+            items.forEach(li => {
+                const target = li.dataset.search || "";
+                li.style.display = target.includes(q) ? "" : "none";
+            });
+        }
+
+        function highlightActiveSurah() {
+            const links = surahListEl.querySelectorAll("a");
+            links.forEach(a => a.classList.remove("active-surah"));
+
+            let targetLink = null;
+            if (currentVerse) {
+                const activeSurahNum = parseInt(currentVerse.split("-")[0], 10);
+                targetLink = surahListEl.querySelector(`a[data-surah="${activeSurahNum}"]`);
+            }
+
+            if (!targetLink) {
+                let activePage = 1;
+                links.forEach(a => {
+                    const p = parseInt(a.dataset.page, 10);
+                    if (p <= currentPage) activePage = p;
+                });
+                links.forEach(a => {
+                    if (parseInt(a.dataset.page, 10) === activePage) {
+                        targetLink = a;
+                    }
+                });
+            }
+
+            if (targetLink) {
+                targetLink.classList.add("active-surah");
+                if (surahMenu.classList.contains("ochiq")) {
+                    targetLink.scrollIntoView({behavior: "smooth", block: "nearest"});
+                }
+            }
+        }
+
+Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
+            let sahifaRaqami = parseInt(sahifaMatni.replace("page-", ""), 10);
+            const parts = suraNomi.split(" - ");
+            const arabNomi = (parts[0] || "").trim();
+            const uzbekToLiq = (parts[1] || suraNomi).trim();
+
+            const numMatch = uzbekToLiq.match(/^(\d+)\.\s*/);
+            let suraRaqami = numMatch ? parseInt(numMatch[1], 10) : (index + 1);
+            let uzbekNomi = uzbekToLiq.replace(/^\d+\.\s*/, "");
+            let birinchiOyatKodi = `${pad(suraRaqami)}-001`;
+
+            let li = document.createElement("li");
+            li.dataset.search = normalizeUz(`${suraRaqami} ${uzbekNomi} ${arabNomi} ${sahifaRaqami}`);
+
+            let a = document.createElement("a");
+            a.href = "javascript:void(0)";
+            a.dataset.page = sahifaRaqami;
+            a.dataset.surah = suraRaqami;
+            a.innerHTML = `
+                <span class="surah-num-badge">${suraRaqami}</span>
+                <span class="surah-info">
+                    <span class="surah-uz">${uzbekNomi}</span>
+                    <span class="surah-page-sub">${sahifaRaqami}-бет</span>
+                </span>
+                <span class="surah-ar">${arabNomi}</span>
+            `;
+
+            a.onclick = () => {
+                currentPage = sahifaRaqami;
+                updateUI(birinchiOyatKodi, true);
+                toggleSurahMenu();
+            };
+
+            li.appendChild(a);
+            surahListEl.appendChild(li);
+        });
+
+        document.addEventListener('click', function (event) {
+            if (surahMenu.classList.contains('ochiq') && !surahMenu.contains(event.target) && !menuToggleBtn.contains(event.target)) {
+                surahMenu.classList.remove('ochiq');
+                menuToggleBtn.classList.remove('active');
+            }
+
+            if (translationBox.classList.contains('ochiq') && !translationBox.contains(event.target) && !transBtn.contains(event.target)) {
+                translationBox.classList.remove('ochiq');
+                transBtn.classList.remove('active');
+            }
+        });
+
+        let currentPage = localStorage.getItem("page") ? parseInt(localStorage.getItem("page")) : 1;
+        let currentFolder = localStorage.getItem("audioFolder") ? localStorage.getItem("audioFolder") : "audios1";
+        let isBookMode = localStorage.getItem("isBookMode") !== null ? localStorage.getItem("isBookMode") === "true" : true;
+        let previousVolume = 1;
+        let currentTranslationType = 'sodiq';
+        let currentVerse = null;
+
+        const audio = document.getElementById("audio");
+        const bookWrapper = document.getElementById("bookWrapper");
+        const viewer = document.querySelector(".viewer");
+        const bookModeBtn = document.getElementById("bookModeBtn");
+
+        const rightImg = document.getElementById("rightPageImage");
+        const leftImg = document.getElementById("leftPageImage");
+        const rightHolder = document.getElementById("rightOverlayHolder");
+        const leftHolder = document.getElementById("leftOverlayHolder");
+        const rightFooter = document.getElementById("rightPageNumFooter");
+        const leftFooter = document.getElementById("leftPageNumFooter");
+
+        const playBtn = document.getElementById("playBtn");
+        const progress = document.getElementById("progress");
+        const volume = document.getElementById("volume");
+        const pageInput = document.getElementById("pageInput");
+        const verseLoopBtn = document.getElementById("verseLoopBtn");
+        const inputRepeatNumber = document.getElementById("inputRepeatNumber");
+        const loopBtn = document.getElementById("loopBtn");
+        const speedBtn = document.getElementById("speedBtn");
+        const folderSelect = document.getElementById("folderSelect");
+        const audioStatus = document.getElementById("audioStatus");
+        const muteBtn = document.getElementById("muteBtn");
+        const btnA = document.getElementById("btnA");
+        const btnB = document.getElementById("btnB");
+        const shortcutModal = document.getElementById("shortcutModal");
+
+        let speeds = [0.5, 1, 1.25, 1.5, 2];
+        let speedIndex = 1;
+        let verseLoop = false;
+        let pageLoop = false;
+        let scale = 1.0;
+
+        // 🟢 1 betli va 2 betli holatlarni rasmdagidek moslovchi funksiya
+        function autoScale(clearSavedZoom = false) {
+            if (clearSavedZoom) {
+                localStorage.removeItem("scale");
+                localStorage.removeItem("zoomScale");
+                localStorage.removeItem("customScale");
+            }
+
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+
+            if (isBookMode && winWidth > 900) {
+                const availW = winWidth - 110;
+                const availH = winHeight - 35;
+                const scaleW = availW / 1000;
+                const scaleH = availH / 870;
+                scale = Math.min(scaleW, scaleH, 1.30);
+                scale = Math.max(scale, 0.5);
+            } else {
+                const targetW = winWidth > 900 ? Math.min(winWidth * 0.62, 920) : (winWidth - 30);
+                scale = targetW / 630;
+                scale = Math.min(Math.max(scale, 0.55), 1.55);
+            }
+
+            scale = Math.round(scale * 100) / 100;
+            applyZoom();
+        }
+
+        window.addEventListener("resize", () => autoScale(false));
+
+        function updateZoomLayout() {
+            const basePageWidth = isBookMode ? 500 : 630;
+            const scaledPageWidth = Math.round(basePageWidth * scale);
+
+            // Konteynerlarning haqiqiy kengligini o'zgartiramiz (GPU xiralashuvi 100% yo'qoladi)
+            rightPageContainer.style.width = `${scaledPageWidth}px`;
+            if (isBookMode) {
+                leftPageContainer.style.width = `${scaledPageWidth}px`;
+            }
+
+            viewer.style.height = "auto";
+            const totalWidth = isBookMode ? (scaledPageWidth * 2) : scaledPageWidth;
+            if (totalWidth > window.innerWidth - 90) {
+                viewer.style.width = `${totalWidth + 90}px`;
+            } else {
+                viewer.style.width = "100%";
+            }
+        }
+
+        // 🟢 AQLLI MINIMAL SKROLL
+        function ensureSelectedOverlayVisible() {
+            const selectedOverlays = Array.from(bookWrapper.querySelectorAll('.overlay.selected'));
+            if (selectedOverlays.length === 0) return;
+
+            let top = Infinity, bottom = -Infinity, left = Infinity, right = -Infinity;
+            selectedOverlays.forEach(el => {
+                const r = el.getBoundingClientRect();
+                if (r.width === 0 && r.height === 0) return;
+                if (r.top < top) top = r.top;
+                if (r.bottom > bottom) bottom = r.bottom;
+                if (r.left < left) left = r.left;
+                if (r.right > right) right = r.right;
+            });
+
+            if (top === Infinity) return;
+
+            const controlsEl = document.querySelector(".controls");
+            const panelsHidden = controlsEl && controlsEl.classList.contains("yashirin");
+
+            const safeTop = panelsHidden ? 20 : 72;
+            const safeBottom = window.innerHeight - (panelsHidden ? 20 : 82);
+            const safeLeft = 20;
+            const safeRight = window.innerWidth - 20;
+
+            let deltaY = 0;
+            let deltaX = 0;
+
+            const overlayHeight = bottom - top;
+            const visibleHeight = safeBottom - safeTop;
+
+            if (overlayHeight > visibleHeight) {
+                if (top < safeTop || top > safeBottom) {
+                    deltaY = top - safeTop;
+                }
+            } else {
+                if (top < safeTop) {
+                    deltaY = top - safeTop;
+                } else if (bottom > safeBottom) {
+                    deltaY = bottom - safeBottom;
+                }
+            }
+
+            const overlayWidth = right - left;
+            const visibleWidth = safeRight - safeLeft;
+
+            if (overlayWidth > visibleWidth) {
+                if (right > safeRight) {
+                    deltaX = right - safeRight;
+                } else if (left < safeLeft) {
+                    deltaX = left - safeLeft;
+                }
+            } else {
+                if (left < safeLeft) {
+                    deltaX = left - safeLeft;
+                } else if (right > safeRight) {
+                    deltaX = right - safeRight;
+                }
+            }
+
+            if (Math.abs(deltaY) > 1 || Math.abs(deltaX) > 1) {
+                window.scrollBy({
+                    top: deltaY,
+                    left: deltaX,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        let zoomScrollTimer = null;
+        function applyZoom() {
+            bookWrapper.style.transform = "none"; // transform: scale() o'chirildi!
+            updateZoomLayout();
+
+            if (zoomScrollTimer) clearTimeout(zoomScrollTimer);
+            zoomScrollTimer = setTimeout(() => {
+                ensureSelectedOverlayVisible(false);
+            }, 60);
+        }
+
+        // === A-B LOOP VA SAHIFA O'ZGARUVCHILARI ===
+        let pointA = null;
+        let pointB = null;
+        let isABLooping = false;
+        let loopInterval = null;
+        let abGapTimer = null;
+        let abRepeatCount = 0;
+
+        let openRightPage = null;
+        let openLeftPage = null;
+        let flipCleanupTimer = null;
+
+        // === SICHQONCHA BILAN TORTIB BELGILASH VA TAKRORLASH O'ZGARUVCHILARI ===
+        let isDraggingVerses = false;
+        let dragStartVerse = null;
+        let selectedVersesRange = [];
+        let currentRepeatCount = 0;
+
+        const savedRepeatMax = localStorage.getItem("repeatMax");
+        if (savedRepeatMax !== null) {
+            inputRepeatNumber.value = savedRepeatMax;
+        }
+
+        inputRepeatNumber.onchange = () => {
+            let val = parseInt(inputRepeatNumber.value, 10);
+            if (isNaN(val) || val < 0) val = 1;
+            inputRepeatNumber.value = val;
+            localStorage.setItem("repeatMax", val);
+            currentRepeatCount = 0;
+            abRepeatCount = 0;
+            showStatus(val === 0 ? "Takror: ∞" : `Takror: ${val} marta`);
+        };
+
+        function getTargetRepeatCount() {
+            const val = parseInt(inputRepeatNumber.value, 10);
+            return isNaN(val) || val < 0 ? 1 : val;
+        }
+
+        /* Belgilangan oyatlar (range) va joriy oyatni vizual yangilash */
+        function updateOverlaySelectionVisuals() {
+            const hasRange = selectedVersesRange.length > 1;
+
+            bookWrapper.querySelectorAll(".overlay").forEach(el => {
+                const v = el.getAttribute("data-verse");
+                const inRange = hasRange && selectedVersesRange.includes(v);
+                const isCurrent = (v === currentVerse);
+
+                el.classList.toggle("range-selected", inRange);
+                el.classList.toggle("selected", isCurrent);
+            });
+
+            const transItems = translationContent.querySelectorAll(".trans-verse-item");
+            transItems.forEach(el => {
+                const v = el.dataset.verse;
+                el.classList.toggle("range-trans", hasRange && selectedVersesRange.includes(v));
+                el.classList.toggle("active-trans", v === currentVerse);
+            });
+        }
+
+        /* Drag-select vaqtida boshlang'ich oyatdan joriy oyatgacha oraliqni hisoblash */
+        function updateDragSelectionRange(endVerse) {
+            if (!dragStartVerse || !endVerse) return;
+            const allVerses = getUniqueVersesOnOpenPages();
+            const startIdx = allVerses.indexOf(dragStartVerse);
+            const endIdx = allVerses.indexOf(endVerse);
+
+            if (startIdx === -1 || endIdx === -1) return;
+
+            const minIdx = Math.min(startIdx, endIdx);
+            const maxIdx = Math.max(startIdx, endIdx);
+            selectedVersesRange = allVerses.slice(minIdx, maxIdx + 1);
+            updateOverlaySelectionVisuals();
+        }
+
+        /* Sichqoncha qo'yib yuborilganda belgilangan oyat(lar)ni o'ynatish */
+        window.addEventListener("mouseup", () => {
+            if (!isDraggingVerses) return;
+            isDraggingVerses = false;
+
+            if (selectedVersesRange.length > 0) {
+                const lockedRange = [...selectedVersesRange];
+                currentRepeatCount = 0;
+                const firstVerse = lockedRange[0];
+
+                if (lockedRange.length > 1) {
+                    showStatus(`${lockedRange.length} ta oyat tanlandi`, 2500);
+                    playVerse(firstVerse, true, false, true);
+                    selectedVersesRange = lockedRange;
+                    updateOverlaySelectionVisuals();
+                } else {
+                    playVerse(firstVerse, true, false, false);
+                }
+            }
+        });
+
+        /* Overlay hodisalari */
+        function bindOverlayEventsInHolder(holderEl, pageNum) {
+            const overlays = holderEl.querySelectorAll('.overlay:not([data-verse$="-000"])');
+            overlays.forEach(ov => {
+                ov.dataset.page = pageNum;
+                ov.ondragstart = () => false;
+
+                ov.onclick = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                };
+
+                ov.onmousedown = function (e) {
+                    if (e.button !== 0) return;
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    const verseCode = this.getAttribute("data-verse");
+                    isDraggingVerses = true;
+                    dragStartVerse = verseCode;
+                    selectedVersesRange = [verseCode];
+                    currentRepeatCount = 0;
+
+                    currentPage = pageNum;
+                    pageInput.value = currentPage;
+                    localStorage.setItem("page", currentPage);
+
+                    updateOverlaySelectionVisuals();
+                };
+
+                ov.onmouseenter = function () {
+                    const v = this.getAttribute("data-verse");
+                    if (isDraggingVerses) {
+                        updateDragSelectionRange(v);
+                    } else {
+                        bookWrapper.querySelectorAll(`.overlay[data-verse="${v}"]`).forEach(el => {
+                            el.classList.add("hovered");
+                        });
+                    }
+                };
+
+                ov.onmouseleave = function () {
+                    const v = this.getAttribute("data-verse");
+                    bookWrapper.querySelectorAll(`.overlay[data-verse="${v}"]`).forEach(el => {
+                        el.classList.remove("hovered");
+                    });
+                };
+            });
+        }
+
+        /* 1 va 2-sahifalar uchun maxsus o'lchangan koordinatalar */
+        const CUSTOM_PAGES = {
+            1: `
+        <div class="custom-overlaies">
+            <div class="overlay custom-ov" data-verse="001-001" style="top: 33.1%; right: 36.2%; width: 27.3%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-002" style="top: 38.1%; right: 31.2%; width: 37.4%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-003" style="top: 43.1%; right: 25.8%; width: 22.4%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-004" style="top: 43.1%; right: 48.2%; width: 25.7%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-005" style="top: 48.1%; right: 26.0%; width: 38.7%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-006" style="top: 48.1%; right: 64.7%; width: 9.5%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-006" style="top: 53.1%; right: 27.1%; width: 24.3%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-007" style="top: 53.1%; right: 51.0%; width: 21.9%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-007" style="top: 58.1%; right: 32.0%; width: 36.1%; height: 5.0%;"></div>
+            <div class="overlay custom-ov" data-verse="001-007" style="top: 61.8%; right: 39.5%; width: 21.1%; height: 5.0%;"></div>
+        </div>
+    `,
+            2: `
+        <div class="custom-overlaies">
+            <div class="overlay custom-ov" data-verse="002-001" style="top: 38.7%; right: 31.2%; width: 7.3%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-002" style="top: 38.7%; right: 38.3%; width: 30.5%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-002" style="top: 43.5%; right: 26.7%; width: 11.8%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-003" style="top: 43.5%; right: 38.2%; width: 35.3%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-003" style="top: 48.3%; right: 25.8%; width: 25.4%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-004" style="top: 48.3%; right: 51.2%; width: 23.2%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-004" style="top: 53.0%; right: 27.0%; width: 46.1%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-005" style="top: 57.8%; right: 31.8%; width: 36.2%; height: 4.8%;"></div>
+            <div class="overlay custom-ov" data-verse="002-005" style="top: 62.2%; right: 39.0%; width: 21.8%; height: 4.8%;"></div>
+        </div>
+    `
+        };
+
+        /* 3D Kitob Varaqlash Animatsiyasi */
+        function playPageFlipAnimation(dir, oldRightNum, oldLeftNum, newRightNum, newLeftNum) {
+            const existingScene = bookWrapper.querySelector(".flip-scene");
+            if (existingScene) existingScene.remove();
+            if (flipCleanupTimer) clearTimeout(flipCleanupTimer);
+
+            const scene = document.createElement("div");
+            scene.className = "flip-scene";
+
+            if (isBookMode && window.innerWidth > 900) {
+                const underlay = document.createElement("div");
+                const leaf = document.createElement("div");
+
+                if (dir > 0) {
+                    underlay.className = "flip-underlay right-side";
+                    underlay.innerHTML = `<img src="images/${pad(oldRightNum)}.jpg" alt="">`;
+
+                    leaf.className = "flip-leaf turn-next";
+                    leaf.innerHTML = `
+                        <div class="flip-face front">
+                            <img src="images/${pad(oldLeftNum)}.jpg" alt="">
+                            <div class="flip-shade"></div>
+                        </div>
+                        <div class="flip-face back">
+                            <img src="images/${pad(newRightNum)}.jpg" alt="">
+                            <div class="flip-shade"></div>
+                        </div>
+                    `;
+                } else {
+                    underlay.className = "flip-underlay left-side";
+                    underlay.innerHTML = `<img src="images/${pad(oldLeftNum)}.jpg" alt="">`;
+
+                    leaf.className = "flip-leaf turn-prev";
+                    leaf.innerHTML = `
+                        <div class="flip-face front">
+                            <img src="images/${pad(oldRightNum)}.jpg" alt="">
+                            <div class="flip-shade"></div>
+                        </div>
+                        <div class="flip-face back">
+                            <img src="images/${pad(newLeftNum)}.jpg" alt="">
+                            <div class="flip-shade"></div>
+                        </div>
+                    `;
+                }
+
+                scene.appendChild(underlay);
+                scene.appendChild(leaf);
+                bookWrapper.appendChild(scene);
+
+                void leaf.offsetWidth;
+                leaf.classList.add("animate");
+            } else {
+                const leaf = document.createElement("div");
+                leaf.className = "flip-leaf " + (dir > 0 ? "single-next" : "single-prev");
+                leaf.innerHTML = `
+                    <div class="flip-face front">
+                        <img src="images/${pad(oldRightNum)}.jpg" alt="">
+                        <div class="flip-shade"></div>
+                    </div>
+                `;
+                scene.appendChild(leaf);
+                bookWrapper.appendChild(scene);
+
+                void leaf.offsetWidth;
+                leaf.classList.add("animate");
+            }
+
+            flipCleanupTimer = setTimeout(() => {
+                if (scene.parentNode) scene.remove();
+            }, 690);
+        }
+
+        function toggleBookMode() {
+            isBookMode = !isBookMode;
+            localStorage.setItem("isBookMode", isBookMode);
+            applyBookModeClass();
+            autoScale(false);
+            updateUI(currentVerse || "first", false, false);
+        }
+
+        function applyBookModeClass() {
+            if (isBookMode) {
+                bookWrapper.classList.remove("single-page");
+                bookWrapper.classList.add("two-page");
+                bookModeBtn.innerHTML = ICONS.twoPage;
+                bookModeBtn.classList.add("active");
+            } else {
+                bookWrapper.classList.remove("two-page");
+                bookWrapper.classList.add("single-page");
+                bookModeBtn.innerHTML = ICONS.onePage;
+                bookModeBtn.classList.remove("active");
+            }
+        }
+
+        function renderPageOverlays(holderEl, pageNum, imgEl) {
+            if (CUSTOM_PAGES[pageNum]) {
+                holderEl.innerHTML = CUSTOM_PAGES[pageNum];
+            } else if (typeof QURAN_OVERLAYS !== "undefined" && QURAN_OVERLAYS[pageNum]) {
+                holderEl.innerHTML = QURAN_OVERLAYS[pageNum].replace(/data-verse="103-004"/g, 'data-verse="103-003"');
+            } else {
+                holderEl.innerHTML = "";
+            }
+            adjustOverlaysInHolder(holderEl, pageNum, imgEl);
+            bindOverlayEventsInHolder(holderEl, pageNum);
+        }
+
+        function adjustOverlaysInHolder(holderEl, pageNum, imgEl) {
+            if (pageNum === 1 || pageNum === 2) return;
+            const OVERLAP_PCT = 0.3;
+            const OVERLAP_X_PCT = 0.15;
+
+            const overlaiesDiv = holderEl.querySelector(".overlaies");
+            if (!overlaiesDiv) return;
+
+            let isCroppedImage = true;
+            if (imgEl && imgEl.naturalWidth > 0) {
+                const ratio = imgEl.naturalHeight / imgEl.naturalWidth;
+                isCroppedImage = ratio < 1.53;
+            }
+
+            const BASE_TOP_PCT = 4.85;       // 1-qatorning yuqoridan boshlanish nuqtasi
+            const LINE_HEIGHT_PCT = 6.00;    // Har bir qatorning balandligi (15 qator = 90.0%)
+            const RIGHT_START_PCT = 9.00;    // O'ng ramkadan matngacha bo'lgan masofa
+            const TEXT_WIDTH_PCT = 82.00;    // Matn yozilgan ichki ramka kengligi
+
+            const children = Array.from(overlaiesDiv.children);
+            const rows = [];
+            let currentRow = [];
+            let currentWidth = 0;
+
+            children.forEach(el => {
+                const verse = el.getAttribute("data-verse") || "";
+                const isSeparator = el.classList.contains("separator") || verse.endsWith("-000");
+                const initW = parseFloat(el.getAttribute("data-init-width")) || 611;
+
+                if (isSeparator) {
+                    if (currentRow.length > 0) {
+                        rows.push({elements: currentRow, totalWidth: currentWidth});
+                        currentRow = [];
+                        currentWidth = 0;
+                    }
+                    rows.push({elements: [{el, initW: 611}], totalWidth: 611, isSeparator: true});
+                    return;
+                }
+
+                if (currentRow.length > 0) {
+                    const widthWithNext = currentWidth + initW;
+                    const diffWithout = Math.abs(611 - currentWidth);
+                    const diffWith = Math.abs(611 - widthWithNext);
+
+                    if (diffWith > diffWithout && currentWidth > 400) {
+                        rows.push({elements: currentRow, totalWidth: currentWidth});
+                        currentRow = [{el, initW}];
+                        currentWidth = initW;
+                    } else {
+                        currentRow.push({el, initW});
+                        currentWidth = widthWithNext;
+                        if (currentWidth >= 608) {
+                            rows.push({elements: currentRow, totalWidth: currentWidth});
+                            currentRow = [];
+                            currentWidth = 0;
+                        }
+                    }
+                } else {
+                    currentRow.push({el, initW});
+                    currentWidth = initW;
+                }
+            });
+
+            if (currentRow.length > 0) {
+                rows.push({elements: currentRow, totalWidth: currentWidth});
+            }
+
+            const rawMt = parseFloat(overlaiesDiv.getAttribute("data-mt")) || 41;
+            let rowOffset = 0;
+            if (rawMt > 80) {
+                rowOffset = Math.round((rawMt - 41) / 60);
+            }
+
+            rows.forEach((rowObj, rIdx) => {
+                const actualRow = rIdx + rowOffset;
+                const topPct = BASE_TOP_PCT + (actualRow * LINE_HEIGHT_PCT);
+
+                if (rowObj.isSeparator) {
+                    const el = rowObj.elements[0].el;
+                    el.style.top = topPct + "%";
+                    el.style.height = LINE_HEIGHT_PCT + "%";
+                    el.style.right = RIGHT_START_PCT + "%";
+                    el.style.width = TEXT_WIDTH_PCT + "%";
+                    return;
+                }
+
+                let rightOffset = RIGHT_START_PCT;
+                const divisor = Math.max(611, rowObj.totalWidth);
+
+                rowObj.elements.forEach(item => {
+                    const el = item.el;
+                    const initW = item.initW;
+                    const verse = el.getAttribute("data-verse") || "";
+                    const isSeparator = el.classList.contains("separator") || verse.endsWith("-000");
+                    const widthPct = (initW / divisor) * TEXT_WIDTH_PCT;
+
+                    if (!isSeparator) {
+                        el.style.top = (topPct - OVERLAP_PCT / 2) + "%";
+                        el.style.height = (LINE_HEIGHT_PCT + OVERLAP_PCT) + "%";
+                        el.style.right = rightOffset + "%";
+                        el.style.width = (widthPct + OVERLAP_X_PCT) + "%";
+                    }
+
+                    rightOffset += widthPct;
+                });
+            });
+        }
+
+        rightImg.onload = () => {
+            adjustOverlaysInHolder(rightHolder, openRightPage, rightImg);
+            updateZoomLayout();
+            ensureSelectedOverlayVisible(false);
+        };
+        leftImg.onload = () => {
+            if (isBookMode && openLeftPage) {
+                adjustOverlaysInHolder(leftHolder, openLeftPage, leftImg);
+            }
+            updateZoomLayout();
+            ensureSelectedOverlayVisible(false);
+        };
+
+        function updateUI(targetVerseMode = "first", shouldScrollToVerse = false, allowAnimation = true) {
+            clearABLoop(true);
+            currentVerse = null;
+            selectedVersesRange = [];
+            currentRepeatCount = 0;
+
+            pageInput.value = currentPage;
+            localStorage.setItem("page", currentPage);
+            localStorage.setItem("audioFolder", currentFolder);
+
+            const prevRight = openRightPage;
+            const prevLeft = openLeftPage;
+
+            if (isBookMode) {
+                openRightPage = (currentPage % 2 === 1) ? currentPage : currentPage - 1;
+                openLeftPage = Math.min(604, openRightPage + 1);
+
+                if (allowAnimation && prevRight !== null && prevRight !== openRightPage) {
+                    const dir = openRightPage > prevRight ? 1 : -1;
+                    playPageFlipAnimation(dir, prevRight, prevLeft || prevRight, openRightPage, openLeftPage);
+                }
+
+                rightImg.src = `${HF_BASE}/images/${pad(openRightPage)}.jpg`;
+                leftImg.src = `${HF_BASE}/images/${pad(openLeftPage)}.jpg`;
+                rightFooter.innerText = "";
+                leftFooter.innerText = "";
+
+                renderPageOverlays(rightHolder, openRightPage, rightImg);
+                renderPageOverlays(leftHolder, openLeftPage, leftImg);
+            } else {
+                openRightPage = currentPage;
+                openLeftPage = null;
+
+                if (allowAnimation && prevRight !== null && prevRight !== openRightPage) {
+                    const dir = openRightPage > prevRight ? 1 : -1;
+                    playPageFlipAnimation(dir, prevRight, prevRight, openRightPage, openRightPage);
+                }
+
+                rightImg.src = `images/${pad(openRightPage)}.jpg`;
+                rightFooter.innerText = "";
+                leftFooter.innerText = "";
+
+                renderPageOverlays(rightHolder, openRightPage, rightImg);
+                leftHolder.innerHTML = "";
+            }
+            updateTranslationContent();
+
+            const activeHolder = (isBookMode && currentPage === openLeftPage) ? leftHolder : rightHolder;
+            const pageVerses = getUniqueVersesInHolder(activeHolder);
+            const allOpenVerses = getUniqueVersesOnOpenPages();
+
+            if (targetVerseMode && targetVerseMode !== "first" && targetVerseMode !== "last" && allOpenVerses.includes(targetVerseMode)) {
+                playVerse(targetVerseMode, true, shouldScrollToVerse, false);
+            } else if (targetVerseMode === "last" && pageVerses.length > 0) {
+                playVerse(pageVerses[pageVerses.length - 1], true, shouldScrollToVerse, false);
+            } else if (pageVerses.length > 0) {
+                playVerse(pageVerses[0], true, shouldScrollToVerse, false);
+            } else {
+                highlightActiveSurah();
+            }
+        }
+
+        function getUniqueVersesInHolder(holderEl) {
+            const list = [];
+            holderEl.querySelectorAll('.overlay:not([data-verse$="-000"])').forEach(el => {
+                const v = el.getAttribute("data-verse");
+                if (v && !list.includes(v)) list.push(v);
+            });
+            return list;
+        }
+
+        function getUniqueVersesOnOpenPages() {
+            const list = getUniqueVersesInHolder(rightHolder);
+            if (isBookMode && openLeftPage) {
+                getUniqueVersesInHolder(leftHolder).forEach(v => {
+                    if (!list.includes(v)) list.push(v);
+                });
+            }
+            return list;
+        }
+
+        /* =========================================================
+           AUDIO MANBA: SURA-FAYL + OYAT VAQTLARI (timings)
+           - Timings mavjud papka (audios1): har bir sura bitta fayl, oyat esa
+             [start, end] oralig'ida ijro etiladi (millisekundlarda).
+           - Timings yo'q papka (audios2): avvalgidek har bir oyat alohida fayl.
+           Pleyerning boshqa barcha funksiyalari (takror, A-B, tezlik, progress)
+           oyat ichidagi nisbiy vaqt bilan avvalgidek ishlaydi.
+           ========================================================= */
+        const SEGMENT_TIMINGS = {
+            audios1: (typeof ALIJON_QORI_TIMINGS !== "undefined") ? ALIJON_QORI_TIMINGS : null
+        };
+        let seg = null;            // joriy oyat: {src, startSec, endSec|null} yoki null (alohida fayl rejimi)
+        let segFinished = false;   // oyat oxiriga yetdimi
+        let segToken = 0;          // har bir yangi ijro/seek da oshadi
+
+        function resolveAudio(verseCode, folder = currentFolder) {
+            const parts = verseCode.split("-");
+            const surahNo = parseInt(parts[0], 10);
+            const ayahNo = parseInt(parts[1], 10);
+            const table = SEGMENT_TIMINGS[folder];
+            const entry = table && table[surahNo];
+            const t = entry && entry.ayahs && entry.ayahs[ayahNo];
+            if (t && typeof t.start === "number") {
+                return {
+                segmented: true,
+                src: `${HF_BASE}/${folder}/${entry.audio1 || (surahNo + ".mp3")}`,
+                startSec: t.start / 1000,
+                endSec: (t.end > t.start) ? t.end / 1000 : null
+                };
+            }
+            return {segmented: false, src: `${HF_BASE}/${folder}/${verseCode.replace("-", "")}.mp3`};
+        }
+
+        function segStart() {return seg ? seg.startSec : 0;}
+        function segEnd() {
+            if (seg && seg.endSec !== null) return seg.endSec;
+            return isFinite(audio.duration) ? audio.duration : 0;
+        }
+        function segDuration() {return Math.max(0, segEnd() - segStart());}
+
+        function seekVerseStart() {
+            segToken++;
+            segFinished = false;
+            audio.currentTime = segStart();
+        }
+
+        // Oyat tugash vaqtini aniq (20 ms) kuzatib boradi
+        setInterval(() => {
+            if (!seg || seg.endSec === null) return;
+            if (audio.paused || isABLooping || segFinished) return;
+            if (audio.currentTime >= seg.endSec) finishSegment();
+        }, 20);
+
+        function finishSegment() {
+            segFinished = true;
+            const tokenBefore = segToken;
+            handleVerseEnded();
+            // Hech qanday yangi oyat/seek boshlanmagan bo'lsa — to'xtatib qo'yamiz
+            if (segToken === tokenBefore) {
+                audio.pause();
+                playBtn.innerHTML = ICONS.play;
+            }
+        }
+
+        audio.addEventListener("seeking", () => {
+            if (seg && seg.endSec !== null && audio.currentTime < seg.endSec - 0.05) segFinished = false;
+        });
+
+        // 🟢 Keyingi oyatni oldindan xotiraga (keshga) yuklab turuvchi yashirin obyekt
+        const preloadAudio = new Audio();
+        preloadAudio.preload = "auto";
+
+        function preloadNextVerse() {
+            if (!currentVerse) return;
+            let nextVerseCode = null;
+
+            if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
+                const rIdx = selectedVersesRange.indexOf(currentVerse);
+                if (rIdx + 1 < selectedVersesRange.length) {
+                    nextVerseCode = selectedVersesRange[rIdx + 1];
+                } else if (verseLoop) {
+                    nextVerseCode = selectedVersesRange[0];
+                }
+            } else {
+                const verses = getUniqueVersesOnOpenPages();
+                const idx = verses.indexOf(currentVerse);
+                if (idx !== -1 && idx + 1 < verses.length) {
+                    nextVerseCode = verses[idx + 1];
+                } else if (pageLoop && verses.length > 0) {
+                    nextVerseCode = verses[0];
+                }
+            }
+
+            if (nextVerseCode && !nextVerseCode.endsWith("-000")) {
+                const nextRes = resolveAudio(nextVerseCode);
+                const nextSrc = nextRes.src;
+                // Xuddi shu sura fayli allaqachon yuklangan bo'lsa, oldindan yuklash shart emas
+                if (nextRes.segmented && nextSrc === audio.getAttribute("src")) return;
+                if (preloadAudio.getAttribute("src") !== nextSrc) {
+                    preloadAudio.src = nextSrc;
+                    preloadAudio.load();
+                }
+            }
+        }
+
+        function playVerse(verseCode, silentClear = false, scrollToOverlay = false, keepRange = false) {
+            if (!verseCode || verseCode.endsWith("-000")) return;
+            clearABLoop(true);
+            currentVerse = verseCode;
+
+            if (!keepRange) {
+                selectedVersesRange = [verseCode];
+                currentRepeatCount = 0;
+            }
+
+            updateOverlaySelectionVisuals();
+            // Bosilgan yoki tinglangan oyatni ochiq holatda saqlab qolish
+            bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`).forEach(el => {el.classList.add("revealed");});
+
+            const matchedOverlays = bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`);
+            if (matchedOverlays.length > 0 && matchedOverlays[0].dataset.page) {
+                currentPage = parseInt(matchedOverlays[0].dataset.page, 10);
+                pageInput.value = currentPage;
+                localStorage.setItem("page", currentPage);
+            }
+
+            if (matchedOverlays.length > 0) {
+                setTimeout(() => {
+                    ensureSelectedOverlayVisible();
+                }, 80);
+            }
+
+            highlightActiveSurah();
+            highlightActiveTranslation(verseCode);
+
+            const res = resolveAudio(verseCode);
+            segToken++;
+            segFinished = false;
+            if (res.segmented) {
+                seg = {src: res.src, startSec: res.startSec, endSec: res.endSec};
+                if (audio.getAttribute("src") !== res.src) {
+                    audio.pause();
+                    audio.src = res.src;
+                    const targetStart = res.startSec;
+                    const myToken = segToken;
+                    audio.addEventListener("loadedmetadata", function onMeta() {
+                        if (segToken === myToken) {
+                            audio.currentTime = targetStart;
+                            audio.playbackRate = speeds[speedIndex];
+                            audio.play().then(() => playBtn.innerHTML = ICONS.pause).catch(() => playBtn.innerHTML = ICONS.play);
+                        }
+                    }, {once: true});
+                    preloadNextVerse();
+                    return;
+                } else if (audio.paused || Math.abs(audio.currentTime - res.startSec) > 0.15) {
+                    audio.currentTime = res.startSec;
+                }
+            } else {
+                seg = null;
+                audio.src = res.src;
+            }
+            audio.playbackRate = speeds[speedIndex];
+            audio.play().then(() => playBtn.innerHTML = ICONS.pause).catch(() => playBtn.innerHTML = ICONS.play);
+            preloadNextVerse();
+
+        }
+
+        /* === INTERAKTIV TARJIMA PANEL FUNKSIYALARI === */
+        function toggleTranslation() {
+            const isOpen = translationBox.classList.toggle("ochiq");
+            transBtn.classList.toggle("active", isOpen);
+            if (isOpen) {
+                updateTranslationContent();
+            }
+        }
+
+        function changeTranslation(type) {
+            currentTranslationType = type;
+            if (type === 'sodiq') {
+                tabSodiq.classList.add("active");
+                tabMansur.classList.remove("active");
+            } else {
+                tabMansur.classList.add("active");
+                tabSodiq.classList.remove("active");
+            }
+            translationContent.dataset.renderedSearchKey = "";
+            updateTranslationContent();
+        }
+
+        // Tarjima shrift o'lchamini boshqarish va xotirada saqlash
+        let transFontSize = parseFloat(localStorage.getItem("transFontSize")) || 14.5;
+        translationContent.style.fontSize = transFontSize + "px";
+
+        function changeTransFontSize(delta) {
+            transFontSize = Math.min(24, Math.max(12, transFontSize + delta));
+            translationContent.style.fontSize = transFontSize + "px";
+            localStorage.setItem("transFontSize", transFontSize);
+        }
+
+        // Qidirilgan so'zni matn ichida xavfsiz ajratib ko'rsatish
+        function highlightSearchMatch(text, rawQuery) {
+            const escapedText = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            const q = rawQuery.trim();
+            if (!q) return escapedText;
+            const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            return escapedText.replace(new RegExp(`(${escapedQ})`, "gi"), '<mark class="search-hl">$1</mark>');
+        }
+
+        // Barcha 6236 oyat tarjimalari ichidan qidirish funksiyasi
+        function renderGlobalTranslationSearch(rawQuery) {
+            const q = rawQuery.toLowerCase().trim();
+            const searchCacheKey = `${currentTranslationType}__${q}`;
+
+            if (translationContent.dataset.renderedSearchKey === searchCacheKey) {
+                if (currentVerse) highlightActiveTranslation(currentVerse);
+                return;
+            }
+            translationContent.dataset.renderedSearchKey = searchCacheKey;
+            translationContent.innerHTML = "";
+
+            if (typeof translations === "undefined") {
+                translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
+                return;
+            }
+
+            const results = [];
+            for (const [transKey, verseData] of Object.entries(translations)) {
+                if (!verseData || !verseData[currentTranslationType]) continue;
+                const text = verseData[currentTranslationType];
+                const parts = transKey.split("_");
+                const sNum = parseInt(parts[0], 10);
+                const aNum = parseInt(parts[1], 10);
+                const surahTitle = surahNamesByNumber[sNum] || `${sNum}-сура`;
+                const refColon = `${sNum}:${aNum}`;
+                const refDash = `${sNum}-${aNum}`;
+
+                if (
+                    text.toLowerCase().includes(q) ||
+                    surahTitle.toLowerCase().includes(q) ||
+                    refColon.includes(q) ||
+                    refDash.includes(q)
+                ) {
+                    results.push({sNum, aNum, text, surahTitle});
+                }
+            }
+
+            transHeaderTitle.innerText = `Қидирув натижалари (${results.length} та)`;
+
+            if (results.length === 0) {
+                translationContent.innerText = `"${rawQuery}" бўйича ҳеч қандай оят топилмади.`;
+                return;
+            }
+
+            const MAX_SHOW = 200;
+            results.slice(0, MAX_SHOW).forEach(itemData => {
+                const verseCode = `${pad(itemData.sNum)}-${pad(itemData.aNum)}`;
+                const pageNum = getPageForVerse(verseCode);
+
+                const item = document.createElement("div");
+                item.className = "trans-verse-item";
+                if (currentVerse === verseCode) item.classList.add("active-trans");
+                item.dataset.verse = verseCode;
+
+                const badge = document.createElement("div");
+                badge.className = "trans-page-badge";
+                badge.style.margin = "0 0 6px 0";
+                badge.innerText = `${itemData.surahTitle} (${itemData.sNum}:${itemData.aNum})` + (pageNum ? ` • ${pageNum}-бет` : "");
+
+                const textDiv = document.createElement("div");
+                textDiv.innerHTML = highlightSearchMatch(itemData.text, rawQuery);
+
+                item.appendChild(badge);
+                item.appendChild(textDiv);
+
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    const openPages = isBookMode && openLeftPage ? [openRightPage, openLeftPage] : [openRightPage];
+                    if (pageNum && !openPages.includes(pageNum)) {
+                        currentPage = pageNum;
+                        updateUI(verseCode, true, true);
+                    } else {
+                        playVerse(verseCode, true, true, false);
+                    }
+                };
+
+                translationContent.appendChild(item);
+            });
+
+            if (results.length > MAX_SHOW) {
+                const moreInfo = document.createElement("div");
+                moreInfo.style.cssText = "text-align:center; padding:10px; font-size:12px; color:#cbbba8;";
+                moreInfo.innerText = `Яна ${results.length - MAX_SHOW} та натижа бор. Қидирув сўзини аниқроқ ёзинг.`;
+                translationContent.appendChild(moreInfo);
+            }
+        }
+
+        function updateTranslationContent() {
+            const searchQuery = translationSearchInput ? translationSearchInput.value.trim() : "";
+            if (searchQuery.length > 0) {
+                renderGlobalTranslationSearch(searchQuery);
+                return;
+            }
+
+            translationContent.dataset.renderedSearchKey = "";
+
+            if (isBookMode && openLeftPage) {
+                transHeaderTitle.innerText = `Саҳифа таржимаси (${openRightPage}–${openLeftPage}-бетлар)`;
+            } else {
+                transHeaderTitle.innerText = `Саҳифа таржимаси (${currentPage}-бет)`;
+            }
+            translationContent.innerHTML = "";
+
+            if (typeof translations === "undefined") {
+                translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
+                return;
+            }
+            let foundAny = false;
+            const pagesToRender = isBookMode && openLeftPage
+                ? [{page: openRightPage, holder: rightHolder}, {page: openLeftPage, holder: leftHolder}]
+                : [{page: openRightPage, holder: rightHolder}];
+
+            pagesToRender.forEach(pObj => {
+                const verses = getUniqueVersesInHolder(pObj.holder);
+                if (verses.length === 0) return;
+
+                if (isBookMode) {
+                    const badge = document.createElement("div");
+                    badge.className = "trans-page-badge";
+                    badge.innerText = `${pObj.page}-бет`;
+                    translationContent.appendChild(badge);
+                }
+                verses.forEach(verseCode => {
+                    const parts = verseCode.split("-");
+                    const sNum = parseInt(parts[0], 10);
+                    const aNum = parseInt(parts[1], 10);
+                    const transKey = `${sNum}_${aNum}`;
+
+                    if (aNum === 1 && surahNamesByNumber[sNum]) {
+                        const surahHeader = document.createElement("div");
+                        surahHeader.className = "trans-surah-title";
+                        surahHeader.innerText = surahNamesByNumber[sNum].toUpperCase();
+                        translationContent.appendChild(surahHeader);
+                    }
+                    const verseData = translations[transKey];
+                    if (verseData && verseData[currentTranslationType]) {
+                        foundAny = true;
+                        const item = document.createElement("div");
+                        item.className = "trans-verse-item";
+                        if (selectedVersesRange.length > 1 && selectedVersesRange.includes(verseCode)) {
+                            item.classList.add("range-trans");
+                        }
+                        if (currentVerse === verseCode) item.classList.add("active-trans");
+                        item.dataset.verse = verseCode;
+                        item.innerText = verseData[currentTranslationType];
+
+                        item.onclick = (e) => {
+                            e.stopPropagation();
+                            playVerse(verseCode, true, true, false);
+                        };
+                        translationContent.appendChild(item);
+                    }
+                });
+            });
+            if (!foundAny) {
+                translationContent.innerText = `Ушбу саҳифа оятлари учун таржима матни топилмади.`;
+            } else if (currentVerse) {
+                highlightActiveTranslation(currentVerse);
+            }
+        }
+
+        function highlightActiveTranslation(verseCode) {
+            const items = translationContent.querySelectorAll(".trans-verse-item");
+            items.forEach(el => {
+                const v = el.dataset.verse;
+                const isMatch = v === verseCode;
+                el.classList.toggle("range-trans", selectedVersesRange.length > 1 && selectedVersesRange.includes(v));
+                el.classList.toggle("active-trans", isMatch);
+                if (isMatch && translationBox.classList.contains("ochiq")) {
+                    el.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+        }
+
+        function changeFolder() {
+            currentFolder = folderSelect.value;
+            localStorage.setItem("audioFolder", currentFolder);
+            if (currentVerse) {
+                playVerse(currentVerse, true, false, selectedVersesRange.length > 1);
+            } else {
+                updateUI();
+            }
+        }
+
+        function showStatus(text, duration = 1500) {
+            audioStatus.innerText = text;
+            if (duration) {
+                setTimeout(() => {
+                    if (audioStatus.innerText === text) audioStatus.innerText = "";
+                }, duration);
+            }
+        }
+
+        function toggleModal() {
+            shortcutModal.style.display = shortcutModal.style.display === "flex" ? "none" : "flex";
+        }
+
+        /* --- A-B LOOP MANTIQLARI (Takrorlar soni bilan birlashtirilgan) --- */
+        const OFFSET = 0.2;
+
+        function setPointA() {
+            pointA = Math.max(segStart(), audio.currentTime - OFFSET);
+            btnA.classList.add("active");
+            btnB.classList.remove("active");
+            isABLooping = false;
+            pointB = null;
+            abRepeatCount = 0;
+            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+            showStatus(`A: ${format(pointA - segStart())}`);
+        }
+
+        function setPointB() {
+            if (pointA === null) {
+                showStatus("Avval A ni bosing");
+                return;
+            }
+            let calculatedB = Math.min(Math.max(0, (segEnd() || Infinity) - 0.05), audio.currentTime);
+            if (calculatedB <= pointA) {
+                showStatus("B nuqta A dan keyin bo'lishi shart");
+                return;
+            }
+            pointB = calculatedB;
+            btnB.classList.add("active");
+
+            // 🟢 B bosilganda takrorlash tugmasini (🔂) avtomatik yoqamiz
+            verseLoop = true;
+            verseLoopBtn.classList.add("active");
+
+            startABLoop();
+        }
+
+        function startABLoop() {
+            if (pointA === null || pointB === null) return;
+            isABLooping = true;
+            abRepeatCount = 0;
+
+            const maxRepeats = getTargetRepeatCount();
+            const initLabel = (!verseLoop) ? "1/1" : (maxRepeats === 0 ? "1/∞" : `1/${maxRepeats}`);
+            showStatus(`A-B: ${initLabel}`, 2000);
+
+            audio.currentTime = pointA;
+
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = ICONS.pause;
+            }
+
+            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+
+            loopInterval = setInterval(() => {
+                if (isABLooping && pointB !== null && audio.currentTime >= pointB && !audio.paused) {
+                    audio.pause();
+
+                    const targetRepeats = getTargetRepeatCount();
+                    abRepeatCount++;
+
+                    if (verseLoop && (targetRepeats === 0 || abRepeatCount < targetRepeats)) {
+                        const label = targetRepeats === 0 ? `${abRepeatCount + 1}/∞` : `${abRepeatCount + 1}/${targetRepeats}`;
+                        showStatus(`A-B: ${label}`, 2000);
+
+                        abGapTimer = setTimeout(() => {
+                            abGapTimer = null;
+                            if (isABLooping && pointA !== null) {
+                                audio.currentTime = pointA;
+                                audio.play();
+                                playBtn.innerHTML = ICONS.pause;
+                            }
+                        }, 250);
+                    } else {
+                        isABLooping = false;
+                        abRepeatCount = 0;
+                        if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+                        playBtn.innerHTML = ICONS.play;
+                        showStatus(`A-B tugadi (${verseLoop ? targetRepeats : 1}x)`, 2500);
+                    }
+                }
+            }, 10);
+        }
+
+        function clearABLoop(silent = false) {
+            const hadAB = (pointA !== null || pointB !== null || isABLooping);
+
+            pointA = null;
+            pointB = null;
+            isABLooping = false;
+            abRepeatCount = 0;
+            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+            btnA.classList.remove("active");
+            btnB.classList.remove("active");
+
+            // 🟢 A-B faol bo'lgan bo'lsa yoki 7 / ✕ tugmasi bosilgan bo'lsa, 🔂 belgisini ham o'chiramiz
+            if (hadAB || !silent) {
+                verseLoop = false;
+                verseLoopBtn.classList.remove("active");
+            }
+
+            if (!silent) {
+                if (selectedVersesRange.length > 1 && currentVerse) {
+                    selectedVersesRange = [currentVerse];
+                    currentRepeatCount = 0;
+                    updateOverlaySelectionVisuals();
+                    showStatus("Tanlov tozalandi");
+                } else {
+                    showStatus("Loop o'chirildi");
+                }
+            }
+        }
+
+        /* Ovozni o'chirish/yoqish */
+        function toggleMute() {
+            if (audio.volume > 0) {
+                previousVolume = audio.volume;
+                audio.volume = 0;
+                volume.value = 0;
+                updateMuteIcon(0);
+            } else {
+                audio.volume = previousVolume;
+                volume.value = previousVolume;
+                updateMuteIcon(previousVolume);
+            }
+        }
+
+        function updateMuteIcon(vol) {
+            if (vol == 0) muteBtn.innerHTML = ICONS.volMute;
+            else if (vol < 0.5) muteBtn.innerHTML = ICONS.volLow;
+            else muteBtn.innerHTML = ICONS.volHigh;
+        }
+
+        function stepSpread(dir) {
+            if (isBookMode) {
+                let nextRight = openRightPage + (dir * 2);
+                if (nextRight < 1) nextRight = 1;
+                if (nextRight > 603) nextRight = 603;
+                currentPage = nextRight;
+            } else {
+                currentPage += dir;
+                if (currentPage < 1) currentPage = 1;
+                if (currentPage > 604) currentPage = 604;
+            }
+            updateUI("first", false, true);
+        }
+
+        function prevAudio() {
+            if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
+                const rIdx = selectedVersesRange.indexOf(currentVerse);
+                if (rIdx > 0) {
+                    playVerse(selectedVersesRange[rIdx - 1], true, false, true);
+                } else {
+                    playVerse(selectedVersesRange[0], true, false, true);
+                }
+                return;
+            }
+
+            const verses = getUniqueVersesOnOpenPages();
+            if (verses.length === 0) {
+                stepSpread(-1);
+                return;
+            }
+            const idx = verses.indexOf(currentVerse);
+            if (idx === -1) {
+                // L bosilgandan keyin oldingi sahifaga o'tib ketmasdan, 1-oyatni ochadi
+                playVerse(verses[0], true, false, false);
+            } else if (idx > 0) {
+                playVerse(verses[idx - 1], true, false, false);
+            } else if (openRightPage > 1) {
+                currentPage = openRightPage - 1;
+                updateUI("last", false, true);
+            } else {
+                playVerse(verses[0], true, false, false);
+            }
+        }
+
+        function nextAudio() {
+            if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
+                const rIdx = selectedVersesRange.indexOf(currentVerse);
+                if (rIdx + 1 < selectedVersesRange.length) {
+                    playVerse(selectedVersesRange[rIdx + 1], true, false, true);
+                } else {
+                    playVerse(selectedVersesRange[0], true, false, true);
+                }
+                return;
+            }
+
+            const verses = getUniqueVersesOnOpenPages();
+            if (verses.length === 0) {
+                stepSpread(1);
+                return;
+            }
+            const idx = verses.indexOf(currentVerse);
+            if (idx === -1) {
+                // L bosilgandan keyin keyingi sahifaga o'tib ketmasdan, 1-oyatni ochadi
+                playVerse(verses[0], true, false, false);
+            } else if (idx + 1 < verses.length) {
+                playVerse(verses[idx + 1], true, false, false);
+            } else {
+                const lastOpenPage = isBookMode && openLeftPage ? openLeftPage : openRightPage;
+                if (lastOpenPage < 604) {
+                    currentPage = lastOpenPage + 1;
+                    updateUI("first", false, true);
+                }
+            }
+        }
+
+        function togglePlay() {
+            if (!audio.src || !currentVerse) {
+                const verses = getUniqueVersesOnOpenPages();
+                if (verses.length > 0) playVerse(verses[0], true, false, false);
+                return;
+            }
+
+            // A va B nuqtalari belgilangan bo'lsa
+            if (pointA !== null && pointB !== null) {
+                if (isABLooping) {
+                    audio.pause();
+                    isABLooping = false;
+                    if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+                    if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+                    playBtn.innerHTML = ICONS.play;
+                } else {
+                    startABLoop();
+                }
+                return;
+            }
+
+            // Oddiy audio ijrosi
+            if (audio.paused) {
+                const verseDone = audio.ended || (seg && (segFinished || (seg.endSec !== null && audio.currentTime >= seg.endSec - 0.02)));
+                if (selectedVersesRange.length > 1 && currentVerse === selectedVersesRange[selectedVersesRange.length - 1] && verseDone) {
+                    currentRepeatCount = 0;
+                    playVerse(selectedVersesRange[0], true, false, true);
+                } else {
+                    if (seg && verseDone) seekVerseStart();   // oyat tugagan bo'lsa, boshidan qayta o'ynaydi
+                    audio.play();
+                    playBtn.innerHTML = ICONS.pause;
+                }
+            } else {
+                audio.pause();
+                playBtn.innerHTML = ICONS.play;
+            }
+        }
+
+        function toggleSpeed() {
+            speedIndex = (speedIndex + 1) % speeds.length;
+            audio.playbackRate = speeds[speedIndex];
+            speedBtn.innerText = speeds[speedIndex] + "x";
+        }
+
+        function toggleVerseLoop() {
+            verseLoop = !verseLoop;
+            currentRepeatCount = 0;
+            abRepeatCount = 0;
+            verseLoopBtn.classList.toggle("active", verseLoop);
+            const maxR = getTargetRepeatCount();
+            const countText = maxR === 0 ? "∞" : `${maxR}x`;
+            showStatus(verseLoop ? `Takror (${countText}): ON` : "Takror: OFF");
+        }
+
+        function toggleLoop() {
+            pageLoop = !pageLoop;
+            audio.loop = false;
+            loopBtn.classList.toggle("active", pageLoop);
+            showStatus(pageLoop ? "Sahifa takrori: ON" : "Sahifa takrori: OFF");
+        }
+
+        audio.ontimeupdate = () => {
+            const relTime = Math.max(0, audio.currentTime - segStart());
+            const relDur = segDuration();
+            progress.max = relDur;
+            progress.value = relTime;
+            document.getElementById("currTime").innerText = format(relTime);
+            document.getElementById("durTime").innerText = format(relDur);
+        };
+        progress.oninput = () => {
+            audio.currentTime = segStart() + parseFloat(progress.value);
+        };
+        volume.oninput = () => {
+            audio.volume = volume.value;
+            updateMuteIcon(volume.value);
+        };
+
+        audio.onended = () => {
+            if (seg && segFinished) return;   // oyat oxirini allaqachon kuzatuvchi qayta ishlagan
+            if (seg) segFinished = true;
+            handleVerseEnded();
+        };
+
+        function handleVerseEnded() {
+            if (isABLooping) return;
+
+            const maxRepeats = getTargetRepeatCount();
+
+            // 1-HOLAT: Bir nechta oyat tortib belgilangan bo'lsa (Range Mode)
+            if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
+                const rIdx = selectedVersesRange.indexOf(currentVerse);
+                if (rIdx + 1 < selectedVersesRange.length) {
+                    playVerse(selectedVersesRange[rIdx + 1], true, false, true);
+                } else {
+                    if (verseLoop) {
+                        currentRepeatCount++;
+                        if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
+                            const label = maxRepeats === 0 ? `${currentRepeatCount + 1}/∞` : `${currentRepeatCount + 1}/${maxRepeats}`;
+                            showStatus(`Takror: ${label}`, 2000);
+                            playVerse(selectedVersesRange[0], true, false, true);
+                        } else {
+                            currentRepeatCount = 0;
+                            playBtn.innerHTML = ICONS.play;
+                            showStatus(`Takror tugadi (${maxRepeats}x)`, 2500);
+                        }
+                    } else {
+                        playBtn.innerHTML = ICONS.play;
+                        showStatus("Tanlangan oyatlar tugadi", 2000);
+                    }
+                }
+                return;
+            }
+
+            // 2-HOLAT: Bitta oyat tanlangan va 🔂 (verseLoop) yoqilgan bo'lsa
+            if (verseLoop) {
+                currentRepeatCount++;
+                if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
+                    const label = maxRepeats === 0 ? `${currentRepeatCount + 1}/∞` : `${currentRepeatCount + 1}/${maxRepeats}`;
+                    showStatus(`Oyat: ${label}`, 1500);
+                    seekVerseStart();
+                    audio.play();
+                    return;
+                } else {
+                    currentRepeatCount = 0;
+                }
+            }
+
+            // 3-HOLAT: Oddiy tartibda keyingi oyatga o'tish
+            const verses = getUniqueVersesOnOpenPages();
+            const idx = verses.indexOf(currentVerse);
+            if (idx !== -1 && idx + 1 < verses.length) {
+                playVerse(verses[idx + 1], true, false, false);
+            } else if (pageLoop) {
+                if (verses.length > 0) playVerse(verses[0], true, false, false);
+            } else {
+                nextAudio();
+            }
+        }
+
+        function format(s) {
+            if (isNaN(s)) return "0:00";
+            let m = Math.floor(s / 60);
+            let sec = Math.floor(s % 60);
+            return m + ":" + (sec < 10 ? "0" : "") + sec;
+        }
+
+        document.onkeydown = (e) => {
+            if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+
+            if (e.code === "KeyB") {e.preventDefault(); toggleBookMode(); return;}
+            if (e.code === "KeyR") {e.preventDefault(); toggleSurahMenu(); return;}
+            if (e.code === "KeyT") {e.preventDefault(); toggleTranslation(); return;}
+            if (e.code === "KeyY") {e.preventDefault(); toggleModal(); return;}
+            if (e.code === "KeyM") {e.preventDefault(); toggleMute(); return;}
+            if (e.code === "KeyV") {e.preventDefault(); toggleVerseLoop(); return;}
+            if (e.code === "KeyP") {e.preventDefault(); toggleAllPanels(); return;}
+            if (e.code === "KeyO") {e.preventDefault(); memorizeViewHide(); return;}
+            if (e.code === "KeyL") {e.preventDefault(); memorizeResetPage(); return;}
+
+            if (e.code === "KeyH" || e.code === "Backspace") {
+                e.preventDefault();
+                autoScale(true);
+                showStatus("Asl masshtab tiklandi");
+                return;
+            }
+            switch (e.key) {
+                case "1": e.preventDefault(); setPointA(); break;
+                case "3": e.preventDefault(); setPointB(); break;
+                case "7": e.preventDefault(); clearABLoop(); break;
+                case " ": case "5": e.preventDefault(); togglePlay(); break;
+                case "ArrowRight": e.preventDefault(); nextAudio(); break;
+                case "ArrowLeft": e.preventDefault(); prevAudio(); break;
+                case "+": case "=":
+                    if (!e.ctrlKey) {e.preventDefault(); scale = Math.min(scale + 0.1, 3); applyZoom();} break;
+                case "-": case "_":
+                    if (!e.ctrlKey) {e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom();} break;
+                case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "x"; break;
+                case ",": case "<": e.preventDefault(); stepSpread(-1); showStatus("Oldingi sahifa"); break;
+                case ".": case ">": e.preventDefault(); stepSpread(1); showStatus("Keyingi sahifa"); break;
+                case "9": e.preventDefault(); toggleLoop(); break;
+                case "0": e.preventDefault(); seekVerseStart(); showStatus("Boshiga"); break;
+                case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2s"); break;
+                case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2s"); break;
+                case "2": e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
+                case "8": e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
+            }
+        };
+
+        pageInput.onchange = () => {
+            let v = parseInt(pageInput.value);
+            if (v >= 1 && v <= 604) {
+                currentPage = v;
+                updateUI("first", false, true);
+            }
+        };
+        bookWrapper.onwheel = (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                scale += e.deltaY * -0.001;
+                scale = Math.min(Math.max(0.4, scale), 3);
+                applyZoom();
+            }
+        };
+
+        // === "👁 KO'RISH / YASHIRISH" VA "🔒 YOPISH" FUNKSIYALARI ===
+        function memorizeResetPage() {
+            clearABLoop(true);
+            audio.pause();
+            preloadAudio.pause();
+            playBtn.innerHTML = ICONS.play;
+            currentVerse = null;
+            selectedVersesRange = [];
+            document.body.classList.add("memorize-masked");
+
+            const peekBtn = document.getElementById("memPeekBtn");
+            if (peekBtn) peekBtn.classList.remove("active");
+
+            bookWrapper.querySelectorAll(".overlay").forEach(el => {
+                el.classList.remove("selected", "range-selected", "revealed", "hovered");
+            });
+            showStatus("Oyatlar yopildi");
+        }
+
+        function memorizeViewHide() {
+            const isMasked = document.body.classList.contains("memorize-masked");
+            const peekBtn = document.getElementById("memPeekBtn");
+
+            if (isMasked) {
+                document.body.classList.remove("memorize-masked");
+                if (peekBtn) peekBtn.classList.add("active");
+                showStatus("Barcha oyatlar ko'rsatildi");
+            } else {
+                document.body.classList.add("memorize-masked");
+                if (peekBtn) peekBtn.classList.remove("active");
+                showStatus("Oyatlar yashirildi");
+            }
+        }
+
+        /* INIT */
+        folderSelect.value = currentFolder;
+        updateMuteIcon(1);
+        applyBookModeClass();
+        autoScale(true);
+        updateUI("first", false, false);
+    </script>
+</body>
+
+</html>
