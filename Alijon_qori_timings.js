@@ -36,12 +36,12 @@ const ALIJON_QORI_TIMINGS = {
         "audio1": "2.mp3",
         "ayahs": {
             "1": {
-                "start": 8970,
-                "end": 20420
+                "start": 7708,
+                "end": 20444
             },
             "2": {
-                "start": 20420,
-                "end": 30770
+                "start": 20444,
+                "end": 30254
             },
             "3": {
                 "start": 30770,
