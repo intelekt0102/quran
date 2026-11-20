@@ -17,6 +17,7 @@
     <script src="translation.js"></script>
     <!-- 3. Alijon qori: har bir sura uchun bitta audio fayl + oyatlar vaqtlari (ms) -->
     <script src="Alijon_qori_timings.js"></script>
+    <script src="Husary_qori_timings.js"></script>
 
     <style>
         /* =========================================================
@@ -2548,7 +2549,8 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
            oyat ichidagi nisbiy vaqt bilan avvalgidek ishlaydi.
            ========================================================= */
         const SEGMENT_TIMINGS = {
-            audios1: (typeof ALIJON_QORI_TIMINGS !== "undefined") ? ALIJON_QORI_TIMINGS : null
+            audios1: (typeof ALIJON_QORI_TIMINGS !== "undefined") ? ALIJON_QORI_TIMINGS : null,
+            audios2: (typeof HUSARY_QORI_TIMINGS !== "undefined") ? HUSARY_QORI_TIMINGS : null
         };
         let seg = null;            // joriy oyat: {src, startSec, endSec|null} yoki null (alohida fayl rejimi)
         let segFinished = false;   // oyat oxiriga yetdimi
