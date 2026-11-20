@@ -2323,7 +2323,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 leaf.className = "flip-leaf " + (dir > 0 ? "single-next" : "single-prev");
                 leaf.innerHTML = `
                     <div class="flip-face front">
-                        <img src="images/${pad(oldRightNum)}.jpg" alt="">
+                        <img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">
                         <div class="flip-shade"></div>
                     </div>
                 `;
