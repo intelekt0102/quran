@@ -349,6 +349,37 @@
             align-items: center;
         }
 
+.status-toast {
+            position: fixed;
+            right: 18px;
+            bottom: 74px;
+            padding: 8px 15px;
+            border-radius: 999px;
+            background: linear-gradient(155deg, var(--panel-glass), var(--panel-glass-deep));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(45, 212, 191, 0.35);
+            color: var(--champagne);
+            font-size: 12.5px;
+            font-weight: 600;
+            box-shadow: 0 10px 28px rgba(0, 8, 8, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            z-index: 3100;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.22s var(--ease-ui), transform 0.25s var(--ease-ui);
+        }
+
+        .status-toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .status-toast.yashirin {
+            transform: translateY(110px);
+            opacity: 0;
+        }
+
         .audio-status:empty {
             display: none;
         }
@@ -1542,9 +1573,9 @@
 
         <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="A-B nuqtalarini tozalash (7)">✕</button>
 
-        <span id="audioStatus" class="audio-status"></span>
     </div>
 
+    <div id="audioStatus" class="status-toast" aria-live="polite"></div>
     <!-- YORDAM MODAL OYNASI -->
     <div id="shortcutModal" class="modal" onclick="toggleModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1755,9 +1786,11 @@
         function toggleAllPanels() {
             const controls = document.querySelector(".controls");
             const playerBar = document.querySelector(".player-bar");
+            const statusToast = document.getElementById("audioStatus");
 
             const isHidden = controls.classList.toggle("yashirin");
             playerBar.classList.toggle("yashirin", isHidden);
+            if (statusToast) statusToast.classList.toggle("yashirin", isHidden);
 
             localStorage.setItem("panelsHidden", isHidden);
         }
@@ -1767,6 +1800,8 @@
             if (localStorage.getItem("panelsHidden") === "true") {
                 document.querySelector(".controls").classList.add("yashirin");
                 document.querySelector(".player-bar").classList.add("yashirin");
+                const statusToast = document.getElementById("audioStatus");
+                if (statusToast) statusToast.classList.add("yashirin");
             }
         });
 
@@ -2937,11 +2972,31 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
         }
 
+        let statusHideTimer = null;
+
         function showStatus(text, duration = 1500) {
-            audioStatus.innerText = text;
+            if (!text) {
+                audioStatus.textContent = "";
+                audioStatus.classList.remove("visible");
+                return;
+            }
+
+            audioStatus.textContent = text;
+            audioStatus.classList.add("visible");
+
+            if (statusHideTimer) {
+                clearTimeout(statusHideTimer);
+                statusHideTimer = null;
+            }
+
             if (duration) {
-                setTimeout(() => {
-                    if (audioStatus.innerText === text) audioStatus.innerText = "";
+                statusHideTimer = setTimeout(() => {
+                    audioStatus.classList.remove("visible");
+                    statusHideTimer = setTimeout(() => {
+                        if (!audioStatus.classList.contains("visible")) {
+                            audioStatus.textContent = "";
+                        }
+                    }, 250);
                 }, duration);
             }
         }
