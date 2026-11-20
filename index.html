@@ -2247,31 +2247,31 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
 
                 if (dir > 0) {
                     underlay.className = "flip-underlay right-side";
-                    underlay.innerHTML = `<img src="images/${pad(oldRightNum)}.jpg" alt="">`;
+                    underlay.innerHTML = `<img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">`;
 
                     leaf.className = "flip-leaf turn-next";
                     leaf.innerHTML = `
                         <div class="flip-face front">
-                            <img src="images/${pad(oldLeftNum)}.jpg" alt="">
+                            <img src="${HF_BASE}/images/${pad(oldLeftNum)}.jpg" alt="">
                             <div class="flip-shade"></div>
                         </div>
                         <div class="flip-face back">
-                            <img src="images/${pad(newRightNum)}.jpg" alt="">
+                            <img src="${HF_BASE}/images/${pad(newRightNum)}.jpg" alt="">
                             <div class="flip-shade"></div>
                         </div>
                     `;
                 } else {
                     underlay.className = "flip-underlay left-side";
-                    underlay.innerHTML = `<img src="images/${pad(oldLeftNum)}.jpg" alt="">`;
+                    underlay.innerHTML = `<img src="${HF_BASE}/images/${pad(oldLeftNum)}.jpg" alt="">`;
 
                     leaf.className = "flip-leaf turn-prev";
                     leaf.innerHTML = `
                         <div class="flip-face front">
-                            <img src="images/${pad(oldRightNum)}.jpg" alt="">
+                            <img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">
                             <div class="flip-shade"></div>
                         </div>
                         <div class="flip-face back">
-                            <img src="images/${pad(newLeftNum)}.jpg" alt="">
+                            <img src="${HF_BASE}/images/${pad(newLeftNum)}.jpg" alt="">
                             <div class="flip-shade"></div>
                         </div>
                     `;
@@ -2497,7 +2497,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     playPageFlipAnimation(dir, prevRight, prevRight, openRightPage, openRightPage);
                 }
 
-                rightImg.src = `images/${pad(openRightPage)}.jpg`;
+                rightImg.src = `${HF_BASE}/images/${pad(openRightPage)}.jpg`;
                 rightFooter.innerText = "";
                 leftFooter.innerText = "";
 
