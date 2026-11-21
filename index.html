@@ -8,6 +8,8 @@
 
     <link rel="preconnect" href="https://huggingface.co" crossorigin>
     <link rel="dns-prefetch" href="https://huggingface.co">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!-- Islomiy xattotlik (Amiri) va zamonaviy interfeys (Plus Jakarta Sans) shriftlari -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1899,6 +1901,7 @@
 
     <script>
         const HF_BASE = "https://huggingface.co/datasets/masterclass1997/madina/resolve/main";
+        const IMG_BASE = "https://cdn.jsdelivr.net/gh/intelekt0102/quran@main/images";
         const ICONS = {
             play: `<svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>`,
             pause: `<svg class="svg-fill" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>`,
@@ -2574,31 +2577,31 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
 
                 if (dir > 0) {
                     underlay.className = "flip-underlay right-side";
-                    underlay.innerHTML = `<img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">`;
+                    underlay.innerHTML = `<img src="${IMG_BASE}/${pad(oldRightNum)}.webp" alt="">`;
 
                     leaf.className = "flip-leaf turn-next";
                     leaf.innerHTML = `
                         <div class="flip-face front">
-                            <img src="${HF_BASE}/images/${pad(oldLeftNum)}.jpg" alt="">
+                            <img src="${IMG_BASE}/${pad(oldLeftNum)}.webp" alt="">
                             <div class="flip-shade"></div>
                         </div>
                         <div class="flip-face back">
-                            <img src="${HF_BASE}/images/${pad(newRightNum)}.jpg" alt="">
+                            <img src="${IMG_BASE}/${pad(newRightNum)}.webp" alt="">
                             <div class="flip-shade"></div>
                         </div>
                     `;
                 } else {
                     underlay.className = "flip-underlay left-side";
-                    underlay.innerHTML = `<img src="${HF_BASE}/images/${pad(oldLeftNum)}.jpg" alt="">`;
+                    underlay.innerHTML = `<img src="${IMG_BASE}/${pad(oldLeftNum)}.webp" alt="">`;
 
                     leaf.className = "flip-leaf turn-prev";
                     leaf.innerHTML = `
                         <div class="flip-face front">
-                            <img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">
+                            <img src="${IMG_BASE}/${pad(oldRightNum)}.webp" alt="">
                             <div class="flip-shade"></div>
                         </div>
                         <div class="flip-face back">
-                            <img src="${HF_BASE}/images/${pad(newLeftNum)}.jpg" alt="">
+                            <img src="${IMG_BASE}/${pad(newLeftNum)}.webp" alt="">
                             <div class="flip-shade"></div>
                         </div>
                     `;
@@ -2615,7 +2618,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 leaf.className = "flip-leaf " + (dir > 0 ? "single-next" : "single-prev");
                 leaf.innerHTML = `
                     <div class="flip-face front">
-                        <img src="${HF_BASE}/images/${pad(oldRightNum)}.jpg" alt="">
+                        <img src="${IMG_BASE}/${pad(oldRightNum)}.webp" alt="">
                         <div class="flip-shade"></div>
                     </div>
                 `;
@@ -2809,8 +2812,8 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     playPageFlipAnimation(dir, prevRight, prevLeft || prevRight, openRightPage, openLeftPage);
                 }
 
-                rightImg.src = `${HF_BASE}/images/${pad(openRightPage)}.jpg`;
-                leftImg.src = `${HF_BASE}/images/${pad(openLeftPage)}.jpg`;
+                rightImg.src = `${IMG_BASE}/${pad(openRightPage)}.webp`;
+                leftImg.src = `${IMG_BASE}/${pad(openLeftPage)}.webp`;
                 rightFooter.innerText = "";
                 leftFooter.innerText = "";
 
@@ -2825,7 +2828,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     playPageFlipAnimation(dir, prevRight, prevRight, openRightPage, openRightPage);
                 }
 
-                rightImg.src = `${HF_BASE}/images/${pad(openRightPage)}.jpg`;
+                rightImg.src = `${IMG_BASE}/${pad(openRightPage)}.webp`;
                 rightFooter.innerText = "";
                 leftFooter.innerText = "";
 
@@ -2980,7 +2983,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             if (pageNum < 1 || pageNum > 604 || imagePreloadCache.has(pageNum)) return;
             const img = new Image();
             img.decoding = "async";
-            img.src = `${HF_BASE}/images/${pad(pageNum)}.jpg`;
+            img.src = `${IMG_BASE}/${pad(pageNum)}.webp`;
             imagePreloadCache.set(pageNum, img);
 
             if (imagePreloadCache.size > 30) {
