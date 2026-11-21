@@ -3789,7 +3789,7 @@
             if (e.code === "KeyT") {e.preventDefault(); toggleTranslation(); return;}
             if (e.code === "KeyY") {e.preventDefault(); toggleModal(); return;}
             if (e.code === "KeyM") {e.preventDefault(); toggleMute(); return;}
-            if (e.code === "KeyV") {e.preventDefault(); toggleVerseLoop(); return;}
+            if (e.code === "KeyV") {e.preventDefault(); toggleLoop(); return;}
             if (e.code === "KeyP") {e.preventDefault(); toggleAllPanels(); return;}
             if (e.code === "KeyO") {e.preventDefault(); memorizeViewHide(); return;}
             if (e.code === "KeyL") {e.preventDefault(); memorizeResetPage(); return;}
@@ -3814,7 +3814,7 @@
                 case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "x"; break;
                 case ",": case "<": e.preventDefault(); stepSpread(-1); showStatus("Oldingi sahifa"); break;
                 case ".": case ">": e.preventDefault(); stepSpread(1); showStatus("Keyingi sahifa"); break;
-                case "9": e.preventDefault(); toggleLoop(); break;
+                case "9": e.preventDefault(); toggleVerseLoop(); break;
                 case "0": e.preventDefault(); seekVerseStart(); showStatus("Boshiga"); break;
                 case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2s"); break;
                 case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2s"); break;
