@@ -359,7 +359,7 @@
             align-items: center;
         }
 
-.status-toast {
+        .status-toast {
             position: fixed;
             right: 18px;
             bottom: 74px;
@@ -983,6 +983,7 @@
             transition: left 0.36s var(--ease-ui);
             z-index: 3200;
             overflow-y: auto;
+            overflow-x: hidden;
             text-align: left;
             display: flex;
             flex-direction: column;
@@ -991,6 +992,25 @@
 
         .yon-panel.ochiq {
             left: 12px;
+        }
+
+        .yon-panel-resizer {
+            position: fixed;
+            top: 12px;
+            left: -9999px;
+            width: 8px;
+            height: calc(100vh - 24px);
+            cursor: ew-resize;
+            background: transparent;
+            z-index: 3250;
+            transition: background 0.15s ease;
+        }
+
+        .yon-panel-resizer,
+        .yon-panel-resizer:hover,
+        .yon-panel-resizer.active {
+            background: transparent;
+            border-radius: 0;
         }
 
         .yon-panel-header {
@@ -1148,6 +1168,25 @@
             right: 12px;
         }
 
+        .translation-resizer {
+            position: fixed;
+            top: 12px;
+            left: -9999px;
+            width: 8px;
+            height: calc(100vh - 24px);
+            cursor: ew-resize;
+            background: transparent;
+            z-index: 3250;
+            transition: background 0.15s ease;
+        }
+
+        .translation-resizer,
+        .translation-resizer:hover,
+        .translation-resizer.active {
+            background: transparent;
+            border-radius: 0;
+        }
+
         .translation-header {
             padding: 18px 18px 14px 18px;
             background: rgba(8, 27, 26, 0.96);
@@ -1296,6 +1335,11 @@
                 width: 36px;
                 height: 36px;
             }
+
+            .yon-panel-resizer,
+            .translation-resizer {
+                display: none;
+            }
         }
 
         /* === 3 QISMLI SURALAR RO'YXATI === */
@@ -1398,7 +1442,8 @@
             border-radius: 4px;
             font-weight: 600;
         }
-/* ===== LOGIN & AUTH LAYER ===== */
+
+        /* ===== LOGIN & AUTH LAYER ===== */
         .auth-backdrop {
             position: fixed;
             inset: 0;
@@ -1640,15 +1685,16 @@
         }
 
         @keyframes authSpin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
     </style>
 
 </head>
 
 <body>
-<!-- LOGIN OYNASI (SAMARQAND ZUMRADI USLUBIDA) -->
+    <!-- LOGIN OYNASI (SAMARQAND ZUMRADI USLUBIDA) -->
     <div id="authLayer" class="auth-backdrop">
         <form class="auth-card" id="loginForm" onsubmit="handleAuthSubmit(event)" autocomplete="on">
             <div class="auth-badge">❖ QUR'ON TILOVATI</div>
@@ -1663,8 +1709,10 @@
             <div class="auth-field">
                 <label for="authPassword">Парол</label>
                 <div class="password-wrap">
-                    <input id="authPassword" type="password" placeholder="Паролни киритинг" autocomplete="current-password" required>
-                    <button type="button" class="toggle-pass-btn" id="togglePassBtn" onclick="togglePasswordVisibility()" title="Паролни кўрсатиш / яшириш">👁</button>
+                    <input id="authPassword" type="password" placeholder="Паролни киритинг"
+                        autocomplete="current-password" required>
+                    <button type="button" class="toggle-pass-btn" id="togglePassBtn"
+                        onclick="togglePasswordVisibility()" title="Паролни кўрсатиш / яшириш">👁</button>
                 </div>
             </div>
 
@@ -1677,9 +1725,11 @@
             <div id="authError" class="auth-error" role="alert" aria-live="polite"></div>
             <div class="auth-telegram-help">
                 <span>Login va parol kerak bo'lsa, yozing:</span>
-                <a href="https://t.me/shadowing_studio_bot" target="_blank" rel="noopener noreferrer" class="auth-tg-link" title="@shadowing_studio_bot">
+                <a href="https://t.me/shadowing_studio_bot" target="_blank" rel="noopener noreferrer"
+                    class="auth-tg-link" title="@shadowing_studio_bot">
                     <svg class="auth-tg-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M21.94 3.47a1.5 1.5 0 0 0-1.62-.24L2.88 10.38a1.5 1.5 0 0 0 .1 2.8l4.42 1.44 1.67 5.24a1.5 1.5 0 0 0 2.55.56l2.46-2.55 4.24 3.12a1.5 1.5 0 0 0 2.38-.9l2.42-14.9a1.5 1.5 0 0 0-1.23-1.47zM9.45 14.33l8.68-7.79-6.64 9.18-.24 2.75-1.14-3.58-2.97-.97 2.31-3.17z"/>
+                        <path
+                            d="M21.94 3.47a1.5 1.5 0 0 0-1.62-.24L2.88 10.38a1.5 1.5 0 0 0 .1 2.8l4.42 1.44 1.67 5.24a1.5 1.5 0 0 0 2.55.56l2.46-2.55 4.24 3.12a1.5 1.5 0 0 0 2.38-.9l2.42-14.9a1.5 1.5 0 0 0-1.23-1.47zM9.45 14.33l8.68-7.79-6.64 9.18-.24 2.75-1.14-3.58-2.97-.97 2.31-3.17z" />
                     </svg>
                     <span>@shadowing_studio_bot</span>
                 </a>
@@ -1692,7 +1742,7 @@
         <div class="auth-spinner"></div>
         <div id="loadingText">Саҳифа тайёрланмоқда...</div>
     </div>
-    
+
     <!-- YON PANEL: Suralar ro'yxati -->
     <nav id="surahMenu" class="yon-panel">
         <div class="yon-panel-header">
@@ -1705,6 +1755,7 @@
         </div>
         <ul id="surahList"></ul>
     </nav>
+    <div id="surahResizer" class="yon-panel-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
     <!-- O'NG YON PANEL: Sahifa tarjimasi -->
     <div id="translationBox">
@@ -1712,8 +1763,10 @@
             <div class="translation-header-top">
                 <span id="transHeaderTitle">Саҳифа таржимаси</span>
                 <div class="trans-header-actions">
-                    <button class="font-size-btn" onclick="changeTransFontSize(-1)" title="Matnni kichraytirish">A-</button>
-                    <button class="font-size-btn" onclick="changeTransFontSize(1)" title="Matnni kattalashtirish">A+</button>
+                    <button class="font-size-btn" onclick="changeTransFontSize(-1)"
+                        title="Matnni kichraytirish">A-</button>
+                    <button class="font-size-btn" onclick="changeTransFontSize(1)"
+                        title="Matnni kattalashtirish">A+</button>
                     <button class="yon-panel-yopish" onclick="toggleTranslation()">✖</button>
                 </div>
             </div>
@@ -1729,6 +1782,7 @@
             Sahifa tarjimasi yuklanmoqda...
         </div>
     </div>
+    <div id="translationResizer" class="translation-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
     <!-- YUQORI BOSHQARUV PANELI -->
     <div class="controls">
@@ -1782,7 +1836,6 @@
                 <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
         </button>
-
     </div>
 
     <!-- EKRAN CHETIDAGI VARAQLASH TUGMALARI -->
@@ -1804,7 +1857,8 @@
             <div class="quran-page-container" id="rightPageContainer">
                 <div class="quran-page">
                     <div id="rightOverlayHolder"></div>
-                    <img id="rightPageImage" class="page-img" fetchpriority="high" decoding="async" alt="Qur'on sahifasi (O'ng)">
+                    <img id="rightPageImage" class="page-img" fetchpriority="high" decoding="async"
+                        alt="Qur'on sahifasi (O'ng)">
                 </div>
                 <div class="page-number-footer" id="rightPageNumFooter"></div>
             </div>
@@ -1813,7 +1867,8 @@
             <div class="quran-page-container" id="leftPageContainer">
                 <div class="quran-page">
                     <div id="leftOverlayHolder"></div>
-                    <img id="leftPageImage" class="page-img" fetchpriority="high" decoding="async" alt="Qur'on sahifasi (Chap)">
+                    <img id="leftPageImage" class="page-img" fetchpriority="high" decoding="async"
+                        alt="Qur'on sahifasi (Chap)">
                 </div>
                 <div class="page-number-footer" id="leftPageNumFooter"></div>
             </div>
@@ -1827,9 +1882,10 @@
                 <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
             </svg>
         </button>
-        <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn"
-            title="Play / Pause (Space / 5)">
-            <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>
+        <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn" title="Play / Pause (Space / 5)">
+            <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;">
+                <path d="M8 5v14l11-7z" />
+            </svg>
         </button>
         <button class="icon-btn" onclick="nextAudio()" title="Keyingi oyat (→)">
             <svg class="svg-fill" viewBox="0 0 24 24">
@@ -1878,7 +1934,6 @@
         <button onclick="setPointB()" id="btnB" class="btn-b" title="B nuqta (3)">B</button>
 
         <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="A-B nuqtalarini tozalash (7)">✕</button>
-
     </div>
 
     <div id="audioStatus" class="status-toast" aria-live="polite"></div>
@@ -2053,8 +2108,10 @@
 
         const surahListEl = document.getElementById("surahList");
         const surahMenu = document.getElementById("surahMenu");
+        const surahResizer = document.getElementById("surahResizer");
 
         const translationBox = document.getElementById("translationBox");
+        const translationResizer = document.getElementById("translationResizer");
         const translationContent = document.getElementById("translationContent");
         const translationSearchInput = document.getElementById("translationSearchInput");
         const transHeaderTitle = document.getElementById("transHeaderTitle");
@@ -2065,6 +2122,70 @@
 
         function pad(n) {
             return n.toString().padStart(3, "0");
+        }
+
+        // Resizable tutqichlarni joriy panel holatiga moslab joylashtirish
+        function syncResizerPositions() {
+            if (surahResizer && surahMenu) {
+                if (surahMenu.classList.contains("ochiq")) {
+                    const rect = surahMenu.getBoundingClientRect();
+                    surahResizer.style.left = `${Math.max(0, rect.right - 4)}px`;
+                } else {
+                    surahResizer.style.left = "-9999px";
+                }
+            }
+
+            if (translationResizer && translationBox) {
+                if (translationBox.classList.contains("ochiq")) {
+                    const rect = translationBox.getBoundingClientRect();
+                    translationResizer.style.left = `${Math.max(0, rect.left - 4)}px`;
+                } else {
+                    translationResizer.style.left = "-9999px";
+                }
+            }
+        }
+
+
+        let surahSyncTimer = null;
+        let transSyncTimer = null;
+
+        function openSurahMenu() {
+            if (surahSyncTimer) clearTimeout(surahSyncTimer);
+            surahMenu.style.transition = "left 0.36s var(--ease-ui)";
+            surahMenu.classList.add("ochiq");
+            surahMenu.style.left = "12px";
+            menuToggleBtn.classList.add("active");
+            surahSyncTimer = setTimeout(syncResizerPositions, 370);
+        }
+
+        function closeSurahMenu() {
+            if (surahSyncTimer) clearTimeout(surahSyncTimer);
+            surahMenu.style.transition = "left 0.36s var(--ease-ui)";
+            surahMenu.classList.remove("ochiq");
+            const w = surahMenu.offsetWidth || 345;
+            surahMenu.style.left = `-${w + 36}px`;
+            menuToggleBtn.classList.remove("active");
+            if (surahResizer) surahResizer.style.left = "-9999px";
+        }
+
+        function openTranslationBox() {
+            if (transSyncTimer) clearTimeout(transSyncTimer);
+            translationBox.style.transition = "right 0.36s var(--ease-ui)";
+            translationBox.classList.add("ochiq");
+            translationBox.style.right = "12px";
+            transBtn.classList.add("active");
+            updateTranslationContent();
+            transSyncTimer = setTimeout(syncResizerPositions, 370);
+        }
+
+        function closeTranslationBox() {
+            if (transSyncTimer) clearTimeout(transSyncTimer);
+            translationBox.style.transition = "right 0.36s var(--ease-ui)";
+            translationBox.classList.remove("ochiq");
+            const w = translationBox.offsetWidth || 415;
+            translationBox.style.right = `-${w + 48}px`;
+            transBtn.classList.remove("active");
+            if (translationResizer) translationResizer.style.left = "-9999px";
         }
 
         // Oyat kodiga (masalan, "002-255") qarab u qaysi sahifada ekanligini topuvchi xarita
@@ -2113,9 +2234,10 @@
         });
 
         function toggleSurahMenu() {
-            const isOpen = surahMenu.classList.toggle("ochiq");
-            menuToggleBtn.classList.toggle("active", isOpen);
-            if (isOpen) {
+            if (surahMenu.classList.contains("ochiq")) {
+                closeSurahMenu();
+            } else {
+                openSurahMenu();
                 const activeEl = surahListEl.querySelector("a.active-surah");
                 if (activeEl) {
                     setTimeout(() => activeEl.scrollIntoView({behavior: "smooth", block: "center"}), 100);
@@ -2123,14 +2245,13 @@
             }
         }
 
-
-// Lotin va kirill yozuvlarini bir xil shaklga keltiruvchi yordamchi funksiya
+        // Lotin va kirill yozuvlarini bir xil shaklga keltiruvchi yordamchi funksiya
         function normalizeUz(str) {
             const map = {
-                'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'j','з':'z',
-                'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
-                'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sh',
-                'ы':'i','э':'e','ю':'yu','я':'ya','ў':'o','қ':'q','ғ':'g','ҳ':'h'
+                'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'j', 'з': 'z',
+                'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r',
+                'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh',
+                'ы': 'i', 'э': 'e', 'ю': 'yu', 'я': 'ya', 'ў': 'o', 'қ': 'q', 'ғ': 'g', 'ҳ': 'h'
             };
             return str.toLowerCase()
                 .replace(/[ъь'‘’`ʼ]/g, '')
@@ -2180,7 +2301,7 @@
             }
         }
 
-Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
+        Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             let sahifaRaqami = parseInt(sahifaMatni.replace("page-", ""), 10);
             const parts = suraNomi.split(" - ");
             const arabNomi = (parts[0] || "").trim();
@@ -2210,22 +2331,20 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             a.onclick = () => {
                 currentPage = sahifaRaqami;
                 updateUI(birinchiOyatKodi, true);
-                toggleSurahMenu();
+                closeSurahMenu();
             };
 
             li.appendChild(a);
             surahListEl.appendChild(li);
         });
 
-        document.addEventListener('click', function (event) {
-            if (surahMenu.classList.contains('ochiq') && !surahMenu.contains(event.target) && !menuToggleBtn.contains(event.target)) {
-                surahMenu.classList.remove('ochiq');
-                menuToggleBtn.classList.remove('active');
+        document.addEventListener("click", function (event) {
+            if (surahMenu.classList.contains("ochiq") && !surahMenu.contains(event.target) && !menuToggleBtn.contains(event.target)) {
+                closeSurahMenu();
             }
 
-            if (translationBox.classList.contains('ochiq') && !translationBox.contains(event.target) && !transBtn.contains(event.target)) {
-                translationBox.classList.remove('ochiq');
-                transBtn.classList.remove('active');
+            if (translationBox.classList.contains("ochiq") && !translationBox.contains(event.target) && !transBtn.contains(event.target)) {
+                closeTranslationBox();
             }
         });
 
@@ -2238,6 +2357,8 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
 
         const audio = document.getElementById("audio");
         const bookWrapper = document.getElementById("bookWrapper");
+        const rightPageContainer = document.getElementById("rightPageContainer");
+        const leftPageContainer = document.getElementById("leftPageContainer");
         const viewer = document.querySelector(".viewer");
         const bookModeBtn = document.getElementById("bookModeBtn");
 
@@ -2297,13 +2418,15 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             applyZoom();
         }
 
-        window.addEventListener("resize", () => autoScale(false));
+        window.addEventListener("resize", () => {
+            autoScale(false);
+            syncResizerPositions();
+        });
 
         function updateZoomLayout() {
             const basePageWidth = isBookMode ? 500 : 630;
             const scaledPageWidth = Math.round(basePageWidth * scale);
 
-            // Konteynerlarning haqiqiy kengligini o'zgartiramiz (GPU xiralashuvi 100% yo'qoladi)
             rightPageContainer.style.width = `${scaledPageWidth}px`;
             if (isBookMode) {
                 leftPageContainer.style.width = `${scaledPageWidth}px`;
@@ -2389,7 +2512,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
 
         let zoomScrollTimer = null;
         function applyZoom() {
-            bookWrapper.style.transform = "none"; // transform: scale() o'chirildi!
+            bookWrapper.style.transform = "none";
             updateZoomLayout();
 
             if (zoomScrollTimer) clearTimeout(zoomScrollTimer);
@@ -2688,16 +2811,10 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             const overlaiesDiv = holderEl.querySelector(".overlaies");
             if (!overlaiesDiv) return;
 
-            let isCroppedImage = true;
-            if (imgEl && imgEl.naturalWidth > 0) {
-                const ratio = imgEl.naturalHeight / imgEl.naturalWidth;
-                isCroppedImage = ratio < 1.53;
-            }
-
-            const BASE_TOP_PCT = 4.85;       // 1-qatorning yuqoridan boshlanish nuqtasi
-            const LINE_HEIGHT_PCT = 6.00;    // Har bir qatorning balandligi (15 qator = 90.0%)
-            const RIGHT_START_PCT = 9.00;    // O'ng ramkadan matngacha bo'lgan masofa
-            const TEXT_WIDTH_PCT = 82.00;    // Matn yozilgan ichki ramka kengligi
+            const BASE_TOP_PCT = 4.85;
+            const LINE_HEIGHT_PCT = 6.00;
+            const RIGHT_START_PCT = 9.00;
+            const TEXT_WIDTH_PCT = 82.00;
 
             const children = Array.from(overlaiesDiv.children);
             const rows = [];
@@ -2883,21 +3000,13 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             return list;
         }
 
-        /* =========================================================
-           AUDIO MANBA: SURA-FAYL + OYAT VAQTLARI (timings)
-           - Timings mavjud papka (audios1): har bir sura bitta fayl, oyat esa
-             [start, end] oralig'ida ijro etiladi (millisekundlarda).
-           - Timings yo'q papka (audios2): avvalgidek har bir oyat alohida fayl.
-           Pleyerning boshqa barcha funksiyalari (takror, A-B, tezlik, progress)
-           oyat ichidagi nisbiy vaqt bilan avvalgidek ishlaydi.
-           ========================================================= */
         const SEGMENT_TIMINGS = {
             audios1: (typeof ALIJON_QORI_TIMINGS !== "undefined") ? ALIJON_QORI_TIMINGS : null,
             audios2: (typeof HUSARY_QORI_TIMINGS !== "undefined") ? HUSARY_QORI_TIMINGS : null
         };
-        let seg = null;            // joriy oyat: {src, startSec, endSec|null} yoki null (alohida fayl rejimi)
-        let segFinished = false;   // oyat oxiriga yetdimi
-        let segToken = 0;          // har bir yangi ijro/seek da oshadi
+        let seg = null;
+        let segFinished = false;
+        let segToken = 0;
 
         function resolveAudio(verseCode, folder = currentFolder) {
             const parts = verseCode.split("-");
@@ -2908,10 +3017,10 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             const t = entry && entry.ayahs && entry.ayahs[ayahNo];
             if (t && typeof t.start === "number") {
                 return {
-                segmented: true,
-                src: `${HF_BASE}/${folder}/${entry.audio1 || (surahNo + ".mp3")}`,
-                startSec: t.start / 1000,
-                endSec: (t.end > t.start) ? t.end / 1000 : null
+                    segmented: true,
+                    src: `${HF_BASE}/${folder}/${entry.audio1 || (surahNo + ".mp3")}`,
+                    startSec: t.start / 1000,
+                    endSec: (t.end > t.start) ? t.end / 1000 : null
                 };
             }
             return {segmented: false, src: `${HF_BASE}/${folder}/${verseCode.replace("-", "")}.mp3`};
@@ -2930,7 +3039,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             audio.currentTime = segStart();
         }
 
-        // Oyat tugash vaqtini aniq (20 ms) kuzatib boradi
         setInterval(() => {
             if (!seg || seg.endSec === null) return;
             if (audio.paused || isABLooping || segFinished) return;
@@ -2941,7 +3049,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             segFinished = true;
             const tokenBefore = segToken;
             handleVerseEnded();
-            // Hech qanday yangi oyat/seek boshlanmagan bo'lsa — to'xtatib qo'yamiz
             if (segToken === tokenBefore) {
                 audio.pause();
                 playBtn.innerHTML = ICONS.play;
@@ -2952,7 +3059,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             if (seg && seg.endSec !== null && audio.currentTime < seg.endSec - 0.05) segFinished = false;
         });
 
-        // 🟢 Keyingi oyatni oldindan xotiraga (keshga) yuklab turuvchi yashirin obyekt
         const preloadAudio = new Audio();
         preloadAudio.preload = "auto";
 
@@ -2980,7 +3086,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             if (nextVerseCode && !nextVerseCode.endsWith("-000")) {
                 const nextRes = resolveAudio(nextVerseCode);
                 const nextSrc = nextRes.src;
-                // Xuddi shu sura fayli allaqachon yuklangan bo'lsa, oldindan yuklash shart emas
                 if (nextRes.segmented && nextSrc === audio.getAttribute("src")) return;
                 if (preloadAudio.getAttribute("src") !== nextSrc) {
                     preloadAudio.src = nextSrc;
@@ -3023,7 +3128,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
 
             updateOverlaySelectionVisuals();
-            // Bosilgan yoki tinglangan oyatni ochiq holatda saqlab qolish
             bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`).forEach(el => {el.classList.add("revealed");});
 
             const matchedOverlays = bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`);
@@ -3071,15 +3175,14 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             audio.playbackRate = speeds[speedIndex];
             audio.play().then(() => playBtn.innerHTML = ICONS.pause).catch(() => playBtn.innerHTML = ICONS.play);
             preloadNextVerse();
-
         }
 
         /* === INTERAKTIV TARJIMA PANEL FUNKSIYALARI === */
         function toggleTranslation() {
-            const isOpen = translationBox.classList.toggle("ochiq");
-            transBtn.classList.toggle("active", isOpen);
-            if (isOpen) {
-                updateTranslationContent();
+            if (translationBox.classList.contains("ochiq")) {
+                closeTranslationBox();
+            } else {
+                openTranslationBox();
             }
         }
 
@@ -3096,7 +3199,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             updateTranslationContent();
         }
 
-        // Tarjima shrift o'lchamini boshqarish va xotirada saqlash
         let transFontSize = parseFloat(localStorage.getItem("transFontSize")) || 14.5;
         translationContent.style.fontSize = transFontSize + "px";
 
@@ -3106,7 +3208,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             localStorage.setItem("transFontSize", transFontSize);
         }
 
-        // Qidirilgan so'zni matn ichida xavfsiz ajratib ko'rsatish
         function highlightSearchMatch(text, rawQuery) {
             const escapedText = text
                 .replace(/&/g, "&amp;")
@@ -3118,7 +3219,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             return escapedText.replace(new RegExp(`(${escapedQ})`, "gi"), '<mark class="search-hl">$1</mark>');
         }
 
-        // Barcha 6236 oyat tarjimalari ichidan qidirish funksiyasi
         function renderGlobalTranslationSearch(rawQuery) {
             const q = rawQuery.toLowerCase().trim();
             const searchCacheKey = `${currentTranslationType}__${q}`;
@@ -3364,7 +3464,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             pointB = calculatedB;
             btnB.classList.add("active");
 
-            // 🟢 B bosilganda takrorlash tugmasini (🔂) avtomatik yoqamiz
             verseLoop = true;
             verseLoopBtn.classList.add("active");
 
@@ -3432,7 +3531,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             btnA.classList.remove("active");
             btnB.classList.remove("active");
 
-            // 🟢 A-B faol bo'lgan bo'lsa yoki 7 / ✕ tugmasi bosilgan bo'lsa, 🔂 belgisini ham o'chiramiz
             if (hadAB || !silent) {
                 verseLoop = false;
                 verseLoopBtn.classList.remove("active");
@@ -3450,7 +3548,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
         }
 
-        /* Ovozni o'chirish/yoqish */
         function toggleMute() {
             if (audio.volume > 0) {
                 previousVolume = audio.volume;
@@ -3502,7 +3599,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
             const idx = verses.indexOf(currentVerse);
             if (idx === -1) {
-                // L bosilgandan keyin oldingi sahifaga o'tib ketmasdan, 1-oyatni ochadi
                 playVerse(verses[0], true, false, false);
             } else if (idx > 0) {
                 playVerse(verses[idx - 1], true, false, false);
@@ -3532,7 +3628,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
             const idx = verses.indexOf(currentVerse);
             if (idx === -1) {
-                // L bosilgandan keyin keyingi sahifaga o'tib ketmasdan, 1-oyatni ochadi
                 playVerse(verses[0], true, false, false);
             } else if (idx + 1 < verses.length) {
                 playVerse(verses[idx + 1], true, false, false);
@@ -3552,7 +3647,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 return;
             }
 
-            // A va B nuqtalari belgilangan bo'lsa
             if (pointA !== null && pointB !== null) {
                 if (isABLooping) {
                     audio.pause();
@@ -3566,14 +3660,13 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 return;
             }
 
-            // Oddiy audio ijrosi
             if (audio.paused) {
                 const verseDone = audio.ended || (seg && (segFinished || (seg.endSec !== null && audio.currentTime >= seg.endSec - 0.02)));
                 if (selectedVersesRange.length > 1 && currentVerse === selectedVersesRange[selectedVersesRange.length - 1] && verseDone) {
                     currentRepeatCount = 0;
                     playVerse(selectedVersesRange[0], true, false, true);
                 } else {
-                    if (seg && verseDone) seekVerseStart();   // oyat tugagan bo'lsa, boshidan qayta o'ynaydi
+                    if (seg && verseDone) seekVerseStart();
                     audio.play();
                     playBtn.innerHTML = ICONS.pause;
                 }
@@ -3623,7 +3716,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
         };
 
         audio.onended = () => {
-            if (seg && segFinished) return;   // oyat oxirini allaqachon kuzatuvchi qayta ishlagan
+            if (seg && segFinished) return;
             if (seg) segFinished = true;
             handleVerseEnded();
         };
@@ -3633,7 +3726,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
 
             const maxRepeats = getTargetRepeatCount();
 
-            // 1-HOLAT: Bir nechta oyat tortib belgilangan bo'lsa (Range Mode)
             if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
                 const rIdx = selectedVersesRange.indexOf(currentVerse);
                 if (rIdx + 1 < selectedVersesRange.length) {
@@ -3658,7 +3750,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 return;
             }
 
-            // 2-HOLAT: Bitta oyat tanlangan va 🔂 (verseLoop) yoqilgan bo'lsa
             if (verseLoop) {
                 currentRepeatCount++;
                 if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
@@ -3672,7 +3763,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 }
             }
 
-            // 3-HOLAT: Oddiy tartibda keyingi oyatga o'tish
             const verses = getUniqueVersesOnOpenPages();
             const idx = verses.indexOf(currentVerse);
             if (idx !== -1 && idx + 1 < verses.length) {
@@ -3783,15 +3873,79 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }
         }
 
-// ===== YAXSHILANGAN LOGIN TIZIMI (SALT + SHA-256 + BRUTE-FORCE HIMOYA) =====
+        // === SURALAR VA TARJIMA PANELLARINI RESIZABLE QILISH ===
+        {
+            let activeMode = null; // "surah" yoki "translation"
+
+            function stopPanelResize() {
+                if (!activeMode) return;
+                activeMode = null;
+                if (surahResizer) {
+                    surahResizer.classList.remove("active");
+                    surahMenu.style.transition = "";
+                }
+                if (translationResizer) {
+                    translationResizer.classList.remove("active");
+                    translationBox.style.transition = "";
+                }
+                document.body.style.cursor = "";
+                document.body.style.userSelect = "";
+                syncResizerPositions();
+            }
+
+            if (surahMenu && surahResizer) {
+                surahResizer.addEventListener("mousedown", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    activeMode = "surah";
+                    surahResizer.classList.add("active");
+                    surahMenu.style.transition = "none";
+                    document.body.style.cursor = "ew-resize";
+                    document.body.style.userSelect = "none";
+                });
+            }
+
+            if (translationBox && translationResizer) {
+                translationResizer.addEventListener("mousedown", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    activeMode = "translation";
+                    translationResizer.classList.add("active");
+                    translationBox.style.transition = "none";
+                    document.body.style.cursor = "ew-resize";
+                    document.body.style.userSelect = "none";
+                });
+            }
+
+            document.addEventListener("mousemove", (e) => {
+                if (!activeMode) return;
+
+                if (activeMode === "surah" && surahMenu) {
+                    const minW = 260;
+                    const maxW = Math.min(560, window.innerWidth - 48);
+                    const newW = Math.min(maxW, Math.max(minW, e.clientX - 12));
+                    surahMenu.style.width = `${newW}px`;
+                    surahResizer.style.left = `${Math.max(0, 12 + newW - 4)}px`;
+                } else if (activeMode === "translation" && translationBox) {
+                    const minW = 300;
+                    const maxW = Math.min(760, window.innerWidth - 48);
+                    const newW = Math.min(maxW, Math.max(minW, (window.innerWidth - 12) - e.clientX));
+                    translationBox.style.width = `${newW}px`;
+                    translationResizer.style.left = `${Math.max(0, window.innerWidth - 12 - newW - 4)}px`;
+                }
+            });
+
+            document.addEventListener("mouseup", stopPanelResize);
+            window.addEventListener("blur", stopPanelResize);
+        }
+
+        // ===== YAXSHILANGAN LOGIN TIZIMI (SALT + SHA-256 + BRUTE-FORCE HIMOYA) =====
         const AUTH_SALT = "madina_mushaf_2026_salt";
         const AUTH_STORAGE_KEY = "quron_auth_session_v1";
-        const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 kun (millisekundlarda)
+        const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
         const MAX_FAILED_ATTEMPTS = 5;
         const LOCKOUT_SECONDS = 30;
 
-        // Yangi login/parol qo'shmoqchi bo'lsangiz, brauzer Console'da:
-        // createAuthUser("yangi_login", "yangi_parol") deb chaqirsangiz, tayyor obyektni chiqarib beradi.
         async function hashWithSalt(username, password) {
             const normalizedUser = username.trim().toLowerCase();
             const payload = `${AUTH_SALT}:${normalizedUser}:${password}`;
@@ -3805,34 +3959,30 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
         async function createAuthUser(username, password) {
             const cleanUser = username.trim().toLowerCase();
             const passwordHash = await hashWithSalt(cleanUser, password);
-            const entry = { username: cleanUser, passwordHash };
+            const entry = {username: cleanUser, passwordHash};
             console.log(JSON.stringify(entry, null, 2));
             return entry;
         }
-
-        // Quyidagi hash'lar faqat namuna uchun; o'zingiz xohlagan login/parolni createAuthUser() orqali yarating
 
         const ALLOWED_USERS = [
             {
                 username: "admin",
                 passwordHash: "10bccb7f6c552aafc5e28393ff17d8bc594e397ecc052ae104264b745d1963bf",
-                expiresAt: null // Cheksiz (muddatsiz)
+                expiresAt: null
             },
             {
                 username: "kiu_talaba",
                 passwordHash: "389dbdf24d1afbe4b8ba736f8fccb7f794bcefcca66db8f399642368e657effd",
-                expiresAt: "2026-11-28" // 2026-yil 28-noyabr soat 23:59 gacha ishlaydi
+                expiresAt: "2026-11-28"
             }
         ];
 
-        // Foydalanuvchi muddati tugaganini tekshiruvchi yordamchi funksiya
         function isUserExpired(userObj) {
             if (!userObj || !userObj.expiresAt) return false;
             const endOfDay = new Date(userObj.expiresAt + "T23:59:59");
             return Date.now() > endOfDay.getTime();
         }
 
-        // Obuna tugashiga 3 kun yoki undan kam qolganda eslatma chiqarish
         function checkExpiryWarning(userObj) {
             if (!userObj || !userObj.expiresAt) return;
 
@@ -3845,7 +3995,6 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     ? `⚠️ Бугун обуна муддатингизнинг охирги куни (${userObj.expiresAt})`
                     : `⚠️ Обуна тугашига ${daysLeft} кун қолди (${userObj.expiresAt})`;
 
-                // Yuklanish oynasi yopilgandan keyin 6 soniya ko'rinib turadi
                 setTimeout(() => showStatus(msg, 6000), 1000);
             }
         }
@@ -3914,7 +4063,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }, 600);
         }
 
-async function handleAuthSubmit(event) {
+        async function handleAuthSubmit(event) {
             event.preventDefault();
 
             const errorEl = document.getElementById("authError");
@@ -3938,7 +4087,6 @@ async function handleAuthSubmit(event) {
                     u => u.username.toLowerCase() === usernameInput && u.passwordHash === computedHash
                 );
 
-                // 1. Логин ёки парол нотўғри бўлса:
                 if (!matchedUser) {
                     failedAttempts++;
                     if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
@@ -3952,7 +4100,6 @@ async function handleAuthSubmit(event) {
                     return;
                 }
 
-                // 2. Логин-парол тўғри, лекин обуна муддати тугаган бўлса:
                 if (isUserExpired(matchedUser)) {
                     errorEl.textContent = `Обуна муддатингиз тугаган (${matchedUser.expiresAt}). Узайтириш учун @shadowing_studio_bot га ёзинг.`;
                     submitBtn.disabled = false;
@@ -3980,8 +4127,8 @@ async function handleAuthSubmit(event) {
                 submitBtn.disabled = false;
             }
         }
-        
-function logoutUser() {
+
+        function logoutUser() {
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(AUTH_STORAGE_KEY);
             if (typeof audio !== "undefined") {
@@ -3993,8 +4140,8 @@ function logoutUser() {
             document.getElementById("authSubmitBtn").disabled = false;
             document.getElementById("authLayer").classList.remove("hidden");
         }
-        
-(function bootstrapAuth() {
+
+        (function bootstrapAuth() {
             const saved = sessionStorage.getItem(AUTH_STORAGE_KEY) || localStorage.getItem(AUTH_STORAGE_KEY);
             if (!saved) return;
 
@@ -4002,10 +4149,9 @@ function logoutUser() {
                 const parsed = JSON.parse(saved);
                 const matchedUser = ALLOWED_USERS.find(
                     u => u.username.toLowerCase() === (parsed.user || "").toLowerCase() &&
-                         u.passwordHash === parsed.passwordHash
+                        u.passwordHash === parsed.passwordHash
                 );
 
-                // 7 kunlik sessiya muddati hali tugamaganini tekshirish
                 const isSessionFresh = typeof parsed.loginAt === "number" &&
                     (Date.now() - parsed.loginAt) < SESSION_MAX_AGE_MS;
 
@@ -4025,7 +4171,6 @@ function logoutUser() {
                 localStorage.removeItem(AUTH_STORAGE_KEY);
             }
         })();
-        
     </script>
 </body>
 
