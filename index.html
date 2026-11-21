@@ -3816,14 +3816,40 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
         const ALLOWED_USERS = [
             {
                 username: "admin",
-                passwordHash: "10bccb7f6c552aafc5e28393ff17d8bc594e397ecc052ae104264b745d1963bf"
+                passwordHash: "10bccb7f6c552aafc5e28393ff17d8bc594e397ecc052ae104264b745d1963bf",
+                expiresAt: null // Cheksiz (muddatsiz)
             },
             {
                 username: "kiu_talaba",
-                passwordHash: "389dbdf24d1afbe4b8ba736f8fccb7f794bcefcca66db8f399642368e657effd"
+                passwordHash: "389dbdf24d1afbe4b8ba736f8fccb7f794bcefcca66db8f399642368e657effd",
+                expiresAt: "2026-11-28" // 2026-yil 28-noyabr soat 23:59 gacha ishlaydi
             }
-            
         ];
+
+        // Foydalanuvchi muddati tugaganini tekshiruvchi yordamchi funksiya
+        function isUserExpired(userObj) {
+            if (!userObj || !userObj.expiresAt) return false;
+            const endOfDay = new Date(userObj.expiresAt + "T23:59:59");
+            return Date.now() > endOfDay.getTime();
+        }
+
+        // Obuna tugashiga 3 kun yoki undan kam qolganda eslatma chiqarish
+        function checkExpiryWarning(userObj) {
+            if (!userObj || !userObj.expiresAt) return;
+
+            const endOfDay = new Date(userObj.expiresAt + "T23:59:59").getTime();
+            const diffMs = endOfDay - Date.now();
+            const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+            if (daysLeft >= 1 && daysLeft <= 3) {
+                const msg = daysLeft === 1
+                    ? `⚠️ Бугун обуна муддатингизнинг охирги куни (${userObj.expiresAt})`
+                    : `⚠️ Обуна тугашига ${daysLeft} кун қолди (${userObj.expiresAt})`;
+
+                // Yuklanish oynasi yopilgandan keyin 6 soniya ko'rinib turadi
+                setTimeout(() => showStatus(msg, 6000), 1000);
+            }
+        }
 
         let failedAttempts = 0;
         let lockoutUntil = 0;
@@ -3889,7 +3915,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             }, 600);
         }
 
-        async function handleAuthSubmit(event) {
+async function handleAuthSubmit(event) {
             event.preventDefault();
 
             const errorEl = document.getElementById("authError");
@@ -3913,6 +3939,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     u => u.username.toLowerCase() === usernameInput && u.passwordHash === computedHash
                 );
 
+                // 1. Логин ёки парол нотўғри бўлса:
                 if (!matchedUser) {
                     failedAttempts++;
                     if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
@@ -3923,6 +3950,13 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                         errorEl.textContent = `Логин ёки парол нотўғри! (${left} та уриниш қолди)`;
                         submitBtn.disabled = false;
                     }
+                    return;
+                }
+
+                // 2. Логин-парол тўғри, лекин обуна муддати тугаган бўлса:
+                if (isUserExpired(matchedUser)) {
+                    errorEl.textContent = `Обуна муддатингиз тугаган (${matchedUser.expiresAt}). Узайтириш учун @shadowing_studio_bot га ёзинг.`;
+                    submitBtn.disabled = false;
                     return;
                 }
 
@@ -3941,12 +3975,13 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 }
 
                 unlockAppWithLoading(false);
+                checkExpiryWarning(matchedUser);
             } catch (err) {
                 errorEl.textContent = "Текширишда хатолик юз берди.";
                 submitBtn.disabled = false;
             }
         }
-
+        
 function logoutUser() {
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -3966,23 +4001,21 @@ function logoutUser() {
 
             try {
                 const parsed = JSON.parse(saved);
-
-                // 1. Login va parol hali ham ALLOWED_USERS da bormi?
-                const isStillValid = ALLOWED_USERS.some(
+                const matchedUser = ALLOWED_USERS.find(
                     u => u.username.toLowerCase() === (parsed.user || "").toLowerCase() &&
                          u.passwordHash === parsed.passwordHash
                 );
 
-                // 2. 7 kunlik muddat hali tugamaganmi?
-                const isNotExpired = typeof parsed.loginAt === "number" &&
-                    (Date.now() - parsed.loginAt) < SESSION_MAX_AGE_MS;
-
-                if (isStillValid && isNotExpired) {
+                if (matchedUser && !isUserExpired(matchedUser)) {
                     unlockAppWithLoading(true);
+                    checkExpiryWarning(matchedUser);
                 } else {
-                    // Parol o'zgargan yoki 7 kun o'tib ketgan bo'lsa, sessiyani tozalaymiz
                     sessionStorage.removeItem(AUTH_STORAGE_KEY);
                     localStorage.removeItem(AUTH_STORAGE_KEY);
+                    if (matchedUser && isUserExpired(matchedUser)) {
+                        document.getElementById("authError").textContent =
+                            `Обуна муддатингиз тугаган (${matchedUser.expiresAt}).`;
+                    }
                 }
             } catch (e) {
                 sessionStorage.removeItem(AUTH_STORAGE_KEY);
