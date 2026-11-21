@@ -4006,7 +4006,11 @@ function logoutUser() {
                          u.passwordHash === parsed.passwordHash
                 );
 
-                if (matchedUser && !isUserExpired(matchedUser)) {
+                // 7 kunlik sessiya muddati hali tugamaganini tekshirish
+                const isSessionFresh = typeof parsed.loginAt === "number" &&
+                    (Date.now() - parsed.loginAt) < SESSION_MAX_AGE_MS;
+
+                if (matchedUser && !isUserExpired(matchedUser) && isSessionFresh) {
                     unlockAppWithLoading(true);
                     checkExpiryWarning(matchedUser);
                 } else {
