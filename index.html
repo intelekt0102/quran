@@ -3915,6 +3915,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                 failedAttempts = 0;
                 const sessionRecord = JSON.stringify({
                     user: matchedUser.username,
+                    passwordHash: matchedUser.passwordHash,
                     loginAt: Date.now()
                 });
 
@@ -3943,10 +3944,27 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             document.getElementById("authLayer").classList.remove("hidden");
         }
 
-        (function bootstrapAuth() {
+(function bootstrapAuth() {
             const saved = sessionStorage.getItem(AUTH_STORAGE_KEY) || localStorage.getItem(AUTH_STORAGE_KEY);
-            if (saved) {
-                unlockAppWithLoading(true);
+            if (!saved) return;
+
+            try {
+                const parsed = JSON.parse(saved);
+                const isStillValid = ALLOWED_USERS.some(
+                    u => u.username.toLowerCase() === (parsed.user || "").toLowerCase() &&
+                         u.passwordHash === parsed.passwordHash
+                );
+
+                if (isStillValid) {
+                    unlockAppWithLoading(true);
+                } else {
+                    // Login o'chirilgan yoki parol o'zgartirilgan bo'lsa, eski sessiyani tozalaydi
+                    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+                    localStorage.removeItem(AUTH_STORAGE_KEY);
+                }
+            } catch (e) {
+                sessionStorage.removeItem(AUTH_STORAGE_KEY);
+                localStorage.removeItem(AUTH_STORAGE_KEY);
             }
         })();
         
