@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Qur'on tilovati</title>
+
+    <link rel="preconnect" href="https://huggingface.co" crossorigin>
+    <link rel="dns-prefetch" href="https://huggingface.co">
     <!-- Islomiy xattotlik (Amiri) va zamonaviy interfeys (Plus Jakarta Sans) shriftlari -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1787,7 +1790,7 @@
             <div class="quran-page-container" id="rightPageContainer">
                 <div class="quran-page">
                     <div id="rightOverlayHolder"></div>
-                    <img id="rightPageImage" class="page-img" alt="Qur'on sahifasi (O'ng)">
+                    <img id="rightPageImage" class="page-img" fetchpriority="high" decoding="async" alt="Qur'on sahifasi (O'ng)">
                 </div>
                 <div class="page-number-footer" id="rightPageNumFooter"></div>
             </div>
@@ -1796,7 +1799,7 @@
             <div class="quran-page-container" id="leftPageContainer">
                 <div class="quran-page">
                     <div id="leftOverlayHolder"></div>
-                    <img id="leftPageImage" class="page-img" alt="Qur'on sahifasi (Chap)">
+                    <img id="leftPageImage" class="page-img" fetchpriority="high" decoding="async" alt="Qur'on sahifasi (Chap)">
                 </div>
                 <div class="page-number-footer" id="leftPageNumFooter"></div>
             </div>
@@ -2774,6 +2777,7 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
             adjustOverlaysInHolder(rightHolder, openRightPage, rightImg);
             updateZoomLayout();
             ensureSelectedOverlayVisible(false);
+            preloadAdjacentPages();
         };
         leftImg.onload = () => {
             if (isBookMode && openLeftPage) {
@@ -2968,6 +2972,29 @@ Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
                     preloadAudio.load();
                 }
             }
+        }
+
+        const imagePreloadCache = new Map();
+
+        function preloadPageImage(pageNum) {
+            if (pageNum < 1 || pageNum > 604 || imagePreloadCache.has(pageNum)) return;
+            const img = new Image();
+            img.decoding = "async";
+            img.src = `${HF_BASE}/images/${pad(pageNum)}.jpg`;
+            imagePreloadCache.set(pageNum, img);
+
+            if (imagePreloadCache.size > 30) {
+                const oldestKey = imagePreloadCache.keys().next().value;
+                imagePreloadCache.delete(oldestKey);
+            }
+        }
+
+        function preloadAdjacentPages() {
+            const base = openRightPage || currentPage;
+            const targets = [base + 1, base + 2, base + 3, base + 4, base - 1, base - 2];
+            targets.forEach((p, idx) => {
+                setTimeout(() => preloadPageImage(p), 250 + idx * 120);
+            });
         }
 
         function playVerse(verseCode, silentClear = false, scrollToOverlay = false, keepRange = false) {
