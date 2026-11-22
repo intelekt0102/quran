@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="uz" dir="ltr">
+<html lang="uz-Cyrl" dir="ltr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Qur'on tilovati</title>
+    <title>Қуръон тиловати</title>
     <link rel="preconnect" href="https://huggingface.co" crossorigin>
     <link rel="dns-prefetch" href="https://huggingface.co">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -1882,7 +1882,7 @@
     <!-- LOGIN OYNASI (BRONZA & ESPRESSO USLUBIDA) -->
     <div id="authLayer" class="auth-backdrop">
         <form class="auth-card" id="loginForm" onsubmit="handleAuthSubmit(event)" autocomplete="on">
-            <div class="auth-badge">❖ QUR'ON TILOVATI</div>
+            <div class="auth-badge">❖ ҚУРЪОН ТИЛОВАТИ</div>
             <h2>Тизимга кириш</h2>
             <p class="auth-subtitle">Логин ва паролингизни киритинг</p>
 
@@ -1909,7 +1909,7 @@
             <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Кириш</button>
             <div id="authError" class="auth-error" role="alert" aria-live="polite"></div>
             <div class="auth-telegram-help">
-                <span>Login va parol kerak bo'lsa, yozing:</span>
+                <span>Логин ва парол керак бўлса, ёзинг:</span>
                 <a href="https://t.me/shadowing_studio_bot" target="_blank" rel="noopener noreferrer"
                     class="auth-tg-link" title="@shadowing_studio_bot">
                     <svg class="auth-tg-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1940,7 +1940,8 @@
         </div>
         <ul id="surahList"></ul>
     </nav>
-    <div id="surahResizer" class="yon-panel-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
+
+    <div id="surahResizer" class="yon-panel-resizer" title="Кенглигини ўзгартириш учун судранг"></div>
 
     <!-- O'NG YON PANEL: Sahifa tarjimasi -->
     <div id="translationBox">
@@ -1949,9 +1950,9 @@
                 <span id="transHeaderTitle">Саҳифа таржимаси</span>
                 <div class="trans-header-actions">
                     <button class="font-size-btn" onclick="changeTransFontSize(-1)"
-                        title="Matnni kichraytirish">A-</button>
+                        title="Матнни кичрайтириш">А-</button>
                     <button class="font-size-btn" onclick="changeTransFontSize(1)"
-                        title="Matnni kattalashtirish">A+</button>
+                        title="Матнни катталаштириш">А+</button>
                     <button class="yon-panel-yopish" onclick="toggleTranslation()">✖</button>
                 </div>
             </div>
@@ -1964,10 +1965,10 @@
             </div>
         </div>
         <div id="translationContent">
-            Sahifa tarjimasi yuklanmoqda...
+            Саҳифа таржимаси юкланмоқда...
         </div>
     </div>
-    <div id="translationResizer" class="translation-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
+    <div id="translationResizer" class="translation-resizer" title="Кенглигини ўзгартириш учун судранг"></div>
 
     <!-- BOSHQARUV PANELI (YUQORI): navigatsiya va ko'rinish -->
 
@@ -1975,7 +1976,7 @@
     <header class="controls topbar">
         <div class="tb-left">
             <button id="menuToggleBtn" class="tb-select" onclick="event.stopPropagation(); toggleSurahMenu()"
-                title="Suralar ro'yxati (R)">
+                title="Суралар рўйхати (R)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -1987,29 +1988,29 @@
                 </svg>
             </button>
 
-            <div class="tb-chip" id="juzChip" title="Joriy juz">Juz 1</div>
+            <div class="tb-chip" id="juzChip" title="Жорий жуз">Жуз 1</div>
 
             <div class="tb-pager">
-                <button class="icon-btn" onclick="stepSpread(1)" title="Keyingi sahifa">◀</button>
-                <input type="number" id="pageInput" min="1" max="604" title="Sahifa raqami">
+                <button class="icon-btn" onclick="stepSpread(1)" title="Кейинги саҳифа">◀</button>
+                <input type="number" id="pageInput" min="1" max="604" title="Саҳифа рақами">
                 <span class="page-total">/ 604</span>
-                <button class="icon-btn" onclick="stepSpread(-1)" title="Oldingi sahifa">▶</button>
+                <button class="icon-btn" onclick="stepSpread(-1)" title="Олдинги саҳифа">▶</button>
             </div>
         </div>
 
         <div class="tb-right">
-            <select id="folderSelect" onchange="changeFolder()" title="Qori">
-                <option value="audios1">Alijon qori</option>
-                <option value="audios2">Husary qori</option>
+            <select id="folderSelect" onchange="changeFolder()" title="Қори">
+                <option value="audios1">Алижон қори</option>
+                <option value="audios2">Ҳусарий қори</option>
             </select>
 
             <div class="divider"></div>
 
             <button id="bookModeBtn" class="icon-btn" onclick="toggleBookMode()"
-                title="1 yoki 2 sahifali ko'rinish (B)"></button>
+                title="1 ёки 2 саҳифали кўриниш (B)"></button>
 
             <button id="transBtn" class="icon-btn" onclick="event.stopPropagation(); toggleTranslation()"
-                title="Sahifa tarjimasi (T)">
+                title="Саҳифа таржимаси (T)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     <line x1="8" y1="9" x2="16" y2="9"></line>
@@ -2018,7 +2019,7 @@
             </button>
 
             <button id="memPeekBtn" class="icon-btn" onclick="memorizeViewHide()"
-                title="Barcha oyatlarni ko'rsatish / yashirish (O)">
+                title="Барча оятларни кўрсатиш / яшириш (O)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
@@ -2026,14 +2027,16 @@
             </button>
 
             <button id="memResetBtn" class="icon-btn" onclick="memorizeResetPage()"
-                title="Barcha oyatlarni oppoq maska bilan yopish (L)">
+                title="Барча оятларни оппоқ ниқоб билан ёпиш (L)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
             </button>
 
-            <button id="fullscreenBtn" class="icon-btn" onclick="toggleFullscreen()" title="To'liq ekran (F)">
+            <div class="divider"></div>
+
+            <button id="fullscreenBtn" class="icon-btn" onclick="toggleFullscreen()" title="Тўлиқ экран (F)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path
                         d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
@@ -2042,8 +2045,8 @@
             </button>
 
             <div class="divider"></div>
-            
-              <button id="logoutBtn" class="icon-btn" onclick="logoutUser()" title="Tizimdan chiqish">
+
+            <button id="logoutBtn" class="icon-btn" onclick="logoutUser()" title="Тизимдан чиқиш">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                     <polyline points="16 17 21 12 16 7"></polyline>
@@ -2054,12 +2057,12 @@
     </header>
 
     <!-- EKRAN CHETIDAGI VARAQLASH TUGMALARI -->
-    <button class="side-nav-btn side-nav-left" onclick="stepSpread(1)" title="Keyingi sahifa">
+    <button class="side-nav-btn side-nav-left" onclick="stepSpread(1)" title="Кейинги саҳифа">
         <svg class="svg-icon" viewBox="0 0 24 24">
             <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
     </button>
-    <button class="side-nav-btn side-nav-right" onclick="stepSpread(-1)" title="Oldingi sahifa">
+    <button class="side-nav-btn side-nav-right" onclick="stepSpread(-1)" title="Олдинги саҳифа">
         <svg class="svg-icon" viewBox="0 0 24 24">
             <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
@@ -2072,7 +2075,7 @@
                 <div class="quran-page">
                     <div id="rightOverlayHolder"></div>
                     <img id="rightPageImage" class="page-img" fetchpriority="high" decoding="async"
-                        alt="Qur'on sahifasi (O'ng)">
+                        alt="Қуръон саҳифаси (ўнг)">
                 </div>
                 <div class="page-number-footer" id="rightPageNumFooter"></div>
             </div>
@@ -2081,7 +2084,7 @@
                 <div class="quran-page">
                     <div id="leftOverlayHolder"></div>
                     <img id="leftPageImage" class="page-img" fetchpriority="high" decoding="async"
-                        alt="Qur'on sahifasi (Chap)">
+                        alt="Қуръон саҳифаси (чап)">
                 </div>
                 <div class="page-number-footer" id="leftPageNumFooter"></div>
             </div>
@@ -2089,20 +2092,22 @@
     </div>
 
     <!-- PASTKI PLAYER PANELI -->
+
+    <!-- PASTKI PLAYER PANELI -->
     <div class="player-bar pbar">
         <!-- Chap: hozir nima o'qilyapti -->
         <div class="pb-info">
-            <div class="pb-avatar" id="pbAvatar">A</div>
+            <div class="pb-avatar" id="pbAvatar">А</div>
             <div class="pb-meta">
                 <div class="pb-title" id="pbTitle">—</div>
-                <div class="pb-sub" id="pbSub">Alijon qori</div>
+                <div class="pb-sub" id="pbSub">Алижон қори</div>
             </div>
         </div>
 
         <!-- O'rta: boshqaruv va vaqt -->
         <div class="pb-center">
             <div class="pb-controls">
-                <button class="icon-btn" onclick="seekBy(-2)" title="-2 soniya (4)">
+                <button class="icon-btn" onclick="seekBy(-2)" title="-2 сония (4)">
                     <svg class="svg-icon" viewBox="0 0 24 24">
                         <polyline points="1 4 1 10 7 10"></polyline>
                         <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
@@ -2110,23 +2115,23 @@
                             stroke="none">2</text>
                     </svg>
                 </button>
-                <button class="icon-btn" onclick="prevAudio()" title="Oldingi oyat (←)">
+                <button class="icon-btn" onclick="prevAudio()" title="Олдинги оят (←)">
                     <svg class="svg-fill" viewBox="0 0 24 24">
                         <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
                     </svg>
                 </button>
                 <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn"
-                    title="Play / Pause (Space / 5)">
+                    title="Ўйнатиш / Тўхтатиш (Space / 5)">
                     <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;">
                         <path d="M8 5v14l11-7z" />
                     </svg>
                 </button>
-                <button class="icon-btn" onclick="nextAudio()" title="Keyingi oyat (→)">
+                <button class="icon-btn" onclick="nextAudio()" title="Кейинги оят (→)">
                     <svg class="svg-fill" viewBox="0 0 24 24">
                         <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
                     </svg>
                 </button>
-                <button class="icon-btn" onclick="seekBy(2)" title="+2 soniya (6)">
+                <button class="icon-btn" onclick="seekBy(2)" title="+2 сония (6)">
                     <svg class="svg-icon" viewBox="0 0 24 24">
                         <polyline points="23 4 23 10 17 10"></polyline>
                         <path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"></path>
@@ -2134,7 +2139,7 @@
                             stroke="none">2</text>
                     </svg>
                 </button>
-                <button onclick="toggleSpeed()" id="speedBtn" title="Tezlik (*)">1x</button>
+                <button onclick="toggleSpeed()" id="speedBtn" title="Тезлик (*)">1х</button>
             </div>
 
             <div class="pb-progress">
@@ -2146,14 +2151,14 @@
 
         <!-- O'ng: A-B, takrorlash, ovoz -->
         <div class="pb-right">
-            <button onclick="setPointA()" id="btnA" class="btn-a" title="A nuqta (1)">A</button>
-            <button onclick="setPointB()" id="btnB" class="btn-b" title="B nuqta (3)">B</button>
+            <button onclick="setPointA()" id="btnA" class="btn-a" title="А нуқта (1)">А</button>
+            <button onclick="setPointB()" id="btnB" class="btn-b" title="Б нуқта (3)">Б</button>
             <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn"
-                title="A-B nuqtalarini tozalash (7)">✕</button>
+                title="А-Б нуқталарини тозалаш (7)">✕</button>
 
-            <div class="repeat-group" title="Belgilangan oyatlarni takrorlash va takrorlar soni">
+            <div class="repeat-group" title="Белгиланган оятларни такрорлаш ва такрорлар сони">
                 <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
-                    title="Belgilangan oyatlarni takrorlash (9)">
+                    title="Белгиланган оятларни такрорлаш (9)">
                     <svg class="svg-icon" viewBox="0 0 24 24">
                         <polyline points="17 1 21 5 17 9"></polyline>
                         <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
@@ -2164,10 +2169,10 @@
                     </svg>
                 </button>
                 <input type="number" id="inputRepeatNumber" min="0" max="999" value="3"
-                    title="Takrorlar soni (0 = cheksiz)">
+                    title="Такрорлар сони (0 = чексиз)">
             </div>
 
-            <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Sahifani takrorlash (V)">
+            <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Саҳифани такрорлаш (V)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <polyline points="17 1 21 5 17 9"></polyline>
                     <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
@@ -2179,7 +2184,7 @@
 
             <div class="divider"></div>
 
-            <button onclick="toggleMute()" id="muteBtn" title="Ovozni o'chirish (M)"></button>
+            <button onclick="toggleMute()" id="muteBtn" title="Овозни ўчириш (M)"></button>
             <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
         </div>
     </div>
@@ -2189,28 +2194,28 @@
     <!-- YORDAM MODAL OYNASI -->
     <div id="shortcutModal" class="modal" onclick="toggleModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h3>Klaviatura qisqartmalari</h3>
+            <h3>Клавиатура қисқартмалари</h3>
             <div class="shortcut-grid">
-                <div><kbd>Space / 5</kbd>Play / Pause</div>
-                <div><kbd>← / →</kbd>Oldingi / Keyingi oyat</div>
-                <div><kbd>, / .</kbd>Oldingi / Keyingi sahifa</div>
-                <div><kbd>H / Backspace</kbd>Asl masshtab</div>
-                <div><kbd>P</kbd>Panellarni yashirish</div>
-                <div><kbd>B</kbd>Kitob (2 bet) / 1 bet</div>
-                <div><kbd>R</kbd>Suralar ro'yxati (Menyu)</div>
-                <div><kbd>T</kbd>Tarjimani ochish/yopish</div>
-                <div><kbd>1</kbd>A nuqtani qo'yish</div>
-                <div><kbd>3</kbd>B nuqtani qo'yish</div>
-                <div><kbd>7</kbd>A-B nuqtalari / tanlovni tozalash</div>
-                <div><kbd>9</kbd>Tanlanganlarni takrorlash</div>
-                <div><kbd>V</kbd>Sahifani takrorlash</div>
-                <div><kbd>4 / 6</kbd>-2s / +2s o'tkazish</div>
-                <div><kbd>8 / 2</kbd>Ovoz baland/past</div>
-                <div><kbd>*</kbd>Tezlikni o'zgartirish</div>
-                <div><kbd>M</kbd>Mute (Ovozni o'chirish)</div>
-                <div><kbd>F</kbd>To'liq ekran</div>
-                <div><kbd>+ / -</kbd>Zoom (Yaqin/Uzoq)</div>
-                <div><kbd>Y / y</kbd>Yordam oynasi</div>
+                <div><kbd>Space / 5</kbd>Ўйнатиш / Тўхтатиш</div>
+                <div><kbd>← / →</kbd>Олдинги / Кейинги оят</div>
+                <div><kbd>, / .</kbd>Олдинги / Кейинги саҳифа</div>
+                <div><kbd>H / Backspace</kbd>Асл масштаб</div>
+                <div><kbd>P</kbd>Панелларни яшириш</div>
+                <div><kbd>B</kbd>Китоб (2 бет) / 1 бет</div>
+                <div><kbd>R</kbd>Суралар рўйхати (Меню)</div>
+                <div><kbd>T</kbd>Таржимани очиш/ёпиш</div>
+                <div><kbd>1</kbd>А нуқтани қўйиш</div>
+                <div><kbd>3</kbd>Б нуқтани қўйиш</div>
+                <div><kbd>7</kbd>А-Б нуқталари / танловни тозалаш</div>
+                <div><kbd>9</kbd>Танланганларни такрорлаш</div>
+                <div><kbd>V</kbd>Саҳифани такрорлаш</div>
+                <div><kbd>4 / 6</kbd>-2с / +2с ўтказиш</div>
+                <div><kbd>8 / 2</kbd>Овоз баланд/паст</div>
+                <div><kbd>*</kbd>Тезликни ўзгартириш</div>
+                <div><kbd>M</kbd>Овозни ўчириш</div>
+                <div><kbd>F</kbd>Тўлиқ экран</div>
+                <div><kbd>+ / -</kbd>Масштаб (Яқин/Узоқ)</div>
+                <div><kbd>Y / y</kbd>Ёрдам ойнаси</div>
             </div>
         </div>
     </div>
@@ -2396,7 +2401,7 @@
             const avatar = document.getElementById("pbAvatar");
 
             if (label && sNum) label.textContent = cleanName(sNum);
-            if (juz) juz.textContent = "Juz " + getJuzForPage(currentPage);
+            if (juz) juz.textContent = "Жуз " + getJuzForPage(currentPage);
 
             if (title) {
                 if (currentVerse) {
@@ -2410,14 +2415,14 @@
             }
 
             const isHusary = currentFolder === "audios2";
-            if (sub) sub.textContent = isHusary ? "Husary qori" : "Alijon qori";
-            if (avatar) avatar.textContent = isHusary ? "H" : "A";
+            if (sub) sub.textContent = isHusary ? "Ҳусарий қори" : "Алижон қори";
+            if (avatar) avatar.textContent = isHusary ? "Ҳ" : "А";
         }
 
         function seekBy(sec) {
             const t = audio.currentTime + sec;
             audio.currentTime = sec < 0 ? Math.max(segStart(), t) : Math.min(segEnd() || t, t);
-            showStatus(sec < 0 ? `${sec}s` : `+${sec}s`);
+            showStatus(sec < 0 ? `${sec}с` : `+${sec}с`);
         }
 
         function toggleFullscreen() {
@@ -2857,7 +2862,7 @@
             localStorage.setItem("repeatMax", val);
             currentRepeatCount = 0;
             abRepeatCount = 0;
-            showStatus(val === 0 ? "Takror: ∞" : `Takror: ${val} marta`);
+            showStatus(val === 0 ? "Такрор: ∞" : `Такрор: ${val} марта`);
         };
 
         function getTargetRepeatCount() {
@@ -2909,7 +2914,7 @@
                 const firstVerse = lockedRange[0];
 
                 if (lockedRange.length > 1) {
-                    showStatus(`${lockedRange.length} ta oyat tanlandi`, 2500);
+                    showStatus(`${lockedRange.length} та оят танланди`, 2500);
                     playVerse(firstVerse, true, false, true);
                     selectedVersesRange = lockedRange;
                     updateOverlaySelectionVisuals();
@@ -3558,7 +3563,7 @@
 
 
             if (typeof translations === "undefined") {
-                translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
+                translationContent.innerText = "translation.js файли топилмади ёки уланмаган.";
                 return;
             }
 
@@ -3666,7 +3671,7 @@
 
 
             if (typeof translations === "undefined") {
-                translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
+                translationContent.innerText = "translation.js файли топилмади ёки уланмаган.";
                 return;
             }
             let foundAny = false;
@@ -3741,16 +3746,17 @@
             });
         }
 
-function changeFolder() {
-    folderSelect.blur();
-    currentFolder = folderSelect.value;
-    localStorage.setItem("audioFolder", currentFolder);
-    if (currentVerse) {
-        playVerse(currentVerse, true, false, selectedVersesRange.length > 1);
-    } else {
-        updateUI();
-    }
-}
+
+        function changeFolder() {
+            folderSelect.blur();
+            currentFolder = folderSelect.value;
+            localStorage.setItem("audioFolder", currentFolder);
+            if (currentVerse) {
+                playVerse(currentVerse, true, false, selectedVersesRange.length > 1);
+            } else {
+                updateUI();
+            }
+        }
 
 
         let statusHideTimer = null;
@@ -3805,18 +3811,18 @@ function changeFolder() {
             abRepeatCount = 0;
             if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
             if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
-            showStatus(`A: ${format(pointA - segStart())}`);
+            showStatus(`А: ${format(pointA - segStart())}`);
         }
 
 
         function setPointB() {
             if (pointA === null) {
-                showStatus("Avval A ni bosing");
+                showStatus("Аввал А ни босинг");
                 return;
             }
             let calculatedB = Math.min(Math.max(0, (segEnd() || Infinity) - 0.05), audio.currentTime);
             if (calculatedB <= pointA) {
-                showStatus("B nuqta A dan keyin bo'lishi shart");
+                showStatus("Б нуқта А дан кейин бўлиши шарт");
                 return;
             }
             pointB = calculatedB;
@@ -3839,7 +3845,7 @@ function changeFolder() {
 
             const maxRepeats = getTargetRepeatCount();
             const initLabel = (!verseLoop) ? "1/1" : (maxRepeats === 0 ? "1/∞" : `1/${maxRepeats}`);
-            showStatus(`A-B: ${initLabel}`, 2000);
+            showStatus(`А-Б: ${initLabel}`, 2000);
 
 
             audio.currentTime = pointA;
@@ -3866,7 +3872,7 @@ function changeFolder() {
 
                     if (verseLoop && (targetRepeats === 0 || abRepeatCount < targetRepeats)) {
                         const label = targetRepeats === 0 ? `${abRepeatCount + 1}/∞` : `${abRepeatCount + 1}/${targetRepeats}`;
-                        showStatus(`A-B: ${label}`, 2000);
+                        showStatus(`А-Б: ${label}`, 2000);
 
 
                         abGapTimer = setTimeout(() => {
@@ -3882,7 +3888,7 @@ function changeFolder() {
                         abRepeatCount = 0;
                         if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
                         playBtn.innerHTML = ICONS.play;
-                        showStatus(`A-B tugadi (${verseLoop ? targetRepeats : 1}x)`, 2500);
+                        showStatus(`А-Б тугади (${verseLoop ? targetRepeats : 1}х)`, 2500);
                     }
                 }
             }, 10);
@@ -3914,9 +3920,9 @@ function changeFolder() {
                     selectedVersesRange = [currentVerse];
                     currentRepeatCount = 0;
                     updateOverlaySelectionVisuals();
-                    showStatus("Tanlov tozalandi");
+                    showStatus("Танлов тозаланди");
                 } else {
-                    showStatus("Loop o'chirildi");
+                    showStatus("Такрорлаш ўчирилди");
                 }
             }
         }
@@ -4063,7 +4069,7 @@ function changeFolder() {
         function toggleSpeed() {
             speedIndex = (speedIndex + 1) % speeds.length;
             audio.playbackRate = speeds[speedIndex];
-            speedBtn.innerText = speeds[speedIndex] + "x";
+            speedBtn.innerText = speeds[speedIndex] + "х";
         }
 
 
@@ -4073,8 +4079,8 @@ function changeFolder() {
             abRepeatCount = 0;
             verseLoopBtn.classList.toggle("active", verseLoop);
             const maxR = getTargetRepeatCount();
-            const countText = maxR === 0 ? "∞" : `${maxR}x`;
-            showStatus(verseLoop ? `Takror (${countText}): ON` : "Takror: OFF");
+            const countText = maxR === 0 ? "∞" : `${maxR}х`;
+            showStatus(verseLoop ? `Такрор (${countText}): ёқилди` : "Такрор: ўчирилди");
         }
 
 
@@ -4082,7 +4088,7 @@ function changeFolder() {
             pageLoop = !pageLoop;
             audio.loop = false;
             loopBtn.classList.toggle("active", pageLoop);
-            showStatus(pageLoop ? "Sahifa takrori: ON" : "Sahifa takrori: OFF");
+            showStatus(pageLoop ? "Саҳифа такрори: ёқилди" : "Саҳифа такрори: ўчирилди");
         }
 
 
@@ -4129,16 +4135,16 @@ function changeFolder() {
                         currentRepeatCount++;
                         if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
                             const label = maxRepeats === 0 ? `${currentRepeatCount + 1}/∞` : `${currentRepeatCount + 1}/${maxRepeats}`;
-                            showStatus(`Takror: ${label}`, 2000);
+                            showStatus(`Такрор: ${label}`, 2000);
                             playVerse(selectedVersesRange[0], true, false, true);
                         } else {
                             currentRepeatCount = 0;
                             playBtn.innerHTML = ICONS.play;
-                            showStatus(`Takror tugadi (${maxRepeats}x)`, 2500);
+                            showStatus(`Такрор тугади (${maxRepeats}х)`, 2500);
                         }
                     } else {
                         playBtn.innerHTML = ICONS.play;
-                        showStatus("Tanlangan oyatlar tugadi", 2000);
+                        showStatus("Танланган оятлар тугади", 2000);
                     }
                 }
                 return;
@@ -4149,7 +4155,7 @@ function changeFolder() {
                 currentRepeatCount++;
                 if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
                     const label = maxRepeats === 0 ? `${currentRepeatCount + 1}/∞` : `${currentRepeatCount + 1}/${maxRepeats}`;
-                    showStatus(`Oyat: ${label}`, 1500);
+                    showStatus(`Оят: ${label}`, 1500);
                     seekVerseStart();
                     audio.play();
                     return;
@@ -4198,7 +4204,7 @@ function changeFolder() {
             if (e.code === "KeyH" || e.code === "Backspace") {
                 e.preventDefault();
                 autoScale(true);
-                showStatus("Asl masshtab tiklandi");
+                showStatus("Асл масштаб тикланди");
                 return;
             }
             switch (e.key) {
@@ -4212,13 +4218,13 @@ function changeFolder() {
                     if (!e.ctrlKey) { e.preventDefault(); scale = Math.min(scale + 0.1, 3); applyZoom(); } break;
                 case "-": case "_":
                     if (!e.ctrlKey) { e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom(); } break;
-                case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "x"; break;
-                case ",": case "<": e.preventDefault(); stepSpread(-1); showStatus("Oldingi sahifa"); break;
-                case ".": case ">": e.preventDefault(); stepSpread(1); showStatus("Keyingi sahifa"); break;
+                case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "х"; break;
+                case ",": case "<": e.preventDefault(); stepSpread(-1); showStatus("Олдинги саҳифа"); break;
+                case ".": case ">": e.preventDefault(); stepSpread(1); showStatus("Кейинги саҳифа"); break;
                 case "9": e.preventDefault(); toggleVerseLoop(); break;
-                case "0": e.preventDefault(); seekVerseStart(); showStatus("Boshiga"); break;
-                case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2s"); break;
-                case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2s"); break;
+                case "0": e.preventDefault(); seekVerseStart(); showStatus("Бошига"); break;
+                case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2с"); break;
+                case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2с"); break;
                 case "2": e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
                 case "8": e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
             }
@@ -4262,7 +4268,7 @@ function changeFolder() {
             bookWrapper.querySelectorAll(".overlay").forEach(el => {
                 el.classList.remove("selected", "range-selected", "revealed", "hovered");
             });
-            showStatus("Oyatlar yopildi");
+            showStatus("Оятлар ёпилди");
         }
 
 
@@ -4274,11 +4280,11 @@ function changeFolder() {
             if (isMasked) {
                 document.body.classList.remove("memorize-masked");
                 if (peekBtn) peekBtn.classList.add("active");
-                showStatus("Barcha oyatlar ko'rsatildi");
+                showStatus("Барча оятлар кўрсатилди");
             } else {
                 document.body.classList.add("memorize-masked");
                 if (peekBtn) peekBtn.classList.remove("active");
-                showStatus("Oyatlar yashirildi");
+                showStatus("Оятлар яширилди");
             }
         }
 
@@ -4577,7 +4583,7 @@ function changeFolder() {
 
 
         function logoutUser() {
-            if (!confirm("Tizimdan chiqmoqchimisiz?")) return;
+            if (!confirm("Тизимдан чиқмоқчимисиз?")) return;
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(AUTH_STORAGE_KEY);
             if (typeof audio !== "undefined") {
