@@ -25958,10 +25958,6 @@ const HUSARY_QORI_TIMINGS = {
       "6": {
         "start": 43241,
         "end": 48823
-      },
-      "999": {
-        "start": 49370,
-        "end": 53340
       }
     }
   }

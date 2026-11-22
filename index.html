@@ -764,7 +764,7 @@
             pointer-events: auto;
             transition: none !important;
         }
-        
+
         /* Sichqoncha ustiga kelganda — yumshoq firuza */
         .overlay.hovered {
             background: rgb(45, 212, 191) !important;
@@ -1578,6 +1578,303 @@
                 display: none;
             }
         }
+
+        /* =========================================================
+   QURAN.COM USLUBIDAGI YANGI PANELLAR
+   ========================================================= */
+        :root {
+            --topbar-h: 58px;
+            --player-h: 88px;
+        }
+
+        /* P bosilganda panellar yashirinadi, joy ham bo'shaydi */
+        body.panels-hidden {
+            --topbar-h: 0px;
+            --player-h: 0px;
+        }
+
+        body {
+            padding-top: calc(var(--topbar-h) + 14px);
+            padding-bottom: calc(var(--player-h) + 24px);
+        }
+
+        .viewer {
+            margin-top: 6px;
+            margin-bottom: 24px;
+        }
+
+        /* ---------- YUQORI PANEL ---------- */
+        .controls.topbar {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: auto;
+            width: 100%;
+            max-width: none;
+            height: 58px;
+            transform: none;
+            padding: 0 18px;
+            gap: 14px;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid var(--bronze-border);
+            justify-content: space-between;
+            box-shadow: 0 8px 26px rgba(24, 15, 10, 0.38), inset 0 -1px 0 rgba(255, 238, 210, 0.08);
+            overflow-x: auto;
+        }
+
+        .controls.topbar.yashirin {
+            transform: translateY(-110%);
+        }
+
+        .tb-left,
+        .tb-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .tb-left>*,
+        .tb-right>* {
+            flex-shrink: 0;
+        }
+
+        .tb-select {
+            height: 38px;
+            min-width: 190px;
+            padding: 0 12px;
+            justify-content: space-between;
+        }
+
+        #surahNameLabel {
+            flex: 1;
+            max-width: 170px;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tb-select .chev {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+
+        .tb-chip {
+            height: 36px;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 10px;
+            background: var(--surface-bronze);
+            border: 1px solid rgba(207, 163, 106, 0.22);
+            color: var(--cream-muted);
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tb-pager {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-total {
+            font-size: 12px;
+            color: var(--cream-muted);
+            font-variant-numeric: tabular-nums;
+            margin: 0 2px;
+        }
+
+        #folderSelect {
+            height: 38px;
+            min-width: 140px;
+        }
+
+        /* ---------- PASTKI PLEYER ---------- */
+        .player-bar.pbar {
+            top: auto;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: none;
+            height: 88px;
+            transform: none;
+            padding: 0 24px;
+            gap: 24px;
+            border-radius: 0;
+            border: none;
+            border-top: 2px solid var(--bronze-gold);
+            justify-content: space-between;
+            box-shadow: 0 -10px 30px rgba(24, 15, 10, 0.42), inset 0 1px 0 rgba(255, 238, 210, 0.14);
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .player-bar.pbar.yashirin {
+            transform: translateY(110%);
+        }
+
+        .pb-info {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .pb-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e130d;
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 60%, var(--bronze-dark) 100%);
+            box-shadow: 0 4px 14px var(--bronze-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .pb-meta {
+            min-width: 0;
+        }
+
+        .pb-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cream-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pb-sub {
+            margin-top: 2px;
+            font-size: 12px;
+            color: var(--cream-muted);
+        }
+
+        .pb-center {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pb-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pb-controls>*,
+        .pb-right>* {
+            flex-shrink: 0;
+        }
+
+        .pbar .play-main-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+        }
+
+        .pbar .play-main-btn .svg-fill {
+            width: 18px;
+            height: 18px;
+        }
+
+        #speedBtn {
+            min-width: 44px;
+        }
+
+        .pb-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: min(440px, 34vw);
+        }
+
+        .pb-progress>#progress {
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 0;
+            /* to'lgan qismi bronza rangda; --pct qiymatini JS beradi */
+            background: linear-gradient(to right, var(--bronze-gold) var(--pct, 0%), rgba(207, 163, 106, 0.24) var(--pct, 0%));
+        }
+
+        #currTime {
+            text-align: right;
+        }
+
+        #durTime {
+            text-align: left;
+        }
+
+        .pb-right {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        #volume {
+            width: 80px;
+        }
+
+        /* ---------- YON PANELLAR, TUGMALAR, XABAR ---------- */
+        .side-nav-btn {
+            top: calc(var(--topbar-h) + (100vh - var(--topbar-h) - var(--player-h)) / 2);
+        }
+
+        .yon-panel,
+        #translationBox {
+            top: var(--topbar-h);
+            height: calc(100vh - var(--topbar-h) - var(--player-h));
+            padding-bottom: 0;
+        }
+
+        .yon-panel-resizer,
+        .translation-resizer {
+            top: var(--topbar-h);
+            height: calc(100vh - var(--topbar-h) - var(--player-h));
+        }
+
+        .status-toast {
+            bottom: calc(var(--player-h) + 16px);
+        }
+
+        /* ---------- MOSLASHUVCHANLIK ---------- */
+        @media (max-width: 1360px) {
+
+            .pb-sub,
+            #volume {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1100px) {
+
+            .tb-chip,
+            .page-total,
+            .pb-info {
+                display: none;
+            }
+
+            .tb-select {
+                min-width: 150px;
+            }
+        }
     </style>
 </head>
 
@@ -1636,13 +1933,23 @@
         <div class="yon-panel-header">
             <div class="yon-panel-header-top">
                 <span>Суралар рўйхати</span>
-                <button class="yon-panel-yopish" onclick="toggleSurahMenu()">✖</button>
+                <div class="trans-header-actions">
+                    <button class="yon-panel-yopish" id="logoutBtn" onclick="logoutUser()" title="Tizimdan chiqish">
+                        <svg class="svg-icon" viewBox="0 0 24 24" style="width:15px;height:15px;">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button class="yon-panel-yopish" onclick="toggleSurahMenu()">✖</button>
+                </div>
             </div>
             <input type="text" id="surahSearchInput" class="surah-search-input" placeholder="Сура номи ёки рақами..."
                 oninput="filterSurahList()">
         </div>
         <ul id="surahList"></ul>
     </nav>
+
     <div id="surahResizer" class="yon-panel-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
     <!-- O'NG YON PANEL: Sahifa tarjimasi -->
@@ -1672,60 +1979,81 @@
     </div>
     <div id="translationResizer" class="translation-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
-    <!-- BOSHQARUV PANELI -->
-    <div class="controls">
-        <button id="menuToggleBtn" class="icon-btn" onclick="event.stopPropagation(); toggleSurahMenu()"
-            title="Suralar ro'yxati (R)">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
+    <!-- BOSHQARUV PANELI (YUQORI): navigatsiya va ko'rinish -->
 
-        <select id="folderSelect" onchange="changeFolder()">
-            <option value="audios1">Alijon qori (audios1)</option>
-            <option value="audios2">Husary qori (audios2)</option>
-        </select>
+    <!-- YUQORI PANEL -->
+    <header class="controls topbar">
+        <div class="tb-left">
+            <button id="menuToggleBtn" class="tb-select" onclick="event.stopPropagation(); toggleSurahMenu()"
+                title="Suralar ro'yxati (R)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <span id="surahNameLabel">Суралар</span>
+                <svg class="svg-icon chev" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
 
-        <button class="icon-btn" onclick="stepSpread(-1)" title="Oldingi sahifa">◀</button>
-        <input type="number" id="pageInput" min="1" max="604" title="Sahifa raqami">
-        <button class="icon-btn" onclick="stepSpread(1)" title="Keyingi sahifa">▶</button>
+            <div class="tb-chip" id="juzChip" title="Joriy juz">Juz 1</div>
 
-        <button id="bookModeBtn" onclick="toggleBookMode()" title="1 yoki 2 sahifali ko'rinish (B)"></button>
+            <div class="tb-pager">
+                <button class="icon-btn" onclick="stepSpread(1)" title="Keyingi sahifa">◀</button>
+                <input type="number" id="pageInput" min="1" max="604" title="Sahifa raqami">
+                <span class="page-total">/ 604</span>
+                <button class="icon-btn" onclick="stepSpread(-1)" title="Oldingi sahifa">▶</button>
+            </div>
+        </div>
 
-        <button id="transBtn" class="icon-btn" onclick="event.stopPropagation(); toggleTranslation()"
-            title="Sahifa tarjimasi (T)">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                <line x1="8" y1="9" x2="16" y2="9"></line>
-                <line x1="8" y1="13" x2="13" y2="13"></line>
-            </svg>
-        </button>
+        <div class="tb-right">
+            <select id="folderSelect" onchange="changeFolder()" title="Qori">
+                <option value="audios1">Alijon qori</option>
+                <option value="audios2">Husary qori</option>
+            </select>
 
-        <button id="memPeekBtn" onclick="memorizeViewHide()" title="Barcha oyatlarni ko'rsatish / yashirish (O)">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-        </button>
+            <div class="divider"></div>
 
-        <button id="memResetBtn" class="icon-btn" onclick="memorizeResetPage()"
-            title="Barcha oyatlarni oppoq maska bilan yopish (L)">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        </button>
+            <button id="bookModeBtn" class="icon-btn" onclick="toggleBookMode()"
+                title="1 yoki 2 sahifali ko'rinish (B)"></button>
 
-        <button id="logoutBtn" class="icon-btn" onclick="logoutUser()" title="Tizimdan chiqish">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-        </button>
-    </div>
+            <button id="transBtn" class="icon-btn" onclick="event.stopPropagation(); toggleTranslation()"
+                title="Sahifa tarjimasi (T)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <line x1="8" y1="9" x2="16" y2="9"></line>
+                    <line x1="8" y1="13" x2="13" y2="13"></line>
+                </svg>
+            </button>
+
+            <button id="memPeekBtn" class="icon-btn" onclick="memorizeViewHide()"
+                title="Barcha oyatlarni ko'rsatish / yashirish (O)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
+
+            <button id="memResetBtn" class="icon-btn" onclick="memorizeResetPage()"
+                title="Barcha oyatlarni oppoq maska bilan yopish (L)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </button>
+
+            <div class="divider"></div>
+
+            <button id="fullscreenBtn" class="icon-btn" onclick="toggleFullscreen()" title="To'liq ekran (F)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </header>
 
     <!-- EKRAN CHETIDAGI VARAQLASH TUGMALARI -->
     <button class="side-nav-btn side-nav-left" onclick="stepSpread(1)" title="Keyingi sahifa">
@@ -1763,62 +2091,99 @@
     </div>
 
     <!-- PASTKI PLAYER PANELI -->
-    <div class="player-bar">
-        <button class="icon-btn" onclick="prevAudio()" title="Oldingi oyat (←)">
-            <svg class="svg-fill" viewBox="0 0 24 24">
-                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-            </svg>
-        </button>
-        <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn" title="Play / Pause (Space / 5)">
-            <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;">
-                <path d="M8 5v14l11-7z" />
-            </svg>
-        </button>
-        <button class="icon-btn" onclick="nextAudio()" title="Keyingi oyat (→)">
-            <svg class="svg-fill" viewBox="0 0 24 24">
-                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-            </svg>
-        </button>
+    <div class="player-bar pbar">
+        <!-- Chap: hozir nima o'qilyapti -->
+        <div class="pb-info">
+            <div class="pb-avatar" id="pbAvatar">A</div>
+            <div class="pb-meta">
+                <div class="pb-title" id="pbTitle">—</div>
+                <div class="pb-sub" id="pbSub">Alijon qori</div>
+            </div>
+        </div>
 
-        <span id="currTime" class="time-label">0:00</span>
-        <input type="range" id="progress" value="0" step="0.1">
-        <span id="durTime" class="time-label">0:00</span>
+        <!-- O'rta: boshqaruv va vaqt -->
+        <div class="pb-center">
+            <div class="pb-controls">
+                <button class="icon-btn" onclick="seekBy(-2)" title="-2 soniya (4)">
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        <text x="12" y="15.2" font-size="8" font-weight="700" text-anchor="middle" fill="currentColor"
+                            stroke="none">2</text>
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="prevAudio()" title="Oldingi oyat (←)">
+                    <svg class="svg-fill" viewBox="0 0 24 24">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                    </svg>
+                </button>
+                <button class="icon-btn play-main-btn" onclick="togglePlay()" id="playBtn"
+                    title="Play / Pause (Space / 5)">
+                    <svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="nextAudio()" title="Keyingi oyat (→)">
+                    <svg class="svg-fill" viewBox="0 0 24 24">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="seekBy(2)" title="+2 soniya (6)">
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"></path>
+                        <text x="12" y="15.2" font-size="8" font-weight="700" text-anchor="middle" fill="currentColor"
+                            stroke="none">2</text>
+                    </svg>
+                </button>
+                <button onclick="toggleSpeed()" id="speedBtn" title="Tezlik (*)">1x</button>
+            </div>
 
-        <button onclick="toggleSpeed()" id="speedBtn" title="Tezlik (*)">1x</button>
+            <div class="pb-progress">
+                <span id="currTime" class="time-label">0:00</span>
+                <input type="range" id="progress" value="0" step="0.1">
+                <span id="durTime" class="time-label">0:00</span>
+            </div>
+        </div>
 
-        <button onclick="toggleMute()" id="muteBtn" title="Ovozni o'chirish (M)"></button>
-        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+        <!-- O'ng: A-B, takrorlash, ovoz -->
+        <div class="pb-right">
+            <button onclick="setPointA()" id="btnA" class="btn-a" title="A nuqta (1)">A</button>
+            <button onclick="setPointB()" id="btnB" class="btn-b" title="B nuqta (3)">B</button>
+            <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn"
+                title="A-B nuqtalarini tozalash (7)">✕</button>
 
-        <div class="divider"></div>
+            <div class="repeat-group" title="Belgilangan oyatlarni takrorlash va takrorlar soni">
+                <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
+                    title="Belgilangan oyatlarni takrorlash (9)">
+                    <svg class="svg-icon" viewBox="0 0 24 24">
+                        <polyline points="17 1 21 5 17 9"></polyline>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                        <polyline points="7 23 3 19 7 15"></polyline>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                        <text x="12" y="15.5" font-size="9" font-weight="700" text-anchor="middle" fill="currentColor"
+                            stroke="none">1</text>
+                    </svg>
+                </button>
+                <input type="number" id="inputRepeatNumber" min="0" max="999" value="3"
+                    title="Takrorlar soni (0 = cheksiz)">
+            </div>
 
-        <div class="repeat-group" title="Belgilangan oyatlarni takrorlash va takrorlar soni">
-            <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
-                title="Belgilangan oyatlarni takrorlash (V)">
+            <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Sahifani takrorlash (V)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <polyline points="17 1 21 5 17 9"></polyline>
                     <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
                     <polyline points="7 23 3 19 7 15"></polyline>
                     <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-                    <path d="M11 10h1v4" stroke-width="2.2"></path>
+                    <rect x="9" y="8.5" width="6" height="7" rx="1"></rect>
                 </svg>
             </button>
-            <input type="number" id="inputRepeatNumber" min="0" max="999" value="3"
-                title="Takrorlar soni (0 = cheksiz)">
+
+            <div class="divider"></div>
+
+            <button onclick="toggleMute()" id="muteBtn" title="Ovozni o'chirish (M)"></button>
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
         </div>
-
-        <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Sahifani takrorlash (9)">
-            <svg class="svg-icon" viewBox="0 0 24 24">
-                <polyline points="17 1 21 5 17 9"></polyline>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-                <polyline points="7 23 3 19 7 15"></polyline>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-            </svg>
-        </button>
-
-        <button onclick="setPointA()" id="btnA" class="btn-a" title="A nuqta (1)">A</button>
-        <button onclick="setPointB()" id="btnB" class="btn-b" title="B nuqta (3)">B</button>
-
-        <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="A-B nuqtalarini tozalash (7)">✕</button>
     </div>
 
     <div id="audioStatus" class="status-toast" aria-live="polite"></div>
@@ -1845,6 +2210,7 @@
                 <div><kbd>8 / 2</kbd>Ovoz baland/past</div>
                 <div><kbd>*</kbd>Tezlikni o'zgartirish</div>
                 <div><kbd>M</kbd>Mute (Ovozni o'chirish)</div>
+                <div><kbd>F</kbd>To'liq ekran</div>
                 <div><kbd>+ / -</kbd>Zoom (Yaqin/Uzoq)</div>
                 <div><kbd>Y / y</kbd>Yordam oynasi</div>
             </div>
@@ -2010,6 +2376,66 @@
             return n.toString().padStart(3, "0");
         }
 
+        // Madina mushafida har bir juz boshlanadigan sahifa
+        const JUZ_START_PAGES = [1, 22, 42, 62, 82, 102, 121, 142, 162, 182, 201, 222, 242, 262, 282,
+            302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
+
+        function getJuzForPage(p) {
+            let juz = 1;
+            for (let i = 0; i < JUZ_START_PAGES.length; i++) {
+                if (p >= JUZ_START_PAGES[i]) juz = i + 1;
+            }
+            return juz;
+        }
+
+        // Yuqori paneldagi sura/juz va pastki pleyerdagi sarlavhani yangilaydi
+        function updateHeaderInfo(sNum) {
+            const cleanName = (n) => (surahNamesByNumber[n] || "").replace(/^\d+\.\s*/, "");
+            const label = document.getElementById("surahNameLabel");
+            const juz = document.getElementById("juzChip");
+            const title = document.getElementById("pbTitle");
+            const sub = document.getElementById("pbSub");
+            const avatar = document.getElementById("pbAvatar");
+
+            if (label && sNum) label.textContent = cleanName(sNum);
+            if (juz) juz.textContent = "Juz " + getJuzForPage(currentPage);
+
+            if (title) {
+                if (currentVerse) {
+                    const p = currentVerse.split("-");
+                    const s = parseInt(p[0], 10);
+                    const a = parseInt(p[1], 10);
+                    title.textContent = `${cleanName(s)} ${s}:${a}`;
+                } else {
+                    title.textContent = sNum ? cleanName(sNum) : "—";
+                }
+            }
+
+            const isHusary = currentFolder === "audios2";
+            if (sub) sub.textContent = isHusary ? "Husary qori" : "Alijon qori";
+            if (avatar) avatar.textContent = isHusary ? "H" : "A";
+        }
+
+        function seekBy(sec) {
+            const t = audio.currentTime + sec;
+            audio.currentTime = sec < 0 ? Math.max(segStart(), t) : Math.min(segEnd() || t, t);
+            showStatus(sec < 0 ? `${sec}s` : `+${sec}s`);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                const p = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+                if (p && p.catch) p.catch(() => { });
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById("fullscreenBtn");
+            if (btn) btn.classList.toggle("active", !!document.fullscreenElement);
+        });
+
         function syncResizerPositions() {
             if (surahResizer && surahMenu) {
                 if (surahMenu.classList.contains("ochiq")) {
@@ -2100,19 +2526,20 @@
 
             const isHidden = controls.classList.toggle("yashirin");
             playerBar.classList.toggle("yashirin", isHidden);
+            document.body.classList.toggle("panels-hidden", isHidden);
             if (statusToast) statusToast.classList.toggle("yashirin", isHidden);
 
             localStorage.setItem("panelsHidden", isHidden);
         }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            if (localStorage.getItem("panelsHidden") === "true") {
-                document.querySelector(".controls").classList.add("yashirin");
-                document.querySelector(".player-bar").classList.add("yashirin");
-                const statusToast = document.getElementById("audioStatus");
-                if (statusToast) statusToast.classList.add("yashirin");
-            }
-        });
+        (function restorePanelsState() {
+            if (localStorage.getItem("panelsHidden") !== "true") return;
+            document.querySelector(".controls").classList.add("yashirin");
+            document.querySelector(".player-bar").classList.add("yashirin");
+            document.body.classList.add("panels-hidden");
+            const statusToast = document.getElementById("audioStatus");
+            if (statusToast) statusToast.classList.add("yashirin");
+        })();
 
         function toggleSurahMenu() {
             if (surahMenu.classList.contains("ochiq")) {
@@ -2179,6 +2606,8 @@
                     targetLink.scrollIntoView({ behavior: "smooth", block: "nearest" });
                 }
             }
+
+            updateHeaderInfo(targetLink ? parseInt(targetLink.dataset.surah, 10) : null);
         }
 
         Object.entries(suralarJSON).forEach(([suraNomi, sahifaMatni], index) => {
@@ -2282,7 +2711,7 @@
 
             if (isBookMode) {
                 const availW = winWidth - 110;
-                const availH = winHeight - 155;
+                const availH = winHeight - (document.body.classList.contains("panels-hidden") ? 60 : 190);
                 const scaleW = availW / 1000;
                 const scaleH = availH / 870;
                 scale = Math.min(scaleW, scaleH, 1.30);
@@ -2342,8 +2771,8 @@
             const controlsEl = document.querySelector(".controls");
             const panelsHidden = controlsEl && controlsEl.classList.contains("yashirin");
 
-            const safeTop = 25;
-            const safeBottom = window.innerHeight - (panelsHidden ? 25 : 135);
+            const safeTop = panelsHidden ? 25 : 78;
+            const safeBottom = window.innerHeight - (panelsHidden ? 25 : 110);
             const safeLeft = 20;
             const safeRight = window.innerWidth - 20;
 
@@ -3314,7 +3743,6 @@
             });
         }
 
-
         function changeFolder() {
             currentFolder = folderSelect.value;
             localStorage.setItem("audioFolder", currentFolder);
@@ -3664,11 +4092,14 @@
             const relDur = segDuration();
             progress.max = relDur;
             progress.value = relTime;
+            progress.style.setProperty("--pct", (relDur > 0 ? (relTime / relDur) * 100 : 0) + "%");
             document.getElementById("currTime").innerText = format(relTime);
             document.getElementById("durTime").innerText = format(relDur);
         };
         progress.oninput = () => {
             audio.currentTime = segStart() + parseFloat(progress.value);
+            const max = parseFloat(progress.max) || 0;
+            progress.style.setProperty("--pct", (max > 0 ? (parseFloat(progress.value) / max) * 100 : 0) + "%");
         };
         volume.oninput = () => {
             audio.volume = volume.value;
@@ -3761,6 +4192,7 @@
             if (e.code === "KeyV") { e.preventDefault(); toggleLoop(); return; }
             if (e.code === "KeyP") { e.preventDefault(); toggleAllPanels(); return; }
             if (e.code === "KeyO") { e.preventDefault(); memorizeViewHide(); return; }
+            if (e.code === "KeyF") { e.preventDefault(); toggleFullscreen(); return; }
             if (e.code === "KeyL") { e.preventDefault(); memorizeResetPage(); return; }
 
 
@@ -3800,7 +4232,9 @@
                 currentPage = v;
                 updateUI("first", false, true);
             }
+            pageInput.blur();
         };
+        
         bookWrapper.onwheel = (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
