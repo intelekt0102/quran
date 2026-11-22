@@ -19,33 +19,30 @@
     <script src="overlays_data.js"></script>
     <!-- 2. Oyatlar tarjimasi bazasi (translation.txt) -->
     <script src="translation.js"></script>
-    <!-- 3. Alijon qori: har bir sura uchun bitta audio fayl + oyatlar vaqtlari (ms) -->
+    <!-- 3. Qorilar: har bir sura uchun bitta audio fayl + oyatlar vaqtlari (ms) -->
     <script src="Alijon_qori_timings.js"></script>
     <script src="Husary_qori_timings.js"></script>
 
     <style>
         /* =========================================================
-           SAMARQAND ZUMRADI — EMERALD, TURQUOISE & GOLD EDITION
+           MADINA MUSHAF HARMONY — ANTIQUE BRONZE, PARCHMENT & PLUM
            ========================================================= */
         :root {
-            --bg-abyss: #051111;
-            --bg-deep: #0a2220;
-            --panel-glass: rgba(9, 28, 27, 0.84);
-            --panel-glass-deep: rgba(5, 17, 17, 0.94);
-            --surface-btn: rgba(20, 56, 53, 0.65);
-            --surface-hover: rgba(29, 78, 74, 0.92);
-
-            --emerald: #10b981;
-            --emerald-bright: #34d399;
-            --turquoise: #2dd4bf;
-            --champagne: #e8c87d;
-            --champagne-soft: rgba(232, 200, 125, 0.25);
-
-            --border-glass: rgba(45, 212, 191, 0.22);
-            --emerald-glow: rgba(16, 185, 129, 0.38);
-
-            --text-main: #f0fdfa;
-            --text-muted: #94b8b3;
+            --mushaf-bg-light: #eee6d8;
+            --mushaf-bg-warm: #dccfb8;
+            --panel-espresso: rgba(32, 22, 19, 0.93);
+            --panel-espresso-deep: rgba(22, 15, 13, 0.96);
+            --surface-bronze: rgba(68, 49, 41, 0.78);
+            --surface-hover: #594035;
+            --bronze-gold: #cfa36a;
+            --bronze-light: #e6c594;
+            --bronze-dark: #a67841;
+            --bronze-border: rgba(207, 163, 106, 0.34);
+            --bronze-glow: rgba(207, 163, 106, 0.35);
+            --plum-accent: #8f6ca8;
+            --plum-soft: rgba(143, 108, 168, 0.18);
+            --cream-text: #f7f2ea;
+            --cream-muted: #cbbba8;
             --ease-ui: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -56,81 +53,74 @@
 
         body {
             margin: 0;
-            background-color: var(--bg-abyss);
-            /* Chuqur zumrad-firuza fon va nozik Samarqand yulduzcha naqshi */
+            background-color: #241914;
             background-image:
-                radial-gradient(ellipse at 50% 30%, rgba(16, 185, 129, 0.16) 0%, rgba(10, 42, 40, 0.55) 45%, rgba(4, 15, 15, 0.98) 100%),
-                radial-gradient(circle at 85% 15%, rgba(232, 200, 125, 0.08) 0%, transparent 40%),
-                url("data:image/svg+xml,%3Csvg width='76' height='76' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232dd4bf' stroke-width='0.55' stroke-opacity='0.10'%3E%3Cpath d='M32 0L40 13.5L53.5 10.5L50.5 24L64 32L50.5 40L53.5 53.5L40 50.5L32 64L24 50.5L10.5 53.5L13.5 40L0 32L13.5 24L10.5 10.5L24 13.5Z'/%3E%3Ccircle cx='32' cy='32' r='10' stroke='%23e8c87d' stroke-opacity='0.09'/%3E%3C/g%3E%3C/svg%3E");
+                radial-gradient(circle at 50% 42%, rgba(246, 235, 214, 0.94) 0%, rgba(212, 194, 165, 0.88) 48%, rgba(44, 30, 23, 0.96) 100%),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%238c6239' stroke-width='0.7' stroke-opacity='0.14'%3E%3Cpath d='M32 0L40 13.5L53.5 10.5L50.5 24L64 32L50.5 40L53.5 53.5L40 50.5L32 64L24 50.5L10.5 53.5L13.5 40L0 32L13.5 24L10.5 10.5L24 13.5Z'/%3E%3Ccircle cx='32' cy='32' r='11' stroke='%237b5896' stroke-opacity='0.10'/%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
-            color: var(--text-main);
+            color: #231915;
             font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             text-align: center;
-            padding-top: 70px;
-            padding-bottom: 98px;
+            padding-top: 24px;
+            padding-bottom: 155px;
             min-height: 100vh;
             overflow-x: auto;
         }
 
-        /* === SUZUVCHI KAPSULA PANELLAR (TEPA VA PAST) === */
+        /* === SUZUVCHI BOSHQARUV PANELLARI (PASTDA) === */
         .controls,
         .player-bar {
             position: fixed;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(155deg, var(--panel-glass), var(--panel-glass-deep));
-            backdrop-filter: blur(22px) saturate(140%);
-            -webkit-backdrop-filter: blur(22px) saturate(140%);
-            border: 1px solid var(--border-glass);
+            background: linear-gradient(145deg, var(--panel-espresso), var(--panel-espresso-deep));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--bronze-border);
             display: flex;
             align-items: center;
             z-index: 3000;
             box-shadow:
-                0 18px 42px rgba(0, 8, 8, 0.6),
-                0 0 0 1px rgba(232, 200, 125, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.12);
-            color: var(--text-main);
-            transition: transform 0.36s var(--ease-ui), opacity 0.28s ease;
+                0 14px 36px rgba(24, 15, 10, 0.45),
+                0 0 0 1px rgba(207, 163, 106, 0.12),
+                inset 0 1px 0 rgba(255, 238, 210, 0.14);
+            color: var(--cream-text);
+            transition: transform 0.3s var(--ease-ui), opacity 0.3s ease;
         }
 
         .controls {
-            top: 12px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            gap: 7px;
+            bottom: 66px;
+            padding: 7px 14px;
+            border-radius: 16px;
+            gap: 8px;
             max-width: 96vw;
         }
 
         .player-bar {
-            bottom: 14px;
-            padding: 8px 18px;
-            border-radius: 999px;
-            gap: 9px;
+            bottom: 10px;
+            padding: 9px 18px;
+            border-radius: 20px;
+            gap: 10px;
             white-space: nowrap;
-            max-width: 97vw;
+            max-width: 98vw;
             overflow-x: auto;
         }
 
-        .controls.yashirin {
-            transform: translateX(-50%) translateY(-100px);
-            opacity: 0;
-            pointer-events: none;
-        }
-
+        .controls.yashirin,
         .player-bar.yashirin {
-            transform: translateX(-50%) translateY(120px);
+            transform: translateX(-50%) translateY(150px);
             opacity: 0;
             pointer-events: none;
         }
 
         button,
         select {
-            background: var(--surface-btn);
-            color: var(--text-main);
-            border: 1px solid rgba(45, 212, 191, 0.16);
-            height: 35px;
+            background: var(--surface-bronze);
+            color: var(--cream-text);
+            border: 1px solid rgba(207, 163, 106, 0.22);
+            height: 36px;
             padding: 0 12px;
-            border-radius: 999px;
+            border-radius: 10px;
             cursor: pointer;
             font-family: inherit;
             font-weight: 600;
@@ -139,83 +129,71 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: all 0.2s var(--ease-ui);
+            transition: all 0.18s var(--ease-ui);
             outline: none;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
 
         select {
-            appearance: none;
-            -webkit-appearance: none;
-            padding: 0 32px 0 14px;
-            background-color: rgba(8, 30, 29, 0.92);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232dd4bf' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 11px center;
+            padding-right: 28px;
+            background-color: #2b1e19;
         }
 
         select option {
-            background-color: #081e1d;
-            color: var(--text-main);
+            background-color: #231814;
+            color: var(--cream-text);
         }
 
         button:hover,
         select:hover {
-            background-color: var(--surface-hover);
-            border-color: rgba(45, 212, 191, 0.5);
-            color: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            background: var(--surface-hover);
+            border-color: rgba(230, 197, 148, 0.55);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
-        /* Faol tugmalar — yorqin zumrad va firuza jilosi */
         button.active,
         .btn-a.active,
         .btn-b.active {
-            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
-            color: #031714;
-            border-color: #99f6e4;
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 55%, var(--bronze-dark) 100%);
+            color: #1e130d;
+            border-color: var(--bronze-light);
             font-weight: 700;
-            box-shadow: 0 0 16px var(--emerald-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            box-shadow: 0 0 14px var(--bronze-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
 
         .icon-btn {
-            width: 35px;
+            width: 36px;
             padding: 0;
         }
 
         #logoutBtn:hover {
-            background: rgba(220, 38, 38, 0.25);
+            background: rgba(158, 63, 59, 0.35);
             border-color: rgba(248, 113, 113, 0.6);
-            color: #fca5a5;
+            color: #ffd6d6;
         }
 
-        /* Markaziy Play/Pause tugmasi — Zumrad-oltin uyg'unligi */
         .play-main-btn {
-            background: linear-gradient(135deg, #5eead4 0%, var(--emerald) 65%, #059669 100%);
-            color: #021a15;
-            border-color: #99f6e4;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 14px;
-            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 60%, var(--bronze-dark) 100%);
+            color: #1e130d;
+            border-color: var(--bronze-light);
+            width: 42px;
+            box-shadow: 0 4px 14px var(--bronze-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
 
         .play-main-btn:hover {
-            background: linear-gradient(135deg, #99f6e4 0%, #34d399 100%);
-            color: #021a15;
-            transform: scale(1.07);
-            box-shadow: 0 6px 22px rgba(45, 212, 191, 0.55);
+            background: linear-gradient(135deg, #f0d4a8 0%, #d8ab72 100%);
+            color: #1e130d;
+            border-color: #faebd4;
         }
 
         .svg-icon {
-            width: 16px;
-            height: 16px;
+            width: 17px;
+            height: 17px;
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
@@ -233,15 +211,15 @@
         }
 
         input[type=number] {
-            width: 52px;
-            height: 35px;
-            border-radius: 999px;
-            border: 1px solid var(--border-glass);
-            background: rgba(4, 15, 15, 0.85);
-            color: var(--champagne);
+            width: 54px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--bronze-border);
+            background: rgba(18, 12, 10, 0.85);
+            color: var(--bronze-light);
             font-family: inherit;
             font-weight: 700;
-            font-size: 13.5px;
+            font-size: 14px;
             text-align: center;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -249,8 +227,8 @@
         }
 
         input[type=number]:focus {
-            border-color: var(--turquoise);
-            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.2);
+            border-color: var(--bronze-gold);
+            box-shadow: 0 0 8px var(--bronze-glow);
         }
 
         input[type=number]::-webkit-inner-spin-button,
@@ -262,117 +240,101 @@
         .repeat-group {
             display: inline-flex;
             align-items: center;
-            background: rgba(4, 15, 15, 0.72);
-            border: 1px solid var(--border-glass);
-            border-radius: 999px;
+            background: rgba(18, 12, 10, 0.72);
+            border: 1px solid rgba(207, 163, 106, 0.25);
+            border-radius: 11px;
             padding: 2px;
             gap: 3px;
         }
 
         .repeat-group button {
             border: none;
-            height: 31px;
-            width: 33px;
-            transform: none;
+            height: 32px;
+            width: 34px;
+            border-radius: 8px;
         }
 
         #inputRepeatNumber {
-            width: 34px;
-            height: 31px;
+            width: 36px;
+            height: 32px;
             border: none;
-            border-radius: 999px;
-            background: rgba(16, 48, 46, 0.85);
-            color: var(--champagne);
+            border-radius: 8px;
+            background: rgba(48, 34, 28, 0.9);
+            color: var(--bronze-light);
             font-size: 13px;
             font-weight: 700;
             padding: 0 2px;
         }
 
         #inputRepeatNumber:focus {
-            background: #13403d;
-            box-shadow: inset 0 0 0 1px var(--turquoise);
+            background: #3b2a22;
+            box-shadow: inset 0 0 0 1px var(--bronze-gold);
         }
 
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
-            background: rgba(45, 212, 191, 0.2);
-            height: 4px;
-            border-radius: 99px;
+            background: rgba(207, 163, 106, 0.24);
+            height: 5px;
+            border-radius: 5px;
             cursor: pointer;
             outline: none;
-        }
-
-        input[type=range]:hover {
-            background: rgba(45, 212, 191, 0.35);
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 13px;
-            height: 13px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #5eead4, var(--emerald));
-            border: 1.5px solid #f0fdfa;
+            background: linear-gradient(135deg, var(--bronze-light), var(--bronze-gold));
+            border: 1px solid #fff5e6;
             cursor: pointer;
-            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-            transition: transform 0.15s ease;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.15s ease, background-color 0.15s ease;
         }
 
         input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.25);
+            transform: scale(1.22);
+            background: var(--bronze-light);
         }
 
         #progress {
-            width: 135px;
+            width: 125px;
         }
 
         #volume {
-            width: 56px;
+            width: 55px;
         }
 
         .time-label {
-            font-size: 11.5px;
-            font-weight: 500;
+            font-size: 12px;
             font-variant-numeric: tabular-nums;
-            color: var(--text-muted);
+            color: var(--cream-muted);
             min-width: 32px;
         }
 
         .divider {
             width: 1px;
             height: 22px;
-            background: linear-gradient(to bottom, transparent, rgba(45, 212, 191, 0.35), transparent);
+            background: linear-gradient(to bottom, transparent, rgba(207, 163, 106, 0.4), transparent);
             margin: 0 2px;
-        }
-
-        .audio-status {
-            font-size: 11.5px;
-            color: var(--champagne);
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: rgba(232, 200, 125, 0.12);
-            border: 1px solid rgba(232, 200, 125, 0.3);
-            display: inline-flex;
-            align-items: center;
         }
 
         .status-toast {
             position: fixed;
             right: 18px;
-            bottom: 74px;
+            bottom: 120px;
             padding: 8px 15px;
-            border-radius: 999px;
-            background: linear-gradient(155deg, var(--panel-glass), var(--panel-glass-deep));
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(45, 212, 191, 0.35);
-            color: var(--champagne);
+            border-radius: 12px;
+            background: linear-gradient(145deg, var(--panel-espresso), var(--panel-espresso-deep));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--bronze-border);
+            color: var(--bronze-light);
             font-size: 12.5px;
-            font-weight: 600;
-            box-shadow: 0 10px 28px rgba(0, 8, 8, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+            box-shadow: 0 10px 28px rgba(24, 15, 10, 0.55), inset 0 1px 0 rgba(255, 238, 210, 0.12);
             z-index: 3100;
             opacity: 0;
             transform: translateY(10px);
@@ -386,12 +348,8 @@
         }
 
         .status-toast.yashirin {
-            transform: translateY(110px);
+            transform: translateY(150px);
             opacity: 0;
-        }
-
-        .audio-status:empty {
-            display: none;
         }
 
         #muteBtn {
@@ -399,20 +357,19 @@
             border-color: transparent;
             width: 30px;
             padding: 0;
-            color: var(--text-muted);
+            color: var(--cream-muted);
             box-shadow: none;
         }
 
         #muteBtn:hover {
-            background: rgba(45, 212, 191, 0.14);
-            color: var(--turquoise);
-            transform: none;
+            background: rgba(207, 163, 106, 0.14);
+            color: var(--bronze-light);
         }
 
         /* === KITOB KONTEYNERI === */
         .viewer {
-            margin-top: 8px;
-            margin-bottom: 40px;
+            margin-top: 16px;
+            margin-bottom: 80px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -423,26 +380,26 @@
         .book-wrapper {
             display: flex;
             flex-direction: row-reverse;
+            flex-wrap: nowrap;
             justify-content: center;
             align-items: stretch;
             position: relative;
             transition: box-shadow 0.35s ease, padding 0.35s ease, border-radius 0.35s ease;
         }
 
-        /* 1. IKKI SAHIFALI REJIM — ZUMRAD CHARM MUQOVALI MUSHAF */
+        /* 1. IKKI SAHIFALI REJIM — QAT-QAT VARAQLI 3D MUSHAF */
         .book-wrapper.two-page {
-            background: #fdfcf7;
+            background: #fffdf9;
             border-radius: 10px;
-            border: 1.5px solid #ebe5d5;
+            border: 1.5px solid #f3ead8;
             box-shadow:
-                -4px 1px 0 #ede7d8,
-                4px 1px 0 #ede7d8,
-                -8px 2px 0 #ddd5c2,
-                8px 2px 0 #ddd5c2,
-                0 3px 0 13px #0a2b25,
-                0 3px 0 14.5px #d4b26a,
-                0 32px 70px -10px rgba(0, 6, 6, 0.85),
-                0 0 80px rgba(16, 185, 129, 0.12);
+                -4px 1px 0 #f3ead8,
+                4px 1px 0 #f3ead8,
+                -8px 2px 0 #e5d7be,
+                8px 2px 0 #e5d7be,
+                0 3px 0 13px #261712,
+                0 3px 0 14.5px #d4a86a,
+                0 25px 50px -10px rgba(10, 6, 4, 0.7);
         }
 
         .book-wrapper.two-page::after {
@@ -454,42 +411,35 @@
             transform: translateX(-50%);
             width: 34px;
             background: linear-gradient(90deg,
-                    rgba(10, 30, 26, 0) 0%,
-                    rgba(10, 30, 26, 0.14) 38%,
-                    rgba(5, 18, 16, 0.34) 50%,
-                    rgba(10, 30, 26, 0.14) 62%,
-                    rgba(10, 30, 26, 0) 100%);
+                    rgba(45, 28, 15, 0) 0%,
+                    rgba(45, 28, 15, 0.14) 38%,
+                    rgba(25, 14, 7, 0.34) 50%,
+                    rgba(45, 28, 15, 0.14) 62%,
+                    rgba(45, 28, 15, 0) 100%);
             pointer-events: none;
             z-index: 25;
         }
 
-        /* Zumrad va oltin xatcho'p tasmasi */
         .book-wrapper.two-page::before {
             content: "۞";
             position: absolute;
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 18px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 6px;
-            font-size: 11px;
-            background: linear-gradient(180deg, #10b981 0%, #065f46 100%);
-            color: #fef3c7;
-            border-left: 1px solid #e8c87d;
-            border-right: 1px solid #e8c87d;
+            width: 16px;
+            height: 40px;
+            background: linear-gradient(180deg, #b8332a 0%, #821d17 100%);
+            color: #f0d2a4;
+            border-left: 1px solid #e6c594;
+            border-right: 1px solid #e6c594;
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             z-index: 30;
             pointer-events: none;
         }
 
         .book-wrapper.two-page .quran-page-container {
             width: 500px;
-            max-width: 45vw;
             margin: 0;
             padding: 4px;
             border-radius: 0;
@@ -500,35 +450,36 @@
         }
 
         .book-wrapper.two-page #rightPageContainer {
-            border-left: 1px solid #c9c3b4;
-            box-shadow: inset 24px 0 32px -16px rgba(10, 35, 30, 0.22);
+            border-left: 1px solid #cdbca4;
+            box-shadow: inset 24px 0 32px -16px rgba(55, 35, 18, 0.28);
             border-radius: 0 8px 8px 0;
         }
 
         .book-wrapper.two-page #leftPageContainer {
-            box-shadow: inset -24px 0 32px -16px rgba(10, 35, 30, 0.22);
+            box-shadow: inset -24px 0 32px -16px rgba(55, 35, 18, 0.28);
             border-radius: 8px 0 0 8px;
         }
 
-        /* 2. BIR SAHIFALI REJIM — MARVARID VA FIRUZA YOG'DUSI */
+        /* 2. BIR SAHIFALI REJIM — "MUALLAQ NURLI SAHIFA" */
         .book-wrapper.single-page {
-            border-radius: 18px;
-            border: 1.5px solid rgba(45, 212, 191, 0.45);
+            border-radius: 16px;
+            border: 1.5px solid rgba(212, 168, 106, 0.65);
             box-shadow:
-                0 30px 70px -10px rgba(0, 8, 8, 0.85),
-                0 0 90px rgba(16, 185, 129, 0.16);
+                0 26px 60px -10px rgba(12, 7, 4, 0.72),
+                0 6px 18px rgba(15, 9, 6, 0.35),
+                0 0 90px rgba(212, 168, 106, 0.24);
         }
 
         .book-wrapper.single-page::before {
             content: "";
             position: absolute;
             top: -2px;
-            left: 16%;
-            right: 16%;
+            left: 12%;
+            right: 12%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--turquoise), var(--champagne), var(--turquoise), transparent);
+            background: linear-gradient(90deg, transparent, #f0d2a4, #cfa36a, #f0d2a4, transparent);
             border-radius: 3px;
-            box-shadow: 0 0 14px rgba(45, 212, 191, 0.7);
+            box-shadow: 0 0 12px rgba(240, 210, 164, 0.75);
             z-index: 30;
             pointer-events: none;
         }
@@ -537,12 +488,12 @@
             content: "";
             position: absolute;
             bottom: -2px;
-            left: 16%;
-            right: 16%;
+            left: 12%;
+            right: 12%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--champagne), var(--turquoise), var(--champagne), transparent);
+            background: linear-gradient(90deg, transparent, #cfa36a, #f0d2a4, #cfa36a, transparent);
             border-radius: 3px;
-            box-shadow: 0 0 12px rgba(232, 200, 125, 0.5);
+            box-shadow: 0 0 10px rgba(212, 168, 106, 0.55);
             z-index: 30;
             pointer-events: none;
         }
@@ -552,9 +503,11 @@
             max-width: 94vw;
             margin: 0;
             padding: 10px;
-            border-radius: 17px;
-            background: #fdfcf7;
-            box-shadow: inset 0 0 24px rgba(16, 80, 70, 0.08);
+            border-radius: 15px;
+            background: #fffdf9;
+            box-shadow:
+                inset 0 0 28px rgba(150, 110, 60, 0.14),
+                inset 0 0 0 1px rgba(212, 168, 106, 0.25);
         }
 
         .book-wrapper.single-page #leftPageContainer {
@@ -563,7 +516,7 @@
 
         .quran-page-container {
             position: relative;
-            background: #fdfcf7;
+            background: #fffdf9;
             overflow: hidden;
         }
 
@@ -585,7 +538,7 @@
             display: none !important;
         }
 
-        /* === 3D VARAQLASH ANIMATSIYASI === */
+        /* === 3D KITOB VARAQLASH ANIMATSIYASI === */
         .flip-scene {
             position: absolute;
             inset: 0;
@@ -600,7 +553,7 @@
             top: 0;
             height: 100%;
             width: 50%;
-            background: #fdfcf7;
+            background: #fffdf9;
             padding: 6px;
             overflow: hidden;
             z-index: 1;
@@ -609,14 +562,14 @@
         .flip-underlay.right-side {
             right: 0;
             border-radius: 0 8px 8px 0;
-            border-left: 1px solid #c9c3b4;
-            box-shadow: inset 18px 0 26px -14px rgba(10, 35, 30, 0.22);
+            border-left: 1px solid #cdbca4;
+            box-shadow: inset 18px 0 26px -14px rgba(60, 40, 20, 0.24);
         }
 
         .flip-underlay.left-side {
             left: 0;
             border-radius: 8px 0 0 8px;
-            box-shadow: inset -18px 0 26px -14px rgba(10, 35, 30, 0.22);
+            box-shadow: inset -18px 0 26px -14px rgba(60, 40, 20, 0.24);
         }
 
         .flip-underlay img {
@@ -642,12 +595,12 @@
             width: 50%;
             transform-origin: right center;
             transform: rotateY(0deg);
-            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.18);
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
         }
 
         .flip-leaf.turn-next.animate {
             transform: rotateY(180deg);
-            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.28);
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.25);
         }
 
         .flip-leaf.turn-prev {
@@ -655,12 +608,12 @@
             width: 50%;
             transform-origin: left center;
             transform: rotateY(0deg);
-            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.18);
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
         }
 
         .flip-leaf.turn-prev.animate {
             transform: rotateY(-180deg);
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.28);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.25);
         }
 
         .flip-leaf.single-next {
@@ -694,7 +647,7 @@
             inset: 0;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            background: #fdfcf7;
+            background: #fffdf9;
             padding: 6px;
             overflow: hidden;
         }
@@ -712,28 +665,28 @@
 
         .flip-leaf.turn-next .flip-face.front {
             border-radius: 8px 0 0 8px;
-            box-shadow: inset -16px 0 24px -12px rgba(10, 35, 30, 0.24);
+            box-shadow: inset -16px 0 24px -12px rgba(60, 40, 20, 0.25);
         }
 
         .flip-leaf.turn-next .flip-face.back {
             border-radius: 0 8px 8px 0;
-            box-shadow: inset 16px 0 24px -12px rgba(10, 35, 30, 0.24);
+            box-shadow: inset 16px 0 24px -12px rgba(60, 40, 20, 0.25);
         }
 
         .flip-leaf.turn-prev .flip-face.front {
             border-radius: 0 8px 8px 0;
-            box-shadow: inset 16px 0 24px -12px rgba(10, 35, 30, 0.24);
+            box-shadow: inset 16px 0 24px -12px rgba(60, 40, 20, 0.25);
         }
 
         .flip-leaf.turn-prev .flip-face.back {
             border-radius: 8px 0 0 8px;
-            box-shadow: inset -16px 0 24px -12px rgba(10, 35, 30, 0.24);
+            box-shadow: inset -16px 0 24px -12px rgba(60, 40, 20, 0.25);
         }
 
         .flip-shade {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(5, 25, 22, 0.04), rgba(5, 25, 22, 0.18));
+            background: linear-gradient(to right, rgba(40, 25, 10, 0.04), rgba(40, 25, 10, 0.18));
             opacity: 0;
             transition: opacity 0.34s ease;
             pointer-events: none;
@@ -743,48 +696,45 @@
             opacity: 1;
         }
 
-        /* Chetdagi varaqlash tugmalari */
+        /* Chetdagi dumaloq varaq o'tkazish tugmalari */
         .side-nav-btn {
             position: fixed;
-            top: 50%;
+            top: 46%;
             transform: translateY(-50%);
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--panel-glass);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            color: var(--turquoise);
-            border: 1px solid var(--border-glass);
+            background: linear-gradient(145deg, var(--panel-espresso), var(--panel-espresso-deep));
+            color: var(--bronze-light);
+            border: 1px solid var(--bronze-border);
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 16px;
             cursor: pointer;
             z-index: 2000;
-            opacity: 0.72;
-            box-shadow: 0 8px 24px rgba(0, 8, 8, 0.5);
+            box-shadow: 0 6px 18px rgba(24, 15, 10, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
             padding: 0;
-            transition: all 0.22s var(--ease-ui);
+            transition: all 0.18s var(--ease-ui);
         }
 
         .side-nav-btn:hover {
-            opacity: 1;
-            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
-            color: #031714;
-            border-color: #99f6e4;
+            background: linear-gradient(135deg, var(--bronze-light), var(--bronze-gold));
+            color: #1e130d;
+            border-color: var(--bronze-light);
             transform: translateY(-50%) scale(1.08);
-            box-shadow: 0 10px 26px rgba(16, 185, 129, 0.45);
+            box-shadow: 0 8px 22px rgba(24, 15, 10, 0.45), 0 0 12px var(--bronze-glow);
         }
 
         .side-nav-left {
-            left: 16px;
+            left: 14px;
         }
 
         .side-nav-right {
-            right: 16px;
+            right: 14px;
         }
 
-        /* === OYAT QATLAMLARI (ZUMRAD VA FIRUZA BELGILASH) === */
+        /* === OYAT QATLAMLARI === */
         .overlaies,
         .custom-overlaies {
             position: absolute !important;
@@ -796,7 +746,7 @@
             margin: 0 !important;
             padding: 0 !important;
             pointer-events: none;
-            opacity: 0.26 !important;
+            opacity: 0.28 !important;
             z-index: 10 !important;
         }
 
@@ -815,39 +765,36 @@
             transition: none !important;
         }
 
-        /* Sichqoncha ustiga kelganda — yumshoq firuza */
         .overlay.hovered {
-            background: rgb(45, 212, 191) !important;
-            box-shadow: 0 1px 0 0 rgb(45, 212, 191), 0 -1px 0 0 rgb(45, 212, 191) !important;
+            background: rgb(226, 166, 87) !important;
+            box-shadow: 0 1px 0 0 rgb(226, 166, 87), 0 -1px 0 0 rgb(226, 166, 87) !important;
             opacity: 1 !important;
             z-index: 2;
         }
 
-        /* Belgilangan oyatlar guruhi — chuqur ko'k-firuza */
         .overlay.range-selected {
-            background: rgb(14, 165, 233) !important;
-            box-shadow: 0 1px 0 0 rgb(14, 165, 233), 0 -1px 0 0 rgb(14, 165, 233) !important;
+            background: rgb(207, 163, 106) !important;
+            box-shadow: 0 1px 0 0 rgb(207, 163, 106), 0 -1px 0 0 rgb(207, 163, 106) !important;
             opacity: 1 !important;
             z-index: 3;
         }
 
-        /* Hozir o'qilayotgan oyat — yorqin zumrad */
         .overlay.selected {
-            background: rgb(16, 185, 129) !important;
-            box-shadow: 0 1px 0 0 rgb(16, 185, 129), 0 -1px 0 0 rgb(16, 185, 129) !important;
+            background: rgb(226, 166, 87) !important;
+            box-shadow: 0 1px 0 0 rgb(226, 166, 87), 0 -1px 0 0 rgb(226, 166, 87) !important;
             opacity: 1 !important;
             z-index: 4;
         }
 
-        /* "🔒 YOPISH" REJIMI */
+        /* === "🔒 YOPISH" REJIMI === */
         body.memorize-masked .overlaies,
         body.memorize-masked .custom-overlaies {
             opacity: 1 !important;
         }
 
         body.memorize-masked .overlay:not([data-verse$="-000"]) {
-            background: #fdfcf7 !important;
-            box-shadow: 0 1px 0 1px #fdfcf7, 0 -1px 0 1px #fdfcf7 !important;
+            background: #ffffff !important;
+            box-shadow: 0 1px 0 1px #ffffff, 0 -1px 0 1px #ffffff !important;
             opacity: 1 !important;
         }
 
@@ -871,53 +818,52 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(3, 12, 12, 0.78);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(18, 12, 10, 0.76);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             z-index: 4000;
             justify-content: center;
             align-items: center;
-            color: var(--text-main);
+            color: var(--cream-text);
         }
 
         .modal-content {
-            background: linear-gradient(155deg, rgba(12, 38, 36, 0.98) 0%, rgba(5, 18, 18, 0.99) 100%);
-            border: 1px solid var(--border-glass);
-            padding: 24px 28px;
-            border-radius: 22px;
-            max-width: 480px;
-            width: 92%;
+            background: linear-gradient(155deg, #2b1f1b 0%, #1b1310 100%);
+            border: 1px solid var(--bronze-border);
+            padding: 22px 26px;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
             text-align: left;
-            box-shadow: 0 28px 64px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(207, 163, 106, 0.15);
         }
 
         .modal-content h3 {
-            margin: 0 0 14px 0;
-            color: var(--turquoise);
+            margin: 0 0 10px 0;
+            color: var(--bronze-light);
             font-size: 16px;
-            border-bottom: 1px solid rgba(45, 212, 191, 0.2);
-            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(207, 163, 106, 0.25);
+            padding-bottom: 10px;
         }
 
         .shortcut-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px 14px;
+            gap: 9px;
             font-size: 13px;
-            color: var(--text-main);
+            margin-top: 14px;
+            color: var(--cream-text);
         }
 
         .shortcut-grid kbd {
-            background: linear-gradient(180deg, #133e3b 0%, #0a2523 100%);
-            color: var(--champagne);
-            padding: 3px 7px;
-            border-radius: 6px;
-            border: 1px solid rgba(45, 212, 191, 0.3);
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            font-size: 12px;
+            background: rgba(68, 49, 41, 0.85);
+            color: var(--bronze-light);
+            padding: 2px 7px;
+            border-radius: 5px;
+            border: 1px solid rgba(207, 163, 106, 0.35);
+            font-family: monospace;
             font-weight: 600;
-            margin-right: 6px;
+            margin-right: 5px;
         }
 
         html,
@@ -934,7 +880,7 @@
         #translationContent,
         .player-bar {
             scrollbar-width: thin;
-            scrollbar-color: rgba(45, 212, 191, 0.3) transparent;
+            scrollbar-color: rgba(207, 163, 106, 0.35) transparent;
         }
 
         .yon-panel::-webkit-scrollbar,
@@ -948,82 +894,74 @@
         #translationContent::-webkit-scrollbar-track,
         .player-bar::-webkit-scrollbar-track {
             background: transparent;
+            border: none;
         }
 
         .yon-panel::-webkit-scrollbar-thumb,
         #translationContent::-webkit-scrollbar-thumb,
         .player-bar::-webkit-scrollbar-thumb {
-            background: rgba(45, 212, 191, 0.3);
+            background: rgba(207, 163, 106, 0.32);
             border-radius: 10px;
+            border: none;
         }
 
         .yon-panel::-webkit-scrollbar-thumb:hover,
         #translationContent::-webkit-scrollbar-thumb:hover,
         .player-bar::-webkit-scrollbar-thumb:hover {
-            background: rgba(45, 212, 191, 0.6);
+            background: rgba(207, 163, 106, 0.65);
         }
 
-        /* === CHAP SUZUVCHI PANEL (SURALAR RO'YXATI) === */
+        /* === CHAP YON PANEL (SURALAR RO'YXATI) === */
         .yon-panel {
             position: fixed;
-            top: 12px;
+            top: 0;
             left: -380px;
-            width: 345px;
-            max-width: calc(100vw - 24px);
-            height: calc(100vh - 24px);
-            border-radius: 22px;
+            width: 340px;
+            max-width: 88vw;
+            height: 100vh;
             background:
-                radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.14), transparent 45%),
-                linear-gradient(180deg, rgba(10, 32, 31, 0.96) 0%, rgba(5, 17, 17, 0.98) 100%);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            box-shadow: 16px 0 50px rgba(0, 0, 0, 0.65);
-            transition: left 0.36s var(--ease-ui);
+                radial-gradient(circle at 100% 10%, var(--plum-soft), transparent 40%),
+                linear-gradient(180deg, rgba(34, 24, 20, 0.97) 0%, rgba(22, 15, 13, 0.99) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-right: 1px solid var(--bronze-border);
+            color: var(--cream-text);
+            box-shadow: 12px 0 40px rgba(0, 0, 0, 0.55);
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 3200;
             overflow-y: auto;
             overflow-x: hidden;
             text-align: left;
             display: flex;
             flex-direction: column;
-            padding-bottom: 24px;
+            padding-bottom: 135px;
         }
 
         .yon-panel.ochiq {
-            left: 12px;
+            left: 0;
         }
 
         .yon-panel-resizer {
             position: fixed;
-            top: 12px;
+            top: 0;
             left: -9999px;
             width: 8px;
-            height: calc(100vh - 24px);
+            height: 100vh;
             cursor: ew-resize;
             background: transparent;
             z-index: 3250;
-            transition: background 0.15s ease;
-        }
-
-        .yon-panel-resizer,
-        .yon-panel-resizer:hover,
-        .yon-panel-resizer.active {
-            background: transparent;
-            border-radius: 0;
         }
 
         .yon-panel-header {
-            padding: 18px 18px 14px 18px;
-            background: rgba(8, 27, 26, 0.96);
-            border-bottom: 1px solid rgba(45, 212, 191, 0.16);
+            padding: 16px 18px 12px 18px;
+            background: linear-gradient(180deg, rgba(42, 29, 24, 0.98), rgba(30, 21, 18, 0.96));
+            border-bottom: 1px solid rgba(207, 163, 106, 0.24);
             display: flex;
             flex-direction: column;
             gap: 12px;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-radius: 22px 22px 0 0;
         }
 
         .yon-panel-header-top {
@@ -1032,41 +970,42 @@
             align-items: center;
             font-size: 15px;
             font-weight: 700;
-            color: var(--champagne);
+            color: var(--bronze-light);
         }
 
         .surah-search-input {
             width: 100%;
-            height: 37px;
-            background: rgba(4, 15, 15, 0.85);
-            border: 1px solid rgba(45, 212, 191, 0.24);
-            border-radius: 12px;
-            padding: 0 14px;
-            color: var(--text-main);
+            height: 35px;
+            background: rgba(16, 11, 9, 0.82);
+            border: 1px solid rgba(207, 163, 106, 0.26);
+            border-radius: 9px;
+            padding: 0 12px;
+            color: var(--cream-text);
             font-family: inherit;
             font-size: 13px;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
 
         .surah-search-input::placeholder {
-            color: #6a928d;
+            color: #9c8a79;
         }
 
         .surah-search-input:focus {
-            border-color: var(--turquoise);
-            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.18);
+            border-color: var(--bronze-gold);
+            background: #140d0b;
+            box-shadow: 0 0 0 2px rgba(207, 163, 106, 0.18);
         }
 
         .yon-panel-yopish {
-            background: rgba(20, 56, 53, 0.6);
-            color: var(--text-muted);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            background: rgba(68, 49, 41, 0.6);
+            color: var(--cream-muted);
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
             font-size: 13px;
             padding: 0;
-            border: 1px solid rgba(45, 212, 191, 0.2);
+            border: 1px solid rgba(207, 163, 106, 0.22);
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -1075,9 +1014,8 @@
 
         .yon-panel-yopish:hover {
             color: #fff;
-            background: #dc2626;
+            background: #9e3f3b;
             border-color: transparent;
-            transform: none;
         }
 
         .yon-panel ul {
@@ -1092,105 +1030,132 @@
         }
 
         .yon-panel li a {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 32px 1fr auto;
             align-items: center;
-            padding: 10px 12px;
-            color: #d5ebe7;
+            gap: 11px;
+            padding: 9px 12px;
+            color: #e2d8cc;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 9px;
             border-left: 3px solid transparent;
             transition: all 0.18s ease;
         }
 
         .yon-panel li a:hover {
-            background: rgba(45, 212, 191, 0.11);
+            background: rgba(207, 163, 106, 0.11);
             color: #fff;
         }
 
         .yon-panel li a.active-surah {
-            background: linear-gradient(90deg, rgba(16, 185, 129, 0.24) 0%, rgba(232, 200, 125, 0.08) 100%);
-            border-left-color: var(--turquoise);
-            color: var(--turquoise);
+            background: linear-gradient(90deg, rgba(207, 163, 106, 0.22) 0%, rgba(143, 108, 168, 0.10) 100%);
+            border-left-color: var(--bronze-gold);
+            color: var(--bronze-light);
             font-weight: 600;
         }
 
-        .sura-nomi {
-            font-family: "Amiri", "Plus Jakarta Sans", serif;
-            font-size: 15.5px;
-            line-height: 1.4;
-        }
-
-        .sura-sahifa {
-            font-size: 11px;
+        .surah-num-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: rgba(16, 11, 9, 0.78);
+            border: 1px solid rgba(207, 163, 106, 0.25);
+            color: var(--bronze-light);
+            font-size: 12px;
             font-weight: 700;
-            color: var(--champagne);
-            background: rgba(4, 15, 15, 0.78);
-            border: 1px solid rgba(232, 200, 125, 0.25);
-            padding: 3px 8px;
-            border-radius: 999px;
-            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
         }
 
-        .yon-panel li a.active-surah .sura-sahifa {
-            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
-            color: #031714;
-            border-color: transparent;
+        .yon-panel li a.active-surah .surah-num-badge {
+            background: linear-gradient(135deg, var(--bronze-light), var(--bronze-gold));
+            color: #1e130d;
+            border-color: var(--bronze-light);
         }
 
-        /* === O'NG SUZUVCHI PANEL (SAHIFA TARJIMASI) === */
+        .surah-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .surah-uz {
+            font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--cream-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .yon-panel li a.active-surah .surah-uz {
+            color: var(--bronze-light);
+        }
+
+        .surah-page-sub {
+            font-size: 11px;
+            color: var(--cream-muted);
+            margin-top: 2px;
+        }
+
+        .surah-ar {
+            font-family: "Amiri", serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--bronze-light);
+            direction: rtl;
+            line-height: 1.2;
+            padding-left: 4px;
+            flex-shrink: 0;
+        }
+
+        /* === O'NG YON PANEL (SAHIFA TARJIMASI) === */
         #translationBox {
             position: fixed;
-            top: 12px;
-            right: -460px;
-            width: 415px;
-            max-width: calc(100vw - 24px);
-            height: calc(100vh - 24px);
-            border-radius: 22px;
+            top: 0;
+            right: -450px;
+            width: 410px;
+            max-width: 92vw;
+            height: 100vh;
             background:
-                radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.14), transparent 45%),
-                linear-gradient(180deg, rgba(10, 32, 31, 0.96) 0%, rgba(5, 17, 17, 0.98) 100%);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            box-shadow: -16px 0 50px rgba(0, 0, 0, 0.65);
-            transition: right 0.36s var(--ease-ui);
+                radial-gradient(circle at 0% 10%, var(--plum-soft), transparent 40%),
+                linear-gradient(180deg, rgba(34, 24, 20, 0.97) 0%, rgba(22, 15, 13, 0.99) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-left: 1px solid var(--bronze-border);
+            color: var(--cream-text);
+            box-shadow: -12px 0 40px rgba(0, 0, 0, 0.55);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 3200;
             display: flex;
             flex-direction: column;
             text-align: left;
+            padding-bottom: 135px;
             overflow: hidden;
         }
 
         #translationBox.ochiq {
-            right: 12px;
+            right: 0;
         }
 
         .translation-resizer {
             position: fixed;
-            top: 12px;
+            top: 0;
             left: -9999px;
             width: 8px;
-            height: calc(100vh - 24px);
+            height: 100vh;
             cursor: ew-resize;
             background: transparent;
             z-index: 3250;
-            transition: background 0.15s ease;
-        }
-
-        .translation-resizer,
-        .translation-resizer:hover,
-        .translation-resizer.active {
-            background: transparent;
-            border-radius: 0;
         }
 
         .translation-header {
-            padding: 18px 18px 14px 18px;
-            background: rgba(8, 27, 26, 0.96);
-            border-bottom: 1px solid rgba(45, 212, 191, 0.16);
+            padding: 16px 18px 12px 18px;
+            background: linear-gradient(180deg, rgba(42, 29, 24, 0.98), rgba(30, 21, 18, 0.96));
+            border-bottom: 1px solid rgba(207, 163, 106, 0.24);
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -1205,212 +1170,9 @@
             align-items: center;
             font-size: 15px;
             font-weight: 700;
-            color: var(--champagne);
+            color: var(--bronze-light);
         }
 
-        .translation-tabs {
-            display: flex;
-            background: rgba(4, 15, 15, 0.82);
-            padding: 3px;
-            border-radius: 12px;
-            border: 1px solid rgba(45, 212, 191, 0.18);
-            gap: 4px;
-        }
-
-        .trans-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 12.5px;
-            font-weight: 600;
-            height: 30px;
-            padding: 0 10px;
-            border-radius: 9px;
-            flex-grow: 1;
-            transition: all 0.18s ease;
-            box-shadow: none;
-        }
-
-        .trans-tab:hover {
-            color: var(--text-main);
-            background: rgba(45, 212, 191, 0.1);
-            transform: none;
-        }
-
-        .trans-tab.active {
-            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
-            color: #031714;
-            font-weight: 700;
-            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
-        }
-
-        #translationContent {
-            padding: 14px 16px 24px 16px;
-            overflow-y: auto;
-            flex-grow: 1;
-            font-size: 14.5px;
-            line-height: 1.75;
-            color: #d8ece9;
-            user-select: text;
-        }
-
-        .trans-page-badge {
-            font-size: 11px;
-            color: var(--champagne);
-            background: rgba(232, 200, 125, 0.14);
-            border: 1px solid rgba(232, 200, 125, 0.32);
-            padding: 3px 10px;
-            border-radius: 999px;
-            margin: 10px 0 8px 0;
-            display: inline-block;
-            font-weight: 700;
-        }
-
-        .trans-surah-title {
-            font-family: "Amiri", "Plus Jakarta Sans", serif;
-            color: var(--champagne);
-            font-weight: 700;
-            font-size: 16.5px;
-            margin: 12px 0 10px 0;
-            padding: 8px 12px;
-            background: linear-gradient(90deg, rgba(16, 185, 129, 0.14), rgba(232, 200, 125, 0.14), rgba(16, 185, 129, 0.14));
-            border-radius: 12px;
-            border: 1px solid rgba(45, 212, 191, 0.24);
-            text-align: center;
-        }
-
-        .trans-verse-item {
-            padding: 11px 14px;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            cursor: pointer;
-            background: rgba(16, 48, 46, 0.42);
-            border: 1px solid rgba(45, 212, 191, 0.06);
-            border-left: 3px solid transparent;
-            white-space: pre-wrap;
-            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
-        }
-
-        .trans-verse-item:hover {
-            background: rgba(24, 68, 64, 0.7);
-            color: #fff;
-        }
-
-        .trans-verse-item.range-trans {
-            background: rgba(14, 165, 233, 0.16);
-            border-left-color: #38bdf8;
-            color: #f0f9ff;
-        }
-
-        .trans-verse-item.active-trans {
-            background: linear-gradient(90deg, rgba(16, 185, 129, 0.26) 0%, rgba(16, 48, 46, 0.65) 100%);
-            border-left-color: var(--turquoise);
-            color: #ffffff;
-        }
-
-        @media (max-width: 900px) {
-            body {
-                padding-top: 64px;
-                padding-bottom: 88px;
-            }
-
-            .controls {
-                top: 8px;
-                padding: 5px 8px;
-                gap: 5px;
-                overflow-x: auto;
-            }
-
-            .book-wrapper.two-page {
-                flex-direction: column;
-            }
-
-            .book-wrapper.two-page .quran-page-container {
-                width: 94vw;
-                max-width: 94vw;
-            }
-
-            .side-nav-btn {
-                width: 36px;
-                height: 36px;
-            }
-
-            .yon-panel-resizer,
-            .translation-resizer {
-                display: none;
-            }
-        }
-
-        /* === 3 QISMLI SURALAR RO'YXATI === */
-        .yon-panel li a {
-            display: grid;
-            grid-template-columns: 32px 1fr auto;
-            align-items: center;
-            gap: 11px;
-            padding: 9px 12px;
-        }
-
-        .surah-num-badge {
-            width: 30px;
-            height: 30px;
-            border-radius: 9px;
-            background: rgba(4, 15, 15, 0.78);
-            border: 1px solid rgba(45, 212, 191, 0.25);
-            color: var(--champagne);
-            font-size: 12px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-
-        .yon-panel li a.active-surah .surah-num-badge {
-            background: linear-gradient(135deg, var(--turquoise), var(--emerald));
-            color: #031714;
-            border-color: transparent;
-        }
-
-        .surah-info {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .surah-uz {
-            font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-            font-size: 13.5px;
-            font-weight: 600;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .yon-panel li a.active-surah .surah-uz {
-            color: var(--turquoise);
-        }
-
-        .surah-page-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .surah-ar {
-            font-family: "Amiri", serif;
-            font-size: 19px;
-            font-weight: 700;
-            color: var(--champagne);
-            direction: rtl;
-            line-height: 1.2;
-            padding-left: 4px;
-            flex-shrink: 0;
-        }
-
-        /* === TARJIMA SHRIFT TUGMALARI (A- / A+) VA QIDIRUV HIGHLIGHT === */
         .trans-header-actions {
             display: inline-flex;
             align-items: center;
@@ -1421,29 +1183,128 @@
             height: 28px;
             min-width: 30px;
             padding: 0 7px;
-            border-radius: 8px;
+            border-radius: 7px;
             font-size: 12px;
             font-weight: 700;
-            background: rgba(20, 56, 53, 0.7);
-            color: var(--champagne);
-            border: 1px solid rgba(45, 212, 191, 0.22);
+            background: rgba(68, 49, 41, 0.75);
+            color: var(--bronze-light);
+            border: 1px solid rgba(207, 163, 106, 0.25);
         }
 
         .font-size-btn:hover {
             background: var(--surface-hover);
             color: #fff;
-            transform: none;
+        }
+
+        .translation-tabs {
+            display: flex;
+            background: rgba(16, 11, 9, 0.82);
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid rgba(207, 163, 106, 0.22);
+            gap: 4px;
+        }
+
+        .trans-tab {
+            background: transparent;
+            border: none;
+            color: var(--cream-muted);
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 600;
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 7px;
+            flex-grow: 1;
+            transition: all 0.18s ease;
+            box-shadow: none;
+        }
+
+        .trans-tab:hover {
+            color: var(--cream-text);
+            background: rgba(207, 163, 106, 0.10);
+        }
+
+        .trans-tab.active {
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 100%);
+            color: #1e130d;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(207, 163, 106, 0.28);
+        }
+
+        #translationContent {
+            padding: 14px 16px;
+            overflow-y: auto;
+            flex-grow: 1;
+            font-size: 14.5px;
+            line-height: 1.72;
+            color: #e6ddd2;
+            user-select: text;
+        }
+
+        .trans-page-badge {
+            font-size: 11px;
+            color: var(--bronze-light);
+            background: rgba(143, 108, 168, 0.18);
+            border: 1px solid rgba(207, 163, 106, 0.32);
+            padding: 3px 10px;
+            border-radius: 6px;
+            margin: 10px 0 8px 0;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .trans-surah-title {
+            font-family: "Amiri", "Plus Jakarta Sans", serif;
+            color: var(--bronze-light);
+            font-weight: 700;
+            font-size: 16px;
+            margin: 12px 0 10px 0;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, rgba(143, 108, 168, 0.16), rgba(207, 163, 106, 0.16), rgba(143, 108, 168, 0.16));
+            border-radius: 9px;
+            border: 1px solid rgba(207, 163, 106, 0.28);
+            text-align: center;
+        }
+
+        .trans-verse-item {
+            padding: 10px 13px;
+            margin-bottom: 7px;
+            border-radius: 9px;
+            cursor: pointer;
+            background: rgba(46, 33, 28, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-left: 3px solid transparent;
+            white-space: pre-wrap;
+            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .trans-verse-item:hover {
+            background: rgba(68, 49, 41, 0.65);
+            color: #fff;
+        }
+
+        .trans-verse-item.range-trans {
+            background: rgba(143, 108, 168, 0.16);
+            border-left-color: #9b7bb5;
+            color: #f5eee6;
+        }
+
+        .trans-verse-item.active-trans {
+            background: linear-gradient(90deg, rgba(207, 163, 106, 0.24) 0%, rgba(68, 49, 41, 0.65) 100%);
+            border-left-color: var(--bronze-gold);
+            color: #fff;
         }
 
         mark.search-hl {
-            background: rgba(232, 200, 125, 0.32);
-            color: #fef3c7;
+            background: rgba(207, 163, 106, 0.34);
+            color: #fff5e6;
             padding: 0 3px;
             border-radius: 4px;
             font-weight: 600;
         }
 
-        /* ===== LOGIN & AUTH LAYER ===== */
+        /* ===== LOGIN & AUTH LAYER (BRONZA & ESPRESSO) ===== */
         .auth-backdrop {
             position: fixed;
             inset: 0;
@@ -1453,9 +1314,9 @@
             justify-content: center;
             padding: 20px;
             background:
-                radial-gradient(ellipse at 50% 25%, rgba(16, 185, 129, 0.22) 0%, rgba(7, 28, 27, 0.92) 55%, rgba(3, 12, 12, 0.98) 100%);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+                radial-gradient(circle at 50% 42%, rgba(246, 235, 214, 0.22) 0%, rgba(36, 25, 20, 0.92) 55%, rgba(18, 12, 10, 0.98) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
 
         .auth-backdrop.hidden {
@@ -1466,15 +1327,15 @@
             width: 100%;
             max-width: 390px;
             padding: 30px 26px;
-            border-radius: 24px;
-            background: linear-gradient(155deg, rgba(11, 35, 34, 0.96) 0%, rgba(5, 18, 18, 0.98) 100%);
-            border: 1px solid rgba(45, 212, 191, 0.32);
+            border-radius: 20px;
+            background: linear-gradient(155deg, #2b1f1b 0%, #1b1310 100%);
+            border: 1px solid var(--bronze-border);
             box-shadow:
                 0 28px 70px rgba(0, 0, 0, 0.78),
-                0 0 0 1px rgba(232, 200, 125, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+                0 0 0 1px rgba(207, 163, 106, 0.14),
+                inset 0 1px 0 rgba(255, 238, 210, 0.12);
             text-align: left;
-            color: var(--text-main);
+            color: var(--cream-text);
         }
 
         .auth-badge {
@@ -1482,9 +1343,9 @@
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.06em;
-            color: var(--champagne);
-            background: rgba(232, 200, 125, 0.12);
-            border: 1px solid rgba(232, 200, 125, 0.28);
+            color: var(--bronze-light);
+            background: rgba(207, 163, 106, 0.14);
+            border: 1px solid rgba(207, 163, 106, 0.3);
             padding: 4px 11px;
             border-radius: 999px;
             margin-bottom: 12px;
@@ -1494,13 +1355,13 @@
             margin: 0 0 6px 0;
             font-size: 21px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--cream-text);
         }
 
         .auth-subtitle {
             margin: 0 0 20px 0;
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--cream-muted);
         }
 
         .auth-field {
@@ -1511,7 +1372,7 @@
             display: block;
             font-size: 12.5px;
             font-weight: 600;
-            color: var(--turquoise);
+            color: var(--bronze-light);
             margin-bottom: 6px;
         }
 
@@ -1519,10 +1380,10 @@
             width: 100%;
             height: 44px;
             padding: 0 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(45, 212, 191, 0.25);
-            background: rgba(4, 15, 15, 0.85);
-            color: var(--text-main);
+            border-radius: 10px;
+            border: 1px solid rgba(207, 163, 106, 0.28);
+            background: rgba(16, 11, 9, 0.85);
+            color: var(--cream-text);
             font-family: inherit;
             font-size: 14.5px;
             outline: none;
@@ -1531,8 +1392,8 @@
         }
 
         .auth-field input:focus {
-            border-color: var(--turquoise);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
+            border-color: var(--bronze-gold);
+            box-shadow: 0 0 0 3px rgba(207, 163, 106, 0.18);
         }
 
         .password-wrap {
@@ -1551,17 +1412,16 @@
             width: 34px;
             height: 34px;
             padding: 0;
-            border-radius: 9px;
-            background: rgba(20, 56, 53, 0.55);
-            border: 1px solid rgba(45, 212, 191, 0.18);
-            color: var(--text-muted);
+            border-radius: 8px;
+            background: rgba(68, 49, 41, 0.65);
+            border: 1px solid rgba(207, 163, 106, 0.22);
+            color: var(--cream-muted);
             font-size: 14px;
             box-shadow: none;
         }
 
         .toggle-pass-btn:hover {
-            color: var(--champagne);
-            transform: none;
+            color: var(--bronze-light);
         }
 
         .auth-remember {
@@ -1569,7 +1429,7 @@
             align-items: center;
             gap: 9px;
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--cream-muted);
             cursor: pointer;
             margin: 6px 0 18px 0;
         }
@@ -1577,32 +1437,30 @@
         .auth-remember input[type="checkbox"] {
             width: 16px;
             height: 16px;
-            accent-color: var(--emerald);
+            accent-color: var(--bronze-gold);
             cursor: pointer;
         }
 
         .auth-submit-btn {
             width: 100%;
             height: 44px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
-            color: #031714;
-            border: 1px solid #99f6e4;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 55%, var(--bronze-dark) 100%);
+            color: #1e130d;
+            border: 1px solid var(--bronze-light);
             font-size: 14.5px;
             font-weight: 700;
-            box-shadow: 0 6px 22px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 6px 22px var(--bronze-glow);
         }
 
         .auth-submit-btn:hover:not(:disabled) {
-            color: #021411;
+            color: #180f0a;
             filter: brightness(1.06);
-            transform: translateY(-1px);
         }
 
         .auth-submit-btn:disabled {
             opacity: 0.55;
             cursor: not-allowed;
-            transform: none;
         }
 
         .auth-error {
@@ -1610,20 +1468,20 @@
             margin-top: 12px;
             font-size: 13px;
             font-weight: 600;
-            color: #fca5a5;
+            color: #ffb4b4;
             text-align: center;
         }
 
         .auth-telegram-help {
             margin-top: 18px;
             padding-top: 14px;
-            border-top: 1px solid rgba(45, 212, 191, 0.16);
+            border-top: 1px solid rgba(207, 163, 106, 0.18);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
             font-size: 12.5px;
-            color: var(--text-muted);
+            color: var(--cream-muted);
             text-align: center;
         }
 
@@ -1633,9 +1491,9 @@
             gap: 8px;
             padding: 7px 14px;
             border-radius: 999px;
-            background: rgba(45, 212, 191, 0.12);
-            border: 1px solid rgba(45, 212, 191, 0.32);
-            color: var(--turquoise);
+            background: rgba(207, 163, 106, 0.14);
+            border: 1px solid rgba(207, 163, 106, 0.34);
+            color: var(--bronze-light);
             font-weight: 700;
             font-size: 13px;
             text-decoration: none;
@@ -1643,11 +1501,9 @@
         }
 
         .auth-tg-link:hover {
-            background: linear-gradient(135deg, var(--turquoise) 0%, var(--emerald) 100%);
-            color: #031714;
-            border-color: #99f6e4;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 100%);
+            color: #1e130d;
+            border-color: var(--bronze-light);
         }
 
         .auth-tg-icon {
@@ -1665,9 +1521,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(4, 15, 15, 0.94);
-            backdrop-filter: blur(14px);
-            color: var(--text-main);
+            background: rgba(24, 16, 13, 0.94);
+            backdrop-filter: blur(12px);
+            color: var(--cream-text);
         }
 
         .auth-loading.active {
@@ -1678,8 +1534,8 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            border: 3.5px solid rgba(45, 212, 191, 0.2);
-            border-top-color: var(--turquoise);
+            border: 3.5px solid rgba(207, 163, 106, 0.22);
+            border-top-color: var(--bronze-light);
             animation: authSpin 0.8s linear infinite;
             margin-bottom: 14px;
         }
@@ -1689,12 +1545,40 @@
                 transform: rotate(360deg);
             }
         }
-    </style>
 
+        @media (max-width: 900px) {
+            body {
+                padding-top: 16px;
+                padding-bottom: 150px;
+            }
+
+            .controls {
+                bottom: 62px;
+                padding: 5px 8px;
+                gap: 5px;
+                overflow-x: auto;
+            }
+
+            .book-wrapper.two-page {
+                flex-direction: row-reverse;
+                flex-wrap: nowrap;
+            }
+
+            .side-nav-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .yon-panel-resizer,
+            .translation-resizer {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- LOGIN OYNASI (SAMARQAND ZUMRADI USLUBIDA) -->
+    <!-- LOGIN OYNASI (BRONZA & ESPRESSO USLUBIDA) -->
     <div id="authLayer" class="auth-backdrop">
         <form class="auth-card" id="loginForm" onsubmit="handleAuthSubmit(event)" autocomplete="on">
             <div class="auth-badge">❖ QUR'ON TILOVATI</div>
@@ -1784,7 +1668,7 @@
     </div>
     <div id="translationResizer" class="translation-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
-    <!-- YUQORI BOSHQARUV PANELI -->
+    <!-- BOSHQARUV PANELI -->
     <div class="controls">
         <button id="menuToggleBtn" class="icon-btn" onclick="event.stopPropagation(); toggleSurahMenu()"
             title="Suralar ro'yxati (R)">
@@ -1829,6 +1713,7 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
         </button>
+
         <button id="logoutBtn" class="icon-btn" onclick="logoutUser()" title="Tizimdan chiqish">
             <svg class="svg-icon" viewBox="0 0 24 24">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -1853,7 +1738,6 @@
     <!-- KITOB SAHIFALARI KONTEYNERI -->
     <div class="viewer">
         <div class="book-wrapper two-page" id="bookWrapper">
-            <!-- O'ng sahifa -->
             <div class="quran-page-container" id="rightPageContainer">
                 <div class="quran-page">
                     <div id="rightOverlayHolder"></div>
@@ -1863,7 +1747,6 @@
                 <div class="page-number-footer" id="rightPageNumFooter"></div>
             </div>
 
-            <!-- Chap sahifa -->
             <div class="quran-page-container" id="leftPageContainer">
                 <div class="quran-page">
                     <div id="leftOverlayHolder"></div>
@@ -1904,7 +1787,6 @@
 
         <div class="divider"></div>
 
-        <!-- 🔂 Belgilangan oyat(lar)ni takrorlash va takrorlar soni (inputRepeatNumber) -->
         <div class="repeat-group" title="Belgilangan oyatlarni takrorlash va takrorlar soni">
             <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
                 title="Belgilangan oyatlarni takrorlash (V)">
@@ -1920,7 +1802,6 @@
                 title="Takrorlar soni (0 = cheksiz)">
         </div>
 
-        <!-- 🔁 Sahifani takrorlash -->
         <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Sahifani takrorlash (9)">
             <svg class="svg-icon" viewBox="0 0 24 24">
                 <polyline points="17 1 21 5 17 9"></polyline>
@@ -1937,6 +1818,7 @@
     </div>
 
     <div id="audioStatus" class="status-toast" aria-live="polite"></div>
+
     <!-- YORDAM MODAL OYNASI -->
     <div id="shortcutModal" class="modal" onclick="toggleModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -2124,7 +2006,6 @@
             return n.toString().padStart(3, "0");
         }
 
-        // Resizable tutqichlarni joriy panel holatiga moslab joylashtirish
         function syncResizerPositions() {
             if (surahResizer && surahMenu) {
                 if (surahMenu.classList.contains("ochiq")) {
@@ -2145,24 +2026,23 @@
             }
         }
 
-
         let surahSyncTimer = null;
         let transSyncTimer = null;
 
         function openSurahMenu() {
             if (surahSyncTimer) clearTimeout(surahSyncTimer);
-            surahMenu.style.transition = "left 0.36s var(--ease-ui)";
+            surahMenu.style.transition = "left 0.3s var(--ease-ui)";
             surahMenu.classList.add("ochiq");
-            surahMenu.style.left = "12px";
+            surahMenu.style.left = "0px";
             menuToggleBtn.classList.add("active");
-            surahSyncTimer = setTimeout(syncResizerPositions, 370);
+            surahSyncTimer = setTimeout(syncResizerPositions, 310);
         }
 
         function closeSurahMenu() {
             if (surahSyncTimer) clearTimeout(surahSyncTimer);
-            surahMenu.style.transition = "left 0.36s var(--ease-ui)";
+            surahMenu.style.transition = "left 0.3s var(--ease-ui)";
             surahMenu.classList.remove("ochiq");
-            const w = surahMenu.offsetWidth || 345;
+            const w = surahMenu.offsetWidth || 340;
             surahMenu.style.left = `-${w + 36}px`;
             menuToggleBtn.classList.remove("active");
             if (surahResizer) surahResizer.style.left = "-9999px";
@@ -2170,25 +2050,24 @@
 
         function openTranslationBox() {
             if (transSyncTimer) clearTimeout(transSyncTimer);
-            translationBox.style.transition = "right 0.36s var(--ease-ui)";
+            translationBox.style.transition = "right 0.3s var(--ease-ui)";
             translationBox.classList.add("ochiq");
-            translationBox.style.right = "12px";
+            translationBox.style.right = "0px";
             transBtn.classList.add("active");
             updateTranslationContent();
-            transSyncTimer = setTimeout(syncResizerPositions, 370);
+            transSyncTimer = setTimeout(syncResizerPositions, 310);
         }
 
         function closeTranslationBox() {
             if (transSyncTimer) clearTimeout(transSyncTimer);
-            translationBox.style.transition = "right 0.36s var(--ease-ui)";
+            translationBox.style.transition = "right 0.3s var(--ease-ui)";
             translationBox.classList.remove("ochiq");
-            const w = translationBox.offsetWidth || 415;
+            const w = translationBox.offsetWidth || 410;
             translationBox.style.right = `-${w + 48}px`;
             transBtn.classList.remove("active");
             if (translationResizer) translationResizer.style.left = "-9999px";
         }
 
-        // Oyat kodiga (masalan, "002-255") qarab u qaysi sahifada ekanligini topuvchi xarita
         let versePageMap = null;
         function getPageForVerse(verseCode) {
             if (!versePageMap) {
@@ -2210,7 +2089,6 @@
             return versePageMap[verseCode] || null;
         }
 
-        // Boshqaruv panellari va playerni birgalikda yashirish/ko'rsatish
         function toggleAllPanels() {
             const controls = document.querySelector(".controls");
             const playerBar = document.querySelector(".player-bar");
@@ -2223,7 +2101,6 @@
             localStorage.setItem("panelsHidden", isHidden);
         }
 
-        // Sahifa yuklanganda oldingi holatni saqlab qolish
         window.addEventListener("DOMContentLoaded", () => {
             if (localStorage.getItem("panelsHidden") === "true") {
                 document.querySelector(".controls").classList.add("yashirin");
@@ -2240,12 +2117,11 @@
                 openSurahMenu();
                 const activeEl = surahListEl.querySelector("a.active-surah");
                 if (activeEl) {
-                    setTimeout(() => activeEl.scrollIntoView({behavior: "smooth", block: "center"}), 100);
+                    setTimeout(() => activeEl.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
                 }
             }
         }
 
-        // Lotin va kirill yozuvlarini bir xil shaklga keltiruvchi yordamchi funksiya
         function normalizeUz(str) {
             const map = {
                 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'j', 'з': 'z',
@@ -2296,7 +2172,7 @@
             if (targetLink) {
                 targetLink.classList.add("active-surah");
                 if (surahMenu.classList.contains("ochiq")) {
-                    targetLink.scrollIntoView({behavior: "smooth", block: "nearest"});
+                    targetLink.scrollIntoView({ behavior: "smooth", block: "nearest" });
                 }
             }
         }
@@ -2390,7 +2266,6 @@
         let pageLoop = false;
         let scale = 1.0;
 
-        // 🟢 1 betli va 2 betli holatlarni rasmdagidek moslovchi funksiya
         function autoScale(clearSavedZoom = false) {
             if (clearSavedZoom) {
                 localStorage.removeItem("scale");
@@ -2401,13 +2276,13 @@
             const winWidth = window.innerWidth;
             const winHeight = window.innerHeight;
 
-            if (isBookMode && winWidth > 900) {
+            if (isBookMode) {
                 const availW = winWidth - 110;
-                const availH = winHeight - 35;
+                const availH = winHeight - 155;
                 const scaleW = availW / 1000;
                 const scaleH = availH / 870;
                 scale = Math.min(scaleW, scaleH, 1.30);
-                scale = Math.max(scale, 0.5);
+                scale = Math.max(scale, 0.35);
             } else {
                 const targetW = winWidth > 900 ? Math.min(winWidth * 0.62, 920) : (winWidth - 30);
                 scale = targetW / 630;
@@ -2427,8 +2302,11 @@
             const basePageWidth = isBookMode ? 500 : 630;
             const scaledPageWidth = Math.round(basePageWidth * scale);
 
+            rightPageContainer.style.maxWidth = "none";
             rightPageContainer.style.width = `${scaledPageWidth}px`;
+
             if (isBookMode) {
+                leftPageContainer.style.maxWidth = "none";
                 leftPageContainer.style.width = `${scaledPageWidth}px`;
             }
 
@@ -2441,7 +2319,6 @@
             }
         }
 
-        // 🟢 AQLLI MINIMAL SKROLL
         function ensureSelectedOverlayVisible() {
             const selectedOverlays = Array.from(bookWrapper.querySelectorAll('.overlay.selected'));
             if (selectedOverlays.length === 0) return;
@@ -2461,8 +2338,8 @@
             const controlsEl = document.querySelector(".controls");
             const panelsHidden = controlsEl && controlsEl.classList.contains("yashirin");
 
-            const safeTop = panelsHidden ? 20 : 72;
-            const safeBottom = window.innerHeight - (panelsHidden ? 20 : 82);
+            const safeTop = 25;
+            const safeBottom = window.innerHeight - (panelsHidden ? 25 : 135);
             const safeLeft = 20;
             const safeRight = window.innerWidth - 20;
 
@@ -2521,7 +2398,6 @@
             }, 60);
         }
 
-        // === A-B LOOP VA SAHIFA O'ZGARUVCHILARI ===
         let pointA = null;
         let pointB = null;
         let isABLooping = false;
@@ -2533,7 +2409,6 @@
         let openLeftPage = null;
         let flipCleanupTimer = null;
 
-        // === SICHQONCHA BILAN TORTIB BELGILASH VA TAKRORLASH O'ZGARUVCHILARI ===
         let isDraggingVerses = false;
         let dragStartVerse = null;
         let selectedVersesRange = [];
@@ -2559,7 +2434,6 @@
             return isNaN(val) || val < 0 ? 1 : val;
         }
 
-        /* Belgilangan oyatlar (range) va joriy oyatni vizual yangilash */
         function updateOverlaySelectionVisuals() {
             const hasRange = selectedVersesRange.length > 1;
 
@@ -2580,7 +2454,6 @@
             });
         }
 
-        /* Drag-select vaqtida boshlang'ich oyatdan joriy oyatgacha oraliqni hisoblash */
         function updateDragSelectionRange(endVerse) {
             if (!dragStartVerse || !endVerse) return;
             const allVerses = getUniqueVersesOnOpenPages();
@@ -2595,7 +2468,6 @@
             updateOverlaySelectionVisuals();
         }
 
-        /* Sichqoncha qo'yib yuborilganda belgilangan oyat(lar)ni o'ynatish */
         window.addEventListener("mouseup", () => {
             if (!isDraggingVerses) return;
             isDraggingVerses = false;
@@ -2616,7 +2488,6 @@
             }
         });
 
-        /* Overlay hodisalari */
         function bindOverlayEventsInHolder(holderEl, pageNum) {
             const overlays = holderEl.querySelectorAll('.overlay:not([data-verse$="-000"])');
             overlays.forEach(ov => {
@@ -2666,7 +2537,6 @@
             });
         }
 
-        /* 1 va 2-sahifalar uchun maxsus o'lchangan koordinatalar */
         const CUSTOM_PAGES = {
             1: `
         <div class="custom-overlaies">
@@ -2697,7 +2567,6 @@
     `
         };
 
-        /* 3D Kitob Varaqlash Animatsiyasi */
         function playPageFlipAnimation(dir, oldRightNum, oldLeftNum, newRightNum, newLeftNum) {
             const existingScene = bookWrapper.querySelector(".flip-scene");
             if (existingScene) existingScene.remove();
@@ -2828,11 +2697,11 @@
 
                 if (isSeparator) {
                     if (currentRow.length > 0) {
-                        rows.push({elements: currentRow, totalWidth: currentWidth});
+                        rows.push({ elements: currentRow, totalWidth: currentWidth });
                         currentRow = [];
                         currentWidth = 0;
                     }
-                    rows.push({elements: [{el, initW: 611}], totalWidth: 611, isSeparator: true});
+                    rows.push({ elements: [{ el, initW: 611 }], totalWidth: 611, isSeparator: true });
                     return;
                 }
 
@@ -2842,26 +2711,26 @@
                     const diffWith = Math.abs(611 - widthWithNext);
 
                     if (diffWith > diffWithout && currentWidth > 400) {
-                        rows.push({elements: currentRow, totalWidth: currentWidth});
-                        currentRow = [{el, initW}];
+                        rows.push({ elements: currentRow, totalWidth: currentWidth });
+                        currentRow = [{ el, initW }];
                         currentWidth = initW;
                     } else {
-                        currentRow.push({el, initW});
+                        currentRow.push({ el, initW });
                         currentWidth = widthWithNext;
                         if (currentWidth >= 608) {
-                            rows.push({elements: currentRow, totalWidth: currentWidth});
+                            rows.push({ elements: currentRow, totalWidth: currentWidth });
                             currentRow = [];
                             currentWidth = 0;
                         }
                     }
                 } else {
-                    currentRow.push({el, initW});
+                    currentRow.push({ el, initW });
                     currentWidth = initW;
                 }
             });
 
             if (currentRow.length > 0) {
-                rows.push({elements: currentRow, totalWidth: currentWidth});
+                rows.push({ elements: currentRow, totalWidth: currentWidth });
             }
 
             const rawMt = parseFloat(overlaiesDiv.getAttribute("data-mt")) || 41;
@@ -3023,15 +2892,16 @@
                     endSec: (t.end > t.start) ? t.end / 1000 : null
                 };
             }
-            return {segmented: false, src: `${HF_BASE}/${folder}/${verseCode.replace("-", "")}.mp3`};
+            return { segmented: false, src: `${HF_BASE}/${folder}/${verseCode.replace("-", "")}.mp3` };
         }
 
-        function segStart() {return seg ? seg.startSec : 0;}
+        function segStart() { return seg ? seg.startSec : 0; }
         function segEnd() {
             if (seg && seg.endSec !== null) return seg.endSec;
             return isFinite(audio.duration) ? audio.duration : 0;
         }
-        function segDuration() {return Math.max(0, segEnd() - segStart());}
+        function segDuration() { return Math.max(0, segEnd() - segStart()); }
+
 
         function seekVerseStart() {
             segToken++;
@@ -3039,11 +2909,13 @@
             audio.currentTime = segStart();
         }
 
+
         setInterval(() => {
             if (!seg || seg.endSec === null) return;
             if (audio.paused || isABLooping || segFinished) return;
             if (audio.currentTime >= seg.endSec) finishSegment();
         }, 20);
+
 
         function finishSegment() {
             segFinished = true;
@@ -3055,16 +2927,20 @@
             }
         }
 
+
         audio.addEventListener("seeking", () => {
             if (seg && seg.endSec !== null && audio.currentTime < seg.endSec - 0.05) segFinished = false;
         });
 
+
         const preloadAudio = new Audio();
         preloadAudio.preload = "auto";
+
 
         function preloadNextVerse() {
             if (!currentVerse) return;
             let nextVerseCode = null;
+
 
             if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
                 const rIdx = selectedVersesRange.indexOf(currentVerse);
@@ -3083,6 +2959,7 @@
                 }
             }
 
+
             if (nextVerseCode && !nextVerseCode.endsWith("-000")) {
                 const nextRes = resolveAudio(nextVerseCode);
                 const nextSrc = nextRes.src;
@@ -3094,7 +2971,9 @@
             }
         }
 
+
         const imagePreloadCache = new Map();
+
 
         function preloadPageImage(pageNum) {
             if (pageNum < 1 || pageNum > 604 || imagePreloadCache.has(pageNum)) return;
@@ -3103,11 +2982,13 @@
             img.src = `${IMG_BASE}/${pad(pageNum)}.webp`;
             imagePreloadCache.set(pageNum, img);
 
+
             if (imagePreloadCache.size > 30) {
                 const oldestKey = imagePreloadCache.keys().next().value;
                 imagePreloadCache.delete(oldestKey);
             }
         }
+
 
         function preloadAdjacentPages() {
             const base = openRightPage || currentPage;
@@ -3117,18 +2998,22 @@
             });
         }
 
+
         function playVerse(verseCode, silentClear = false, scrollToOverlay = false, keepRange = false) {
             if (!verseCode || verseCode.endsWith("-000")) return;
             clearABLoop(true);
             currentVerse = verseCode;
+
 
             if (!keepRange) {
                 selectedVersesRange = [verseCode];
                 currentRepeatCount = 0;
             }
 
+
             updateOverlaySelectionVisuals();
-            bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`).forEach(el => {el.classList.add("revealed");});
+            bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`).forEach(el => { el.classList.add("revealed"); });
+
 
             const matchedOverlays = bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`);
             if (matchedOverlays.length > 0 && matchedOverlays[0].dataset.page) {
@@ -3137,20 +3022,23 @@
                 localStorage.setItem("page", currentPage);
             }
 
+
             if (matchedOverlays.length > 0) {
                 setTimeout(() => {
                     ensureSelectedOverlayVisible();
                 }, 80);
             }
 
+
             highlightActiveSurah();
             highlightActiveTranslation(verseCode);
+
 
             const res = resolveAudio(verseCode);
             segToken++;
             segFinished = false;
             if (res.segmented) {
-                seg = {src: res.src, startSec: res.startSec, endSec: res.endSec};
+                seg = { src: res.src, startSec: res.startSec, endSec: res.endSec };
                 if (audio.getAttribute("src") !== res.src) {
                     audio.pause();
                     audio.src = res.src;
@@ -3162,7 +3050,7 @@
                             audio.playbackRate = speeds[speedIndex];
                             audio.play().then(() => playBtn.innerHTML = ICONS.pause).catch(() => playBtn.innerHTML = ICONS.play);
                         }
-                    }, {once: true});
+                    }, { once: true });
                     preloadNextVerse();
                     return;
                 } else if (audio.paused || Math.abs(audio.currentTime - res.startSec) > 0.15) {
@@ -3177,6 +3065,7 @@
             preloadNextVerse();
         }
 
+
         /* === INTERAKTIV TARJIMA PANEL FUNKSIYALARI === */
         function toggleTranslation() {
             if (translationBox.classList.contains("ochiq")) {
@@ -3185,6 +3074,7 @@
                 openTranslationBox();
             }
         }
+
 
         function changeTranslation(type) {
             currentTranslationType = type;
@@ -3199,14 +3089,17 @@
             updateTranslationContent();
         }
 
+
         let transFontSize = parseFloat(localStorage.getItem("transFontSize")) || 14.5;
         translationContent.style.fontSize = transFontSize + "px";
+
 
         function changeTransFontSize(delta) {
             transFontSize = Math.min(24, Math.max(12, transFontSize + delta));
             translationContent.style.fontSize = transFontSize + "px";
             localStorage.setItem("transFontSize", transFontSize);
         }
+
 
         function highlightSearchMatch(text, rawQuery) {
             const escapedText = text
@@ -3219,9 +3112,11 @@
             return escapedText.replace(new RegExp(`(${escapedQ})`, "gi"), '<mark class="search-hl">$1</mark>');
         }
 
+
         function renderGlobalTranslationSearch(rawQuery) {
             const q = rawQuery.toLowerCase().trim();
             const searchCacheKey = `${currentTranslationType}__${q}`;
+
 
             if (translationContent.dataset.renderedSearchKey === searchCacheKey) {
                 if (currentVerse) highlightActiveTranslation(currentVerse);
@@ -3230,10 +3125,12 @@
             translationContent.dataset.renderedSearchKey = searchCacheKey;
             translationContent.innerHTML = "";
 
+
             if (typeof translations === "undefined") {
                 translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
                 return;
             }
+
 
             const results = [];
             for (const [transKey, verseData] of Object.entries(translations)) {
@@ -3246,43 +3143,52 @@
                 const refColon = `${sNum}:${aNum}`;
                 const refDash = `${sNum}-${aNum}`;
 
+
                 if (
                     text.toLowerCase().includes(q) ||
                     surahTitle.toLowerCase().includes(q) ||
                     refColon.includes(q) ||
                     refDash.includes(q)
                 ) {
-                    results.push({sNum, aNum, text, surahTitle});
+                    results.push({ sNum, aNum, text, surahTitle });
                 }
             }
 
+
             transHeaderTitle.innerText = `Қидирув натижалари (${results.length} та)`;
+
 
             if (results.length === 0) {
                 translationContent.innerText = `"${rawQuery}" бўйича ҳеч қандай оят топилмади.`;
                 return;
             }
 
+
             const MAX_SHOW = 200;
             results.slice(0, MAX_SHOW).forEach(itemData => {
                 const verseCode = `${pad(itemData.sNum)}-${pad(itemData.aNum)}`;
                 const pageNum = getPageForVerse(verseCode);
+
 
                 const item = document.createElement("div");
                 item.className = "trans-verse-item";
                 if (currentVerse === verseCode) item.classList.add("active-trans");
                 item.dataset.verse = verseCode;
 
+
                 const badge = document.createElement("div");
                 badge.className = "trans-page-badge";
                 badge.style.margin = "0 0 6px 0";
                 badge.innerText = `${itemData.surahTitle} (${itemData.sNum}:${itemData.aNum})` + (pageNum ? ` • ${pageNum}-бет` : "");
 
+
                 const textDiv = document.createElement("div");
                 textDiv.innerHTML = highlightSearchMatch(itemData.text, rawQuery);
 
+
                 item.appendChild(badge);
                 item.appendChild(textDiv);
+
 
                 item.onclick = (e) => {
                     e.stopPropagation();
@@ -3295,8 +3201,10 @@
                     }
                 };
 
+
                 translationContent.appendChild(item);
             });
+
 
             if (results.length > MAX_SHOW) {
                 const moreInfo = document.createElement("div");
@@ -3306,6 +3214,7 @@
             }
         }
 
+
         function updateTranslationContent() {
             const searchQuery = translationSearchInput ? translationSearchInput.value.trim() : "";
             if (searchQuery.length > 0) {
@@ -3313,7 +3222,9 @@
                 return;
             }
 
+
             translationContent.dataset.renderedSearchKey = "";
+
 
             if (isBookMode && openLeftPage) {
                 transHeaderTitle.innerText = `Саҳифа таржимаси (${openRightPage}–${openLeftPage}-бетлар)`;
@@ -3322,18 +3233,21 @@
             }
             translationContent.innerHTML = "";
 
+
             if (typeof translations === "undefined") {
                 translationContent.innerText = "translation.txt файли топилмади ёки уланмаган.";
                 return;
             }
             let foundAny = false;
             const pagesToRender = isBookMode && openLeftPage
-                ? [{page: openRightPage, holder: rightHolder}, {page: openLeftPage, holder: leftHolder}]
-                : [{page: openRightPage, holder: rightHolder}];
+                ? [{ page: openRightPage, holder: rightHolder }, { page: openLeftPage, holder: leftHolder }]
+                : [{ page: openRightPage, holder: rightHolder }];
+
 
             pagesToRender.forEach(pObj => {
                 const verses = getUniqueVersesInHolder(pObj.holder);
                 if (verses.length === 0) return;
+
 
                 if (isBookMode) {
                     const badge = document.createElement("div");
@@ -3346,6 +3260,7 @@
                     const sNum = parseInt(parts[0], 10);
                     const aNum = parseInt(parts[1], 10);
                     const transKey = `${sNum}_${aNum}`;
+
 
                     if (aNum === 1 && surahNamesByNumber[sNum]) {
                         const surahHeader = document.createElement("div");
@@ -3365,6 +3280,7 @@
                         item.dataset.verse = verseCode;
                         item.innerText = verseData[currentTranslationType];
 
+
                         item.onclick = (e) => {
                             e.stopPropagation();
                             playVerse(verseCode, true, true, false);
@@ -3380,6 +3296,7 @@
             }
         }
 
+
         function highlightActiveTranslation(verseCode) {
             const items = translationContent.querySelectorAll(".trans-verse-item");
             items.forEach(el => {
@@ -3388,10 +3305,11 @@
                 el.classList.toggle("range-trans", selectedVersesRange.length > 1 && selectedVersesRange.includes(v));
                 el.classList.toggle("active-trans", isMatch);
                 if (isMatch && translationBox.classList.contains("ochiq")) {
-                    el.scrollIntoView({behavior: "smooth", block: "center"});
+                    el.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
             });
         }
+
 
         function changeFolder() {
             currentFolder = folderSelect.value;
@@ -3403,7 +3321,9 @@
             }
         }
 
+
         let statusHideTimer = null;
+
 
         function showStatus(text, duration = 1500) {
             if (!text) {
@@ -3412,13 +3332,16 @@
                 return;
             }
 
+
             audioStatus.textContent = text;
             audioStatus.classList.add("visible");
+
 
             if (statusHideTimer) {
                 clearTimeout(statusHideTimer);
                 statusHideTimer = null;
             }
+
 
             if (duration) {
                 statusHideTimer = setTimeout(() => {
@@ -3432,12 +3355,15 @@
             }
         }
 
+
         function toggleModal() {
             shortcutModal.style.display = shortcutModal.style.display === "flex" ? "none" : "flex";
         }
 
+
         /* --- A-B LOOP MANTIQLARI (Takrorlar soni bilan birlashtirilgan) --- */
         const OFFSET = 0.2;
+
 
         function setPointA() {
             pointA = Math.max(segStart(), audio.currentTime - OFFSET);
@@ -3446,10 +3372,11 @@
             isABLooping = false;
             pointB = null;
             abRepeatCount = 0;
-            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
-            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+            if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
+            if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
             showStatus(`A: ${format(pointA - segStart())}`);
         }
+
 
         function setPointB() {
             if (pointA === null) {
@@ -3464,41 +3391,52 @@
             pointB = calculatedB;
             btnB.classList.add("active");
 
+
             verseLoop = true;
             verseLoopBtn.classList.add("active");
 
+
             startABLoop();
         }
+
 
         function startABLoop() {
             if (pointA === null || pointB === null) return;
             isABLooping = true;
             abRepeatCount = 0;
 
+
             const maxRepeats = getTargetRepeatCount();
             const initLabel = (!verseLoop) ? "1/1" : (maxRepeats === 0 ? "1/∞" : `1/${maxRepeats}`);
             showStatus(`A-B: ${initLabel}`, 2000);
 
+
             audio.currentTime = pointA;
+
 
             if (audio.paused) {
                 audio.play();
                 playBtn.innerHTML = ICONS.pause;
             }
 
-            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
-            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+
+            if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
+            if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
+
 
             loopInterval = setInterval(() => {
                 if (isABLooping && pointB !== null && audio.currentTime >= pointB && !audio.paused) {
                     audio.pause();
 
+
                     const targetRepeats = getTargetRepeatCount();
                     abRepeatCount++;
+
 
                     if (verseLoop && (targetRepeats === 0 || abRepeatCount < targetRepeats)) {
                         const label = targetRepeats === 0 ? `${abRepeatCount + 1}/∞` : `${abRepeatCount + 1}/${targetRepeats}`;
                         showStatus(`A-B: ${label}`, 2000);
+
 
                         abGapTimer = setTimeout(() => {
                             abGapTimer = null;
@@ -3511,7 +3449,7 @@
                     } else {
                         isABLooping = false;
                         abRepeatCount = 0;
-                        if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
+                        if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
                         playBtn.innerHTML = ICONS.play;
                         showStatus(`A-B tugadi (${verseLoop ? targetRepeats : 1}x)`, 2500);
                     }
@@ -3519,22 +3457,26 @@
             }, 10);
         }
 
+
         function clearABLoop(silent = false) {
             const hadAB = (pointA !== null || pointB !== null || isABLooping);
+
 
             pointA = null;
             pointB = null;
             isABLooping = false;
             abRepeatCount = 0;
-            if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
-            if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+            if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
+            if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
             btnA.classList.remove("active");
             btnB.classList.remove("active");
+
 
             if (hadAB || !silent) {
                 verseLoop = false;
                 verseLoopBtn.classList.remove("active");
             }
+
 
             if (!silent) {
                 if (selectedVersesRange.length > 1 && currentVerse) {
@@ -3547,6 +3489,7 @@
                 }
             }
         }
+
 
         function toggleMute() {
             if (audio.volume > 0) {
@@ -3561,11 +3504,13 @@
             }
         }
 
+
         function updateMuteIcon(vol) {
             if (vol == 0) muteBtn.innerHTML = ICONS.volMute;
             else if (vol < 0.5) muteBtn.innerHTML = ICONS.volLow;
             else muteBtn.innerHTML = ICONS.volHigh;
         }
+
 
         function stepSpread(dir) {
             if (isBookMode) {
@@ -3581,6 +3526,7 @@
             updateUI("first", false, true);
         }
 
+
         function prevAudio() {
             if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
                 const rIdx = selectedVersesRange.indexOf(currentVerse);
@@ -3591,6 +3537,7 @@
                 }
                 return;
             }
+
 
             const verses = getUniqueVersesOnOpenPages();
             if (verses.length === 0) {
@@ -3610,6 +3557,7 @@
             }
         }
 
+
         function nextAudio() {
             if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
                 const rIdx = selectedVersesRange.indexOf(currentVerse);
@@ -3620,6 +3568,7 @@
                 }
                 return;
             }
+
 
             const verses = getUniqueVersesOnOpenPages();
             if (verses.length === 0) {
@@ -3640,6 +3589,7 @@
             }
         }
 
+
         function togglePlay() {
             if (!audio.src || !currentVerse) {
                 const verses = getUniqueVersesOnOpenPages();
@@ -3647,18 +3597,20 @@
                 return;
             }
 
+
             if (pointA !== null && pointB !== null) {
                 if (isABLooping) {
                     audio.pause();
                     isABLooping = false;
-                    if (loopInterval) {clearInterval(loopInterval); loopInterval = null;}
-                    if (abGapTimer) {clearTimeout(abGapTimer); abGapTimer = null;}
+                    if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
+                    if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
                     playBtn.innerHTML = ICONS.play;
                 } else {
                     startABLoop();
                 }
                 return;
             }
+
 
             if (audio.paused) {
                 const verseDone = audio.ended || (seg && (segFinished || (seg.endSec !== null && audio.currentTime >= seg.endSec - 0.02)));
@@ -3676,11 +3628,13 @@
             }
         }
 
+
         function toggleSpeed() {
             speedIndex = (speedIndex + 1) % speeds.length;
             audio.playbackRate = speeds[speedIndex];
             speedBtn.innerText = speeds[speedIndex] + "x";
         }
+
 
         function toggleVerseLoop() {
             verseLoop = !verseLoop;
@@ -3692,12 +3646,14 @@
             showStatus(verseLoop ? `Takror (${countText}): ON` : "Takror: OFF");
         }
 
+
         function toggleLoop() {
             pageLoop = !pageLoop;
             audio.loop = false;
             loopBtn.classList.toggle("active", pageLoop);
             showStatus(pageLoop ? "Sahifa takrori: ON" : "Sahifa takrori: OFF");
         }
+
 
         audio.ontimeupdate = () => {
             const relTime = Math.max(0, audio.currentTime - segStart());
@@ -3715,16 +3671,20 @@
             updateMuteIcon(volume.value);
         };
 
+
         audio.onended = () => {
             if (seg && segFinished) return;
             if (seg) segFinished = true;
             handleVerseEnded();
         };
 
+
         function handleVerseEnded() {
             if (isABLooping) return;
 
+
             const maxRepeats = getTargetRepeatCount();
+
 
             if (selectedVersesRange.length > 1 && selectedVersesRange.includes(currentVerse)) {
                 const rIdx = selectedVersesRange.indexOf(currentVerse);
@@ -3750,6 +3710,7 @@
                 return;
             }
 
+
             if (verseLoop) {
                 currentRepeatCount++;
                 if (maxRepeats === 0 || currentRepeatCount < maxRepeats) {
@@ -3763,6 +3724,7 @@
                 }
             }
 
+
             const verses = getUniqueVersesOnOpenPages();
             const idx = verses.indexOf(currentVerse);
             if (idx !== -1 && idx + 1 < verses.length) {
@@ -3774,6 +3736,7 @@
             }
         }
 
+
         function format(s) {
             if (isNaN(s)) return "0:00";
             let m = Math.floor(s / 60);
@@ -3781,18 +3744,21 @@
             return m + ":" + (sec < 10 ? "0" : "") + sec;
         }
 
+
         document.onkeydown = (e) => {
             if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
 
-            if (e.code === "KeyB") {e.preventDefault(); toggleBookMode(); return;}
-            if (e.code === "KeyR") {e.preventDefault(); toggleSurahMenu(); return;}
-            if (e.code === "KeyT") {e.preventDefault(); toggleTranslation(); return;}
-            if (e.code === "KeyY") {e.preventDefault(); toggleModal(); return;}
-            if (e.code === "KeyM") {e.preventDefault(); toggleMute(); return;}
-            if (e.code === "KeyV") {e.preventDefault(); toggleLoop(); return;}
-            if (e.code === "KeyP") {e.preventDefault(); toggleAllPanels(); return;}
-            if (e.code === "KeyO") {e.preventDefault(); memorizeViewHide(); return;}
-            if (e.code === "KeyL") {e.preventDefault(); memorizeResetPage(); return;}
+
+            if (e.code === "KeyB") { e.preventDefault(); toggleBookMode(); return; }
+            if (e.code === "KeyR") { e.preventDefault(); toggleSurahMenu(); return; }
+            if (e.code === "KeyT") { e.preventDefault(); toggleTranslation(); return; }
+            if (e.code === "KeyY") { e.preventDefault(); toggleModal(); return; }
+            if (e.code === "KeyM") { e.preventDefault(); toggleMute(); return; }
+            if (e.code === "KeyV") { e.preventDefault(); toggleLoop(); return; }
+            if (e.code === "KeyP") { e.preventDefault(); toggleAllPanels(); return; }
+            if (e.code === "KeyO") { e.preventDefault(); memorizeViewHide(); return; }
+            if (e.code === "KeyL") { e.preventDefault(); memorizeResetPage(); return; }
+
 
             if (e.code === "KeyH" || e.code === "Backspace") {
                 e.preventDefault();
@@ -3808,9 +3774,9 @@
                 case "ArrowRight": e.preventDefault(); nextAudio(); break;
                 case "ArrowLeft": e.preventDefault(); prevAudio(); break;
                 case "+": case "=":
-                    if (!e.ctrlKey) {e.preventDefault(); scale = Math.min(scale + 0.1, 3); applyZoom();} break;
+                    if (!e.ctrlKey) { e.preventDefault(); scale = Math.min(scale + 0.1, 3); applyZoom(); } break;
                 case "-": case "_":
-                    if (!e.ctrlKey) {e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom();} break;
+                    if (!e.ctrlKey) { e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom(); } break;
                 case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "x"; break;
                 case ",": case "<": e.preventDefault(); stepSpread(-1); showStatus("Oldingi sahifa"); break;
                 case ".": case ">": e.preventDefault(); stepSpread(1); showStatus("Keyingi sahifa"); break;
@@ -3822,6 +3788,7 @@
                 case "8": e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
             }
         };
+
 
         pageInput.onchange = () => {
             let v = parseInt(pageInput.value);
@@ -3839,7 +3806,8 @@
             }
         };
 
-        // === "👁 KO'RISH / YASHIRISH" VA "🔒 YOPISH" FUNKSIYALARI ===
+
+        // === "👁 KO'RISH / YASHIRISH" VA "🔒 YOPISH" FUNKSIYALARI ===                                                                                                                    
         function memorizeResetPage() {
             clearABLoop(true);
             audio.pause();
@@ -3849,8 +3817,10 @@
             selectedVersesRange = [];
             document.body.classList.add("memorize-masked");
 
+
             const peekBtn = document.getElementById("memPeekBtn");
             if (peekBtn) peekBtn.classList.remove("active");
+
 
             bookWrapper.querySelectorAll(".overlay").forEach(el => {
                 el.classList.remove("selected", "range-selected", "revealed", "hovered");
@@ -3858,9 +3828,11 @@
             showStatus("Oyatlar yopildi");
         }
 
+
         function memorizeViewHide() {
             const isMasked = document.body.classList.contains("memorize-masked");
             const peekBtn = document.getElementById("memPeekBtn");
+
 
             if (isMasked) {
                 document.body.classList.remove("memorize-masked");
@@ -3873,9 +3845,11 @@
             }
         }
 
-        // === SURALAR VA TARJIMA PANELLARINI RESIZABLE QILISH ===
+
+        // === SURALAR VA TARJIMA PANELLARINI RESIZABLE QILISH ===                                                                                                                         
         {
-            let activeMode = null; // "surah" yoki "translation"
+            let activeMode = null; // "surah" yoki "translation"                                                                                                                           
+
 
             function stopPanelResize() {
                 if (!activeMode) return;
@@ -3893,6 +3867,7 @@
                 syncResizerPositions();
             }
 
+
             if (surahMenu && surahResizer) {
                 surahResizer.addEventListener("mousedown", (e) => {
                     e.preventDefault();
@@ -3904,6 +3879,7 @@
                     document.body.style.userSelect = "none";
                 });
             }
+
 
             if (translationBox && translationResizer) {
                 translationResizer.addEventListener("mousedown", (e) => {
@@ -3917,8 +3893,10 @@
                 });
             }
 
+
             document.addEventListener("mousemove", (e) => {
                 if (!activeMode) return;
+
 
                 if (activeMode === "surah" && surahMenu) {
                     const minW = 260;
@@ -3935,16 +3913,19 @@
                 }
             });
 
+
             document.addEventListener("mouseup", stopPanelResize);
             window.addEventListener("blur", stopPanelResize);
         }
 
-        // ===== YAXSHILANGAN LOGIN TIZIMI (SALT + SHA-256 + BRUTE-FORCE HIMOYA) =====
+
+        // ===== YAXSHILANGAN LOGIN TIZIMI (SALT + SHA-256 + BRUTE-FORCE HIMOYA) =====                                                                                                     
         const AUTH_SALT = "madina_mushaf_2026_salt";
         const AUTH_STORAGE_KEY = "quron_auth_session_v1";
         const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
         const MAX_FAILED_ATTEMPTS = 5;
         const LOCKOUT_SECONDS = 30;
+
 
         async function hashWithSalt(username, password) {
             const normalizedUser = username.trim().toLowerCase();
@@ -3956,13 +3937,15 @@
                 .join("");
         }
 
+
         async function createAuthUser(username, password) {
             const cleanUser = username.trim().toLowerCase();
             const passwordHash = await hashWithSalt(cleanUser, password);
-            const entry = {username: cleanUser, passwordHash};
+            const entry = { username: cleanUser, passwordHash };
             console.log(JSON.stringify(entry, null, 2));
             return entry;
         }
+
 
         const ALLOWED_USERS = [
             {
@@ -3977,32 +3960,39 @@
             }
         ];
 
+
         function isUserExpired(userObj) {
             if (!userObj || !userObj.expiresAt) return false;
             const endOfDay = new Date(userObj.expiresAt + "T23:59:59");
             return Date.now() > endOfDay.getTime();
         }
 
+
         function checkExpiryWarning(userObj) {
             if (!userObj || !userObj.expiresAt) return;
+
 
             const endOfDay = new Date(userObj.expiresAt + "T23:59:59").getTime();
             const diffMs = endOfDay - Date.now();
             const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
 
             if (daysLeft >= 1 && daysLeft <= 3) {
                 const msg = daysLeft === 1
                     ? `⚠️ Бугун обуна муддатингизнинг охирги куни (${userObj.expiresAt})`
                     : `⚠️ Обуна тугашига ${daysLeft} кун қолди (${userObj.expiresAt})`;
 
+
                 setTimeout(() => showStatus(msg, 6000), 1000);
             }
         }
+
 
         let failedAttempts = 0;
         let lockoutUntil = 0;
         let lockoutTimer = null;
         let appInitialized = false;
+
 
         function togglePasswordVisibility() {
             const passInput = document.getElementById("authPassword");
@@ -4012,11 +4002,14 @@
             passBtn.textContent = isHidden ? "🙈" : "👁";
         }
 
+
         function setLockoutCountdown() {
             const submitBtn = document.getElementById("authSubmitBtn");
             const errorEl = document.getElementById("authError");
 
+
             if (lockoutTimer) clearInterval(lockoutTimer);
+
 
             lockoutTimer = setInterval(() => {
                 const remainingMs = lockoutUntil - Date.now();
@@ -4034,9 +4027,11 @@
             }, 250);
         }
 
+
         function initQuranApp() {
             if (appInitialized) return;
             appInitialized = true;
+
 
             folderSelect.value = currentFolder;
             updateMuteIcon(1);
@@ -4045,16 +4040,20 @@
             updateUI("first", false, false);
         }
 
+
         function unlockAppWithLoading(skipLoading = false) {
             const authLayer = document.getElementById("authLayer");
             const loadingScreen = document.getElementById("loadingScreen");
 
+
             authLayer.classList.add("hidden");
+
 
             if (skipLoading) {
                 initQuranApp();
                 return;
             }
+
 
             loadingScreen.classList.add("active");
             setTimeout(() => {
@@ -4063,29 +4062,36 @@
             }, 600);
         }
 
+
         async function handleAuthSubmit(event) {
             event.preventDefault();
 
+
             const errorEl = document.getElementById("authError");
             const submitBtn = document.getElementById("authSubmitBtn");
+
 
             if (Date.now() < lockoutUntil) {
                 setLockoutCountdown();
                 return;
             }
 
+
             const usernameInput = document.getElementById("authUsername").value.trim().toLowerCase();
             const passwordInput = document.getElementById("authPassword").value;
             const rememberMe = document.getElementById("rememberMeCheck").checked;
 
+
             submitBtn.disabled = true;
             errorEl.textContent = "";
+
 
             try {
                 const computedHash = await hashWithSalt(usernameInput, passwordInput);
                 const matchedUser = ALLOWED_USERS.find(
                     u => u.username.toLowerCase() === usernameInput && u.passwordHash === computedHash
                 );
+
 
                 if (!matchedUser) {
                     failedAttempts++;
@@ -4100,11 +4106,13 @@
                     return;
                 }
 
+
                 if (isUserExpired(matchedUser)) {
                     errorEl.textContent = `Обуна муддатингиз тугаган (${matchedUser.expiresAt}). Узайтириш учун @shadowing_studio_bot га ёзинг.`;
                     submitBtn.disabled = false;
                     return;
                 }
+
 
                 failedAttempts = 0;
                 const sessionRecord = JSON.stringify({
@@ -4113,12 +4121,14 @@
                     loginAt: Date.now()
                 });
 
+
                 sessionStorage.setItem(AUTH_STORAGE_KEY, sessionRecord);
                 if (rememberMe) {
                     localStorage.setItem(AUTH_STORAGE_KEY, sessionRecord);
                 } else {
                     localStorage.removeItem(AUTH_STORAGE_KEY);
                 }
+
 
                 unlockAppWithLoading(false);
                 checkExpiryWarning(matchedUser);
@@ -4127,6 +4137,7 @@
                 submitBtn.disabled = false;
             }
         }
+
 
         function logoutUser() {
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
@@ -4141,9 +4152,11 @@
             document.getElementById("authLayer").classList.remove("hidden");
         }
 
+
         (function bootstrapAuth() {
             const saved = sessionStorage.getItem(AUTH_STORAGE_KEY) || localStorage.getItem(AUTH_STORAGE_KEY);
             if (!saved) return;
+
 
             try {
                 const parsed = JSON.parse(saved);
@@ -4152,8 +4165,10 @@
                         u.passwordHash === parsed.passwordHash
                 );
 
+
                 const isSessionFresh = typeof parsed.loginAt === "number" &&
                     (Date.now() - parsed.loginAt) < SESSION_MAX_AGE_MS;
+
 
                 if (matchedUser && !isUserExpired(matchedUser) && isSessionFresh) {
                     unlockAppWithLoading(true);
@@ -4170,7 +4185,7 @@
                 sessionStorage.removeItem(AUTH_STORAGE_KEY);
                 localStorage.removeItem(AUTH_STORAGE_KEY);
             }
-        })();
+        })();                                                                                                                                                                              
     </script>
 </body>
 
