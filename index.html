@@ -1933,23 +1933,13 @@
         <div class="yon-panel-header">
             <div class="yon-panel-header-top">
                 <span>Суралар рўйхати</span>
-                <div class="trans-header-actions">
-                    <button class="yon-panel-yopish" id="logoutBtn" onclick="logoutUser()" title="Tizimdan chiqish">
-                        <svg class="svg-icon" viewBox="0 0 24 24" style="width:15px;height:15px;">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                    </button>
-                    <button class="yon-panel-yopish" onclick="toggleSurahMenu()">✖</button>
-                </div>
+                <button class="yon-panel-yopish" onclick="toggleSurahMenu()">✖</button>
             </div>
             <input type="text" id="surahSearchInput" class="surah-search-input" placeholder="Сура номи ёки рақами..."
                 oninput="filterSurahList()">
         </div>
         <ul id="surahList"></ul>
     </nav>
-
     <div id="surahResizer" class="yon-panel-resizer" title="Kengligini o'zgartirish uchun sudrang"></div>
 
     <!-- O'NG YON PANEL: Sahifa tarjimasi -->
@@ -2043,13 +2033,21 @@
                 </svg>
             </button>
 
-            <div class="divider"></div>
-
             <button id="fullscreenBtn" class="icon-btn" onclick="toggleFullscreen()" title="To'liq ekran (F)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path
                         d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
                     </path>
+                </svg>
+            </button>
+
+            <div class="divider"></div>
+            
+              <button id="logoutBtn" class="icon-btn" onclick="logoutUser()" title="Tizimdan chiqish">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
             </button>
         </div>
@@ -3743,15 +3741,16 @@
             });
         }
 
-        function changeFolder() {
-            currentFolder = folderSelect.value;
-            localStorage.setItem("audioFolder", currentFolder);
-            if (currentVerse) {
-                playVerse(currentVerse, true, false, selectedVersesRange.length > 1);
-            } else {
-                updateUI();
-            }
-        }
+function changeFolder() {
+    folderSelect.blur();
+    currentFolder = folderSelect.value;
+    localStorage.setItem("audioFolder", currentFolder);
+    if (currentVerse) {
+        playVerse(currentVerse, true, false, selectedVersesRange.length > 1);
+    } else {
+        updateUI();
+    }
+}
 
 
         let statusHideTimer = null;
@@ -4578,6 +4577,7 @@
 
 
         function logoutUser() {
+            if (!confirm("Tizimdan chiqmoqchimisiz?")) return;
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(AUTH_STORAGE_KEY);
             if (typeof audio !== "undefined") {
