@@ -219,7 +219,7 @@
             color: var(--bronze-light);
             font-family: inherit;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 14px;
             text-align: center;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -1683,7 +1683,7 @@
         }
 
         .page-total {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--cream-muted);
             font-variant-numeric: tabular-nums;
@@ -1855,6 +1855,7 @@
             bottom: calc(var(--player-h) + 16px);
         }
 
+
         /* ---------- А-Б TAKRORLASH GURUHI ---------- */
         .ab-group {
             display: inline-flex;
@@ -1873,7 +1874,6 @@
             border-radius: 8px;
         }
 
-
         .ab-group button:hover {
             background: rgba(207, 163, 106, 0.16);
             color: var(--bronze-light);
@@ -1886,8 +1886,9 @@
             box-shadow: 0 0 12px var(--bronze-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
+        /* А va Б orasidagi chiziq: ikkalasi qo'yilganda oltin rangga o'tadi */
         .ab-link {
-            width: 12px;
+            width: 14px;
             height: 2px;
             border-radius: 2px;
             background: rgba(207, 163, 106, 0.28);
@@ -1906,6 +1907,7 @@
             background: rgba(207, 163, 106, 0.25);
         }
 
+        /* Tozalash tugmasi: hech narsa qo'yilmagan bo'lsa xira turadi */
         .ab-group #clearABBtn {
             width: 30px;
             color: var(--cream-muted);
@@ -1941,6 +1943,160 @@
             .tb-select {
                 min-width: 150px;
             }
+        }
+
+        /* =========================================================
+           TELEFON (ekran kengligi ≤ 700px)
+           ========================================================= */
+        @media (max-width: 700px) {
+            :root {
+                --topbar-h: 92px;
+                --player-h: 132px;
+            }
+
+            body {
+                overflow-x: hidden;
+            }
+
+            .viewer {
+                padding: 0;
+                margin-top: 4px;
+                margin-bottom: 8px;
+            }
+
+            /* Yon strelkalar matn ustida turmasin: surish + yuqoridagi ◀ ▶ yetarli */
+            .side-nav-btn {
+                display: none;
+            }
+
+            /* ---------- YUQORI PANEL: 2 qator ---------- */
+            .controls.topbar {
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: center;
+                height: 92px;
+                padding: 7px 10px;
+                gap: 7px;
+                overflow: hidden;
+            }
+
+            .tb-left {
+                width: 100%;
+                gap: 7px;
+            }
+
+            .tb-right {
+                width: 100%;
+                gap: 5px;
+            }
+
+            .tb-select {
+                flex: 1 1 0;
+                min-width: 0;
+                height: 36px;
+            }
+
+            #surahNameLabel {
+                max-width: none;
+            }
+
+            #folderSelect {
+                flex: 1 1 0;
+                min-width: 0;
+                height: 36px;
+                padding: 0 20px 0 10px;
+                font-size: 12.5px;
+            }
+
+            .topbar .icon-btn {
+                width: 32px;
+                height: 34px;
+            }
+
+            #pageInput {
+                width: 48px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            .tb-right .divider,
+            #bookModeBtn {
+                display: none;
+            }
+
+            /* ---------- PASTKI PLEYER: 3 qator ---------- */
+            .player-bar.pbar {
+                flex-direction: column;
+                justify-content: center;
+                align-items: stretch;
+                height: 132px;
+                padding: 8px 10px;
+                gap: 6px;
+                overflow: hidden;
+            }
+
+            .pb-info,
+            #muteBtn,
+            #volume,
+            .pb-right .divider {
+                display: none;
+            }
+
+            .pb-center {
+                flex: 0 0 auto;
+                width: 100%;
+                gap: 6px;
+            }
+
+            .pb-progress {
+                order: -1;
+                width: 100%;
+            }
+
+            .pb-controls {
+                gap: 7px;
+                justify-content: center;
+            }
+
+            .pb-controls .icon-btn {
+                width: 34px;
+                height: 34px;
+            }
+
+            .pbar .play-main-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 13px;
+            }
+
+            #speedBtn {
+                min-width: 40px;
+                height: 34px;
+            }
+
+            .pb-right {
+                flex: 0 0 auto;
+                width: 100%;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            /* ---------- YON PANELLAR ---------- */
+            .yon-panel,
+            #translationBox {
+                height: calc(100vh - var(--topbar-h) - var(--player-h));
+                height: calc(100dvh - var(--topbar-h) - var(--player-h));
+            }
+
+            /* iPhone'da maydonga bosganda sahifa yaqinlashib ketmasligi uchun */
+            .surah-search-input {
+                font-size: 16px;
+            }
+        }
+
+        .overlay {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
     </style>
 </head>
@@ -2101,6 +2257,8 @@
                 </svg>
             </button>
 
+            <div class="divider"></div>
+
             <button id="fullscreenBtn" class="icon-btn" onclick="toggleFullscreen()" title="Тўлиқ экран (F)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <path
@@ -2217,11 +2375,22 @@
         <!-- O'ng: A-B, takrorlash, ovoz -->
         <div class="pb-right">
             <div class="ab-group" title="А-Б оралиғини белгилаб, такрорлаш">
-                <button onclick="setPointA()" id="btnA" class="btn-a" title="А нуқта (1)">[А</button>
+                <button onclick="setPointA()" id="btnA" class="btn-a" title="А нуқта (1)">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:22px;height:22px;">
+                        <path d="M9 4H4v16h5"></path>
+                        <text x="16" y="15.6" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">А</text>
+                    </svg>
+                </button>
                 <span class="ab-link" aria-hidden="true"></span>
-                <button onclick="setPointB()" id="btnB" class="btn-b" title="Б нуқта (3)">Б]</button>
+                <button onclick="setPointB()" id="btnB" class="btn-b" title="Б нуқта (3)">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:22px;height:22px;">
+                        <path d="M15 4h5v16h-5"></path>
+                        <text x="8" y="15.6" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">Б</text>
+                    </svg>
+                </button>
                 <span class="ab-sep" aria-hidden="true"></span>
-                <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="А-Б нуқталарини тозалаш (7)">
+                <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn"
+                    title="А-Б нуқталарини тозалаш (7)">
                     <svg class="svg-icon" viewBox="0 0 24 24" style="width:14px;height:14px;">
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -2736,6 +2905,9 @@
         let currentPage = localStorage.getItem("page") ? parseInt(localStorage.getItem("page")) : 1;
         let currentFolder = localStorage.getItem("audioFolder") ? localStorage.getItem("audioFolder") : "audios1";
         let isBookMode = localStorage.getItem("isBookMode") !== null ? localStorage.getItem("isBookMode") === "true" : true;
+        // Telefonda (≤700px) doim 1 sahifali ko'rinish; bu tanlov saqlanmaydi
+        const IS_PHONE = window.matchMedia("(max-width: 700px)").matches;
+        if (IS_PHONE) isBookMode = false;
         let previousVolume = 1;
         let currentTranslationType = 'sodiq';
         let currentVerse = null;
@@ -2793,9 +2965,9 @@
                 scale = Math.min(scaleW, scaleH, 1.30);
                 scale = Math.max(scale, 0.35);
             } else {
-                const targetW = winWidth > 900 ? Math.min(winWidth * 0.62, 920) : (winWidth - 30);
+                const targetW = winWidth > 900 ? Math.min(winWidth * 0.62, 920) : (winWidth <= 700 ? winWidth - 12 : winWidth - 30);
                 scale = targetW / 630;
-                scale = Math.min(Math.max(scale, 0.55), 1.55);
+                scale = Math.min(Math.max(scale, winWidth <= 700 ? 0.4 : 0.55), 1.55);
             }
 
             scale = Math.round(scale * 100) / 100;
@@ -2821,8 +2993,9 @@
 
             viewer.style.height = "auto";
             const totalWidth = isBookMode ? (scaledPageWidth * 2) : scaledPageWidth;
-            if (totalWidth > window.innerWidth - 90) {
-                viewer.style.width = `${totalWidth + 90}px`;
+            const sidePad = window.innerWidth <= 700 ? 0 : 90;
+            if (totalWidth > window.innerWidth - sidePad) {
+                viewer.style.width = `${totalWidth + sidePad}px`;
             } else {
                 viewer.style.width = "100%";
             }
@@ -2844,11 +3017,12 @@
 
             if (top === Infinity) return;
 
-            const controlsEl = document.querySelector(".controls");
-            const panelsHidden = controlsEl && controlsEl.classList.contains("yashirin");
+            const cs = getComputedStyle(document.body);
+            const topH = parseFloat(cs.getPropertyValue("--topbar-h")) || 0;
+            const botH = parseFloat(cs.getPropertyValue("--player-h")) || 0;
 
-            const safeTop = panelsHidden ? 25 : 78;
-            const safeBottom = window.innerHeight - (panelsHidden ? 25 : 110);
+            const safeTop = topH + 20;
+            const safeBottom = window.innerHeight - botH - 20;
             const safeLeft = 20;
             const safeRight = window.innerWidth - 20;
 
@@ -2919,6 +3093,8 @@
         let flipCleanupTimer = null;
 
         let isDraggingVerses = false;
+        let touchRangeActive = false;     // telefonda oraliq tanlash davom etyaptimi
+        let touchRangeBlockUntil = 0;     // shundan keyin kelgan "soxta" sichqoncha hodisalarini e'tiborsiz qoldirish
         let dragStartVerse = null;
         let selectedVersesRange = [];
         let currentRepeatCount = 0;
@@ -2977,7 +3153,7 @@
             updateOverlaySelectionVisuals();
         }
 
-        window.addEventListener("mouseup", () => {
+        function finishVerseDrag() {
             if (!isDraggingVerses) return;
             isDraggingVerses = false;
 
@@ -2995,7 +3171,8 @@
                     playVerse(firstVerse, true, false, false);
                 }
             }
-        });
+        }
+        window.addEventListener("mouseup", finishVerseDrag);
 
         function bindOverlayEventsInHolder(holderEl, pageNum) {
             const overlays = holderEl.querySelectorAll('.overlay:not([data-verse$="-000"])');
@@ -3010,6 +3187,7 @@
 
                 ov.onmousedown = function (e) {
                     if (e.button !== 0) return;
+                    if (Date.now() < touchRangeBlockUntil) { e.preventDefault(); return; }
                     e.stopPropagation();
                     e.preventDefault();
 
@@ -4313,6 +4491,110 @@
             }
             pageInput.blur();
         };
+        
+        // === TELEFON: barmoq bilan surib sahifa almashtirish ===
+        // O'ngga surish = keyingi sahifa (arabcha kitob yo'nalishi), chapga = oldingi
+        (function enableSwipe() {
+            let sx = 0, sy = 0, st = 0, tracking = false;
+            viewer.addEventListener("touchstart", (e) => {
+                const zoomed = window.visualViewport && window.visualViewport.scale > 1.05;
+                if (e.touches.length !== 1 || zoomed) { tracking = false; return; }
+                sx = e.touches[0].clientX;
+                sy = e.touches[0].clientY;
+                st = Date.now();
+                tracking = true;
+            }, { passive: true });
+            viewer.addEventListener("touchend", (e) => {
+                if (touchRangeActive || Date.now() < touchRangeBlockUntil) { tracking = false; return; }
+                if (!tracking) return;
+                tracking = false;
+                const t = e.changedTouches[0];
+                const dx = t.clientX - sx;
+                const dy = t.clientY - sy;
+                if (Date.now() - st > 600) return;
+                if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.6) return;
+                stepSpread(dx > 0 ? 1 : -1);
+            }, { passive: true });
+        })();
+
+        // === TELEFON: oyatlar oralig'ini tanlash ===
+        // Oyatni ~0.35 soniya bosib turing, so'ng barmoqni oxirgi oyatgacha sudrang.
+        // Qisqa bosish = bitta oyat, tez surish = sahifa almashtirish, bosib turmasdan aylantirish = oddiy skroll.
+        (function enableTouchRangeSelect() {
+            const HOLD_MS = 350;
+            const MOVE_TOLERANCE = 10;
+            let timer = null;
+            let sx = 0, sy = 0, startOv = null;
+
+            const overlayAt = (x, y) => {
+                const el = document.elementFromPoint(x, y);
+                return el && el.closest ? el.closest('.overlay:not([data-verse$="-000"])') : null;
+            };
+            const cancelTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
+            const clearHover = () => bookWrapper.querySelectorAll(".overlay.hovered").forEach(el => el.classList.remove("hovered"));
+
+            function begin(ov) {
+                const verseCode = ov.getAttribute("data-verse");
+                touchRangeActive = true;
+                isDraggingVerses = true;
+                dragStartVerse = verseCode;
+                selectedVersesRange = [verseCode];
+                currentRepeatCount = 0;
+
+                const pg = parseInt(ov.dataset.page, 10);
+                if (pg) {
+                    currentPage = pg;
+                    pageInput.value = currentPage;
+                    localStorage.setItem("page", currentPage);
+                }
+                bookWrapper.querySelectorAll(`.overlay[data-verse="${verseCode}"]`).forEach(el => el.classList.add("hovered"));
+                updateOverlaySelectionVisuals();
+                if (navigator.vibrate) navigator.vibrate(25);
+                showStatus("Оралиқни белгилаш учун бармоқни суринг", 2000);
+            }
+
+            viewer.addEventListener("touchstart", (e) => {
+                cancelTimer();
+                if (e.touches.length !== 1) return;
+                const t = e.touches[0];
+                const ov = overlayAt(t.clientX, t.clientY);
+                if (!ov) return;
+                sx = t.clientX;
+                sy = t.clientY;
+                startOv = ov;
+                timer = setTimeout(() => { timer = null; begin(startOv); }, HOLD_MS);
+            }, { passive: true });
+
+            viewer.addEventListener("touchmove", (e) => {
+                const t = e.touches[0];
+                if (!touchRangeActive) {
+                    if (timer && (Math.abs(t.clientX - sx) > MOVE_TOLERANCE || Math.abs(t.clientY - sy) > MOVE_TOLERANCE)) {
+                        cancelTimer();
+                    }
+                    return;
+                }
+                if (e.cancelable) e.preventDefault();      // tanlash paytida sahifa aylanib ketmasin
+                const ov = overlayAt(t.clientX, t.clientY);
+                if (ov) updateDragSelectionRange(ov.getAttribute("data-verse"));
+            }, { passive: false });
+
+            const endTouch = (e) => {
+                cancelTimer();
+                if (!touchRangeActive) return;
+                touchRangeActive = false;
+                touchRangeBlockUntil = Date.now() + 350;
+                if (e.cancelable) e.preventDefault();      // soxta sichqoncha hodisalarini to'xtatish
+                clearHover();
+                finishVerseDrag();
+            };
+            viewer.addEventListener("touchend", endTouch, { passive: false });
+            viewer.addEventListener("touchcancel", endTouch, { passive: false });
+
+            // Bosib turganda brauzer menyusi chiqib ketmasin
+            viewer.addEventListener("contextmenu", (e) => {
+                if (touchRangeActive || timer) e.preventDefault();
+            });
+        })();
 
         bookWrapper.onwheel = (e) => {
             if (e.ctrlKey) {
@@ -4551,6 +4833,10 @@
 
 
             folderSelect.value = currentFolder;
+            if (!document.documentElement.requestFullscreen) {
+                const fsBtn = document.getElementById("fullscreenBtn");
+                if (fsBtn) fsBtn.style.display = "none";
+            }
             updateMuteIcon(1);
             applyBookModeClass();
             autoScale(true);
