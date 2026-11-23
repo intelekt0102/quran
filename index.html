@@ -1855,6 +1855,76 @@
             bottom: calc(var(--player-h) + 16px);
         }
 
+        /* ---------- А-Б TAKRORLASH GURUHI ---------- */
+        .ab-group {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(18, 12, 10, 0.72);
+            border: 1px solid rgba(207, 163, 106, 0.25);
+            border-radius: 11px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .ab-group button {
+            border: none;
+            height: 32px;
+            width: 34px;
+            border-radius: 8px;
+            background: transparent;
+            box-shadow: none;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cream-muted);
+        }
+
+        .ab-group button:hover {
+            background: rgba(207, 163, 106, 0.16);
+            color: var(--bronze-light);
+            box-shadow: none;
+        }
+
+        .ab-group button.active {
+            background: linear-gradient(135deg, var(--bronze-light) 0%, var(--bronze-gold) 60%, var(--bronze-dark) 100%);
+            color: #1e130d;
+            box-shadow: 0 0 12px var(--bronze-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .ab-link {
+            width: 12px;
+            height: 2px;
+            border-radius: 2px;
+            background: rgba(207, 163, 106, 0.28);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .ab-group:has(#btnA.active):has(#btnB.active) .ab-link {
+            background: var(--bronze-gold);
+            box-shadow: 0 0 8px var(--bronze-glow);
+        }
+
+        .ab-sep {
+            width: 1px;
+            height: 18px;
+            margin: 0 2px;
+            background: rgba(207, 163, 106, 0.25);
+        }
+
+        .ab-group #clearABBtn {
+            width: 30px;
+            color: var(--cream-muted);
+            transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .ab-group:not(:has(.active)) #clearABBtn {
+            opacity: 0.4;
+        }
+
+        .ab-group #clearABBtn:hover {
+            background: rgba(158, 63, 59, 0.35);
+            color: #ffd6d6;
+        }
+
         /* ---------- MOSLASHUVCHANLIK ---------- */
         @media (max-width: 1360px) {
 
@@ -2150,10 +2220,18 @@
 
         <!-- O'ng: A-B, takrorlash, ovoz -->
         <div class="pb-right">
-            <button onclick="setPointA()" id="btnA" class="btn-a" title="А нуқта (1)">А</button>
-            <button onclick="setPointB()" id="btnB" class="btn-b" title="Б нуқта (3)">Б</button>
-            <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn"
-                title="А-Б нуқталарини тозалаш (7)">✕</button>
+            <div class="ab-group" title="А-Б оралиғини белгилаб, такрорлаш">
+                <button onclick="setPointA()" id="btnA" class="btn-a" title="А нуқта (1)">[А</button>
+                <span class="ab-link" aria-hidden="true"></span>
+                <button onclick="setPointB()" id="btnB" class="btn-b" title="Б нуқта (3)">Б]</button>
+                <span class="ab-sep" aria-hidden="true"></span>
+                <button class="icon-btn" onclick="clearABLoop()" id="clearABBtn" title="А-Б нуқталарини тозалаш (7)">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
 
             <div class="repeat-group" title="Белгиланган оятларни такрорлаш ва такрорлар сони">
                 <button class="icon-btn" onclick="toggleVerseLoop()" id="verseLoopBtn"
@@ -4239,7 +4317,7 @@
             }
             pageInput.blur();
         };
-        
+
         bookWrapper.onwheel = (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
