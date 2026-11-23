@@ -1954,6 +1954,78 @@
         }
 
         /* =========================================================
+           YUQORI PANEL TUZATISHI: telefon gorizontal (landscape) va o'rta ekranlar.
+           Chap blok qisqarib, tugmalari (keyingi sahifa ▶) o'ng blok ostida qolib ketmasin.
+           ========================================================= */
+        @media (min-width: 701px) {
+            .tb-left {
+                flex: 0 0 auto;
+            }
+
+            .tb-right {
+                flex: 1 1 auto;
+                min-width: min-content;
+                justify-content: flex-end;
+            }
+
+            /* Joy yetmasa faqat qori tanlovi torayadi, tugmalar emas */
+            #folderSelect {
+                flex: 0 1 auto;
+                min-width: 92px;
+            }
+        }
+
+        @media (min-width: 701px) and (max-width: 1100px) {
+            .controls.topbar {
+                padding: 0 10px;
+                gap: 8px;
+            }
+
+            .tb-left,
+            .tb-right {
+                gap: 6px;
+            }
+
+            .tb-select {
+                min-width: 0;
+                padding: 0 10px;
+            }
+
+            #surahNameLabel {
+                max-width: 120px;
+            }
+
+            #folderSelect {
+                max-width: 150px;
+                padding-left: 8px;
+            }
+
+            #pageInput {
+                width: 52px;
+            }
+        }
+
+        @media (min-width: 701px) and (max-width: 800px) {
+            .tb-right .divider {
+                display: none;
+            }
+
+            #surahNameLabel {
+                max-width: 100px;
+            }
+
+            #folderSelect {
+                max-width: 140px;
+                padding-right: 20px;
+                font-size: 12.5px;
+            }
+
+            #pageInput {
+                width: 46px;
+            }
+        }
+
+        /* =========================================================
            TELEFON (ekran kengligi ≤ 700px)
            ========================================================= */
         @media (max-width: 700px) {
@@ -2099,6 +2171,301 @@
             /* iPhone'da maydonga bosganda sahifa yaqinlashib ketmasligi uchun */
             .surah-search-input {
                 font-size: 16px;
+            }
+        }
+
+        /* =========================================================
+           MOBIL MOSLASHUV TUZATISHLARI (tik va yonga burilgan holat)
+           ========================================================= */
+
+        /* --- Kirish oynasi: ekran past bo'lsa (yonga burilganda yoki klaviatura chiqqanda)
+               karta kesilib qolmasin, aylantirib yetib borilsin --- */
+        .auth-backdrop {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            align-items: flex-start;
+        }
+
+        .auth-card {
+            margin: auto;
+        }
+
+        @media (max-height: 560px) {
+            .auth-backdrop {
+                padding: 10px;
+            }
+
+            .auth-card {
+                padding: 16px 20px;
+            }
+
+            .auth-card h2 {
+                font-size: 18px;
+                margin-bottom: 4px;
+            }
+
+            .auth-subtitle {
+                margin-bottom: 10px;
+            }
+
+            .auth-field {
+                margin-bottom: 8px;
+            }
+
+            .auth-field input,
+            .auth-submit-btn {
+                height: 40px;
+            }
+
+            .auth-remember {
+                margin: 4px 0 10px 0;
+            }
+
+            .auth-error {
+                min-height: 0;
+                margin-top: 6px;
+            }
+
+            .auth-telegram-help {
+                margin-top: 10px;
+                padding-top: 8px;
+                gap: 4px;
+            }
+        }
+
+        /* --- Yon panellardagi kichik tugmalar barmoq bilan bosishga qulay bo'lsin --- */
+        @media (max-width: 1100px), (pointer: coarse) {
+            .yon-panel-yopish {
+                width: 34px;
+                height: 34px;
+            }
+
+            .font-size-btn {
+                height: 34px;
+                min-width: 36px;
+            }
+        }
+
+        /* --- Telefon YONGA burilgan (past ekran): panellar ixcham, sahifa uchun joy ko'proq --- */
+        @media (max-width: 700px) and (orientation: landscape) and (max-height: 500px) {
+            :root {
+                --topbar-h: 46px;
+                --player-h: 84px;
+            }
+
+            /* Yuqori panel: bitta qator */
+            .controls.topbar {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                height: 46px;
+                padding: 0 8px;
+                gap: 6px;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .tb-left {
+                width: auto;
+                flex: 0 0 auto;
+                gap: 5px;
+            }
+
+            .tb-right {
+                width: auto;
+                flex: 1 1 auto;
+                min-width: min-content;
+                justify-content: flex-end;
+                gap: 4px;
+            }
+
+            .tb-select {
+                flex: 0 0 auto;
+                height: 34px;
+                min-width: 0;
+                padding: 0 8px;
+            }
+
+            #surahNameLabel {
+                max-width: 78px;
+            }
+
+            #folderSelect {
+                flex: 0 1 auto;
+                min-width: 74px;
+                max-width: 120px;
+                height: 34px;
+                font-size: 12px;
+                padding: 0 16px 0 8px;
+            }
+
+            .topbar .icon-btn {
+                width: 32px;
+                height: 34px;
+            }
+
+            #pageInput {
+                width: 42px;
+                height: 34px;
+                font-size: 15px;
+            }
+
+            /* Pastki pleyer: 2 qator (tugmalar + A-B/takror | vaqt chizig'i) */
+            .player-bar.pbar {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-areas: "ctrl right" "prog prog";
+                align-items: center;
+                justify-content: start;
+                height: 84px;
+                padding: 6px 10px;
+                gap: 4px 8px;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .pb-center {
+                display: contents;
+            }
+
+            .pb-controls {
+                grid-area: ctrl;
+                gap: 5px;
+                justify-content: flex-start;
+            }
+
+            .pb-progress {
+                grid-area: prog;
+                order: 0;
+                width: 100%;
+            }
+
+            .pb-right {
+                grid-area: right;
+                width: auto;
+                min-width: auto;
+                justify-content: flex-end;
+                gap: 6px;
+            }
+
+            .pb-controls .icon-btn {
+                width: 32px;
+                height: 34px;
+            }
+
+            .pbar .play-main-btn {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+
+            #speedBtn {
+                min-width: 38px;
+                height: 34px;
+            }
+        }
+
+        /* Juda tor/past yonga burilgan ekranlar (masalan 568x320): yanada ixcham */
+        @media (max-width: 600px) and (orientation: landscape) and (max-height: 500px) {
+            .controls.topbar {
+                padding: 0 6px;
+                gap: 4px;
+            }
+
+            .tb-left {
+                gap: 4px;
+            }
+
+            .tb-right {
+                gap: 3px;
+            }
+
+            .tb-select .chev {
+                display: none;
+            }
+
+            #surahNameLabel {
+                max-width: 64px;
+            }
+
+            .topbar .icon-btn {
+                width: 30px;
+            }
+
+            #pageInput {
+                width: 38px;
+            }
+
+            .player-bar.pbar {
+                padding: 6px 6px;
+                gap: 4px 6px;
+            }
+
+            .pb-controls {
+                gap: 3px;
+            }
+
+            .pb-controls .icon-btn {
+                width: 30px;
+            }
+
+            .pb-right {
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 520px) and (orientation: landscape) and (max-height: 500px) {
+            #surahNameLabel {
+                display: none;
+            }
+
+            .tb-select {
+                padding: 0 9px;
+            }
+        }
+
+        @media (max-width: 700px) and (orientation: landscape) and (max-height: 340px) {
+            :root {
+                --topbar-h: 42px;
+                --player-h: 76px;
+            }
+
+            .controls.topbar {
+                height: 42px;
+            }
+
+            .player-bar.pbar {
+                height: 76px;
+                padding-top: 4px;
+                padding-bottom: 4px;
+                gap: 2px 6px;
+            }
+        }
+
+        /* --- Yonga burilgan past ekran (har qanday kenglik): yon panellar butun balandlikda,
+               sarlavhalar ixcham --- */
+        @media (orientation: landscape) and (max-height: 500px) {
+
+            .yon-panel,
+            #translationBox {
+                top: 0;
+                height: 100vh;
+                height: 100dvh;
+                padding-bottom: 0;
+            }
+
+            .yon-panel-resizer,
+            .translation-resizer {
+                top: 0;
+                height: 100vh;
+                height: 100dvh;
+            }
+
+            .yon-panel-header,
+            .translation-header {
+                padding: 8px 14px;
+                gap: 8px;
             }
         }
 
