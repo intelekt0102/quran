@@ -4,6 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- PWA: o'rnatish va oflayn ishlash -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#eee6d8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Қуръон">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <title>Қуръон тиловати</title>
     <link rel="preconnect" href="https://huggingface.co" crossorigin>
     <link rel="dns-prefetch" href="https://huggingface.co">
@@ -4988,6 +4996,16 @@
                 localStorage.removeItem(AUTH_STORAGE_KEY);
             }
         })();                                                                                                                                                                              
+    </script>
+
+    <!-- PWA: service worker (faqat http/https da ishlaydi, file:// da emas) -->
+    <script>
+        if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("sw.js").catch((e) => console.warn("SW ro'yxatdan o'tmadi:", e));
+                if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { });
+            });
+        }
     </script>
 </body>
 
