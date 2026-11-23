@@ -3545,6 +3545,15 @@
             showStatus(val === 0 ? "Такрор: ∞" : `Такрор: ${val} марта`);
         };
 
+        inputRepeatNumber.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                e.stopPropagation();
+                inputRepeatNumber.onchange();
+                inputRepeatNumber.blur();
+            }
+        });
+
         function getTargetRepeatCount() {
             const val = parseInt(inputRepeatNumber.value, 10);
             return isNaN(val) || val < 0 ? 1 : val;
