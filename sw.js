@@ -8,7 +8,7 @@
  *
  * Yangi versiya chiqarganda CACHE_VERSION ni oshiring (masalan v2).
  */
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const SHELL_CACHE = `quran-shell-${CACHE_VERSION}`;
 const IMAGE_CACHE = 'quran-images-v1';   // rasmlar versiyaga bog'lanmagan: yangilanganda qayta yuklanmasin
 const FONT_CACHE = 'quran-fonts-v1';
@@ -89,7 +89,7 @@ self.addEventListener('fetch', (event) => {
 
   // Audio va Range so'rovlari — brauzerga qoldiramiz
   if (req.headers.has('range') || req.destination === 'audio' || req.destination === 'video') return;
-  if (url.hostname === 'huggingface.co' || url.hostname.endsWith('.hf.co')) return;
+  if (url.hostname.endsWith('.workers.dev')) return;
 
   // Sahifa rasmlari (jsDelivr). 'cors' rejimi: opaque javob kvotani 7 MB dan "to'ldirib" yubormasligi uchun
   if (url.hostname === 'cdn.jsdelivr.net') {
