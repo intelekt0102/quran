@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz-Cyrl" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,8 +13,8 @@
     <link rel="icon" type="image/png" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <title>Қуръон тиловати</title>
-    <link rel="preconnect" href="https://huggingface.co" crossorigin>
-    <link rel="dns-prefetch" href="https://huggingface.co">
+    <link rel="preconnect" href="https://quran-audio.mirzobekyaqubov77.workers.dev" crossorigin>
+    <link rel="dns-prefetch" href="https://quran-audio.mirzobekyaqubov77.workers.dev">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!-- Islomiy xattotlik (Amiri) va zamonaviy interfeys (Plus Jakarta Sans) shriftlari -->
@@ -2891,10 +2892,10 @@
             </div>
         </div>
     </div>
-    <audio id="audio"></audio>
+    <audio id="audio" preload="auto"></audio>
 
     <script>
-        const HF_BASE = "https://huggingface.co/datasets/masterclass1997/madina/resolve/main";
+        const HF_BASE = "https://quran-audio.mirzobekyaqubov77.workers.dev";
         const IMG_BASE = "https://cdn.jsdelivr.net/gh/intelekt0102/quran@main/images";
         const ICONS = {
             play: `<svg class="svg-fill" viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>`,
@@ -4060,7 +4061,7 @@
 
 
         const preloadAudio = new Audio();
-        preloadAudio.preload = "auto";
+        preloadAudio.preload = "metadata";
 
 
         function preloadNextVerse() {
@@ -4091,8 +4092,8 @@
                 const nextSrc = nextRes.src;
                 if (nextRes.segmented && nextSrc === audio.getAttribute("src")) return;
                 if (preloadAudio.getAttribute("src") !== nextSrc) {
+                    preloadAudio.preload = "metadata";
                     preloadAudio.src = nextSrc;
-                    preloadAudio.load();
                 }
             }
         }
@@ -4105,6 +4106,7 @@
             if (pageNum < 1 || pageNum > 604 || imagePreloadCache.has(pageNum)) return;
             const img = new Image();
             img.decoding = "async";
+            img.fetchPriority = "low";
             img.src = `${IMG_BASE}/${pad(pageNum)}.webp`;
             imagePreloadCache.set(pageNum, img);
 
@@ -4118,12 +4120,11 @@
 
         function preloadAdjacentPages() {
             const base = openRightPage || currentPage;
-            const targets = [base + 1, base + 2, base + 3, base + 4, base - 1, base - 2];
+            const targets = [base + 2, base + 3, base + 1, base - 2];
             targets.forEach((p, idx) => {
-                setTimeout(() => preloadPageImage(p), 250 + idx * 120);
+                setTimeout(() => preloadPageImage(p), 1200 + idx * 400);
             });
         }
-
 
         function playVerse(verseCode, silentClear = false, scrollToOverlay = false, keepRange = false) {
             if (!verseCode || verseCode.endsWith("-000")) return;
@@ -4168,15 +4169,18 @@
                 if (audio.getAttribute("src") !== res.src) {
                     audio.pause();
                     audio.src = res.src;
-                    const targetStart = res.startSec;
+                    audio.defaultPlaybackRate = speeds[speedIndex];   // src o'zgarganda tezlik tiklanib ketmasligi uchun
+                    audio.playbackRate = speeds[speedIndex];
+                    audio.currentTime = res.startSec;                 // metadata kutmasdan to'g'ri joydan boshlaydi
                     const myToken = segToken;
-                    audio.addEventListener("loadedmetadata", function onMeta() {
-                        if (segToken === myToken) {
-                            audio.currentTime = targetStart;
-                            audio.playbackRate = speeds[speedIndex];
-                            audio.play().then(() => playBtn.innerHTML = ICONS.pause).catch(() => playBtn.innerHTML = ICONS.play);
+                    audio.addEventListener("loadedmetadata", () => {
+                        if (segToken === myToken && Math.abs(audio.currentTime - res.startSec) > 0.3) {
+                            audio.currentTime = res.startSec;         // zaxira tekshiruv
                         }
                     }, { once: true });
+                    audio.play()
+                        .then(() => { if (segToken === myToken) playBtn.innerHTML = ICONS.pause; })
+                        .catch(() => { if (segToken === myToken) playBtn.innerHTML = ICONS.play; });
                     preloadNextVerse();
                     return;
                 } else if (audio.paused || Math.abs(audio.currentTime - res.startSec) > 0.15) {
