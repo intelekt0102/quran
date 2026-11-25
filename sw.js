@@ -8,7 +8,7 @@
  *
  * Yangi versiya chiqarganda CACHE_VERSION ni oshiring (masalan v2).
  */
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const SHELL_CACHE = `quran-shell-${CACHE_VERSION}`;
 const IMAGE_CACHE = 'quran-images-v1';   // rasmlar versiyaga bog'lanmagan: yangilanganda qayta yuklanmasin
 const FONT_CACHE = 'quran-fonts-v1';
