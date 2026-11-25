@@ -2845,6 +2845,16 @@
                     title="Такрорлар сони (0 = чексиз)">
             </div>
 
+            <button class="icon-btn" onclick="toggleStopAfterVerse()" id="stopAfterBtn"
+                title="Бир оятдан кейин тўхташ (S)">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                    <line x1="3" y1="8.5" x2="15.5" y2="8.5"></line>
+                    <polyline points="12.5 5.5 15.5 8.5 12.5 11.5"></polyline>
+                    <line x1="14.5" y1="14" x2="19.5" y2="19"></line>
+                    <line x1="19.5" y1="14" x2="14.5" y2="19"></line>
+                </svg>
+            </button>
+
             <button class="icon-btn" onclick="toggleLoop()" id="loopBtn" title="Саҳифани такрорлаш (V)">
                 <svg class="svg-icon" viewBox="0 0 24 24">
                     <polyline points="17 1 21 5 17 9"></polyline>
@@ -2876,6 +2886,7 @@
                 <div><kbd>P</kbd>Панелларни яшириш</div>
                 <div><kbd>B</kbd>Китоб (2 бет) / 1 бет</div>
                 <div><kbd>R</kbd>Суралар рўйхати (Меню)</div>
+                <div><kbd>S</kbd>Бир оятдан кейин тўхташ</div>
                 <div><kbd>T</kbd>Таржимани очиш/ёпиш</div>
                 <div><kbd>1</kbd>А нуқтани қўйиш</div>
                 <div><kbd>3</kbd>Б нуқтани қўйиш</div>
@@ -3371,10 +3382,12 @@
         const btnA = document.getElementById("btnA");
         const btnB = document.getElementById("btnB");
         const shortcutModal = document.getElementById("shortcutModal");
+        const stopAfterBtn = document.getElementById("stopAfterBtn");
 
         let speeds = [0.5, 1, 1.25, 1.5, 2];
         let speedIndex = 1;
         let verseLoop = false;
+        let stopAfterVerse = localStorage.getItem("stopAfterVerse") === "true";
         let pageLoop = false;
         let scale = 1.0;
 
@@ -4785,6 +4798,12 @@
             showStatus(pageLoop ? "Саҳифа такрори: ёқилди" : "Саҳифа такрори: ўчирилди");
         }
 
+        function toggleStopAfterVerse() {
+            stopAfterVerse = !stopAfterVerse;
+            localStorage.setItem("stopAfterVerse", stopAfterVerse);
+            stopAfterBtn.classList.toggle("active", stopAfterVerse);
+            showStatus(stopAfterVerse ? "Бир оятдан кейин тўхташ: ёқилди" : "Узлуксиз ўқиш: ёқилди");
+        }
 
         audio.ontimeupdate = () => {
             const relTime = Math.max(0, audio.currentTime - segStart());
@@ -4859,6 +4878,15 @@
             }
 
 
+            // === YANGI QISM: "Bir oyatdan keyin to'xtash" rejimi ===
+            if (stopAfterVerse) {
+                playBtn.innerHTML = ICONS.play;
+                showStatus(verseLoop ? `Такрор тугади (${maxRepeats}х)` : "Оят тугади", 1800);
+                return;
+            }
+            // === YANGI QISM TUGADI ===
+
+
             const verses = getUniqueVersesOnOpenPages();
             const idx = verses.indexOf(currentVerse);
             if (idx !== -1 && idx + 1 < verses.length) {
@@ -4869,7 +4897,6 @@
                 nextAudio();
             }
         }
-
 
         function format(s) {
             if (isNaN(s)) return "0:00";
@@ -4893,6 +4920,7 @@
             if (e.code === "KeyO") { e.preventDefault(); memorizeViewHide(); return; }
             if (e.code === "KeyF") { e.preventDefault(); toggleFullscreen(); return; }
             if (e.code === "KeyL") { e.preventDefault(); memorizeResetPage(); return; }
+            if (e.code === "KeyS") { e.preventDefault(); toggleStopAfterVerse(); return; }
 
 
             if (e.code === "KeyH" || e.code === "Backspace") {
@@ -5281,6 +5309,7 @@
                 if (fsBtn) fsBtn.style.display = "none";
             }
             updateMuteIcon(1);
+            stopAfterBtn.classList.toggle("active", stopAfterVerse);
             applyBookModeClass();
             autoScale(true);
             updateUI("first", false, false);
