@@ -3616,7 +3616,12 @@
                 const firstVerse = lockedRange[0];
 
                 if (lockedRange.length > 1) {
-                    showStatus(`${lockedRange.length} та оят танланди`, 2500);
+                    let msg = `${lockedRange.length} та оят танланди`;
+                    if (pageLoop) {
+                        setPageLoop(false);
+                        msg += " · Саҳифа такрори ўчирилди";
+                    }
+                    showStatus(msg, 2500);
                     playVerse(firstVerse, true, false, true);
                     selectedVersesRange = lockedRange;
                     updateOverlaySelectionVisuals();
@@ -4539,10 +4544,12 @@
             verseLoop = true;
             verseLoopBtn.classList.add("active");
 
+            const cancelledPageLoop = pageLoop;
+            if (pageLoop) setPageLoop(false);
 
             startABLoop();
+            if (cancelledPageLoop) showStatus("А-Б ёқилди · Саҳифа такрори ўчирилди", 2500);
         }
-
 
         function startABLoop() {
             if (pointA === null || pointB === null) return;
@@ -4791,18 +4798,55 @@
         }
 
 
-        function toggleLoop() {
-            pageLoop = !pageLoop;
+        function setPageLoop(on) {
+            pageLoop = on;
             audio.loop = false;
-            loopBtn.classList.toggle("active", pageLoop);
-            showStatus(pageLoop ? "Саҳифа такрори: ёқилди" : "Саҳифа такрори: ўчирилди");
+            loopBtn.classList.toggle("active", on);
+        }
+
+        function setStopAfter(on) {
+            stopAfterVerse = on;
+            localStorage.setItem("stopAfterVerse", on);
+            stopAfterBtn.classList.toggle("active", on);
+        }
+
+        function toggleLoop() {
+            const turnOn = !pageLoop;
+            const cancelled = [];
+
+            if (turnOn) {
+                if (stopAfterVerse) {
+                    setStopAfter(false);
+                    cancelled.push("тўхташ");
+                }
+                if (isABLooping || pointA !== null || pointB !== null) {
+                    clearABLoop(true);
+                    cancelled.push("А-Б");
+                }
+                if (selectedVersesRange.length > 1) {
+                    selectedVersesRange = currentVerse ? [currentVerse] : [];
+                    currentRepeatCount = 0;
+                    updateOverlaySelectionVisuals();
+                    cancelled.push("оралиқ");
+                }
+            }
+
+            setPageLoop(turnOn);
+            let msg = turnOn ? "Саҳифа такрори: ёқилди" : "Саҳифа такрори: ўчирилди";
+            if (cancelled.length) msg += " · ўчирилди: " + cancelled.join(", ");
+            showStatus(msg, 2500);
         }
 
         function toggleStopAfterVerse() {
-            stopAfterVerse = !stopAfterVerse;
-            localStorage.setItem("stopAfterVerse", stopAfterVerse);
-            stopAfterBtn.classList.toggle("active", stopAfterVerse);
-            showStatus(stopAfterVerse ? "Бир оятдан кейин тўхташ: ёқилди" : "Узлуксиз ўқиш: ёқилди");
+            const turnOn = !stopAfterVerse;
+            setStopAfter(turnOn);
+
+            let msg = turnOn ? "Бир оятдан кейин тўхташ: ёқилди" : "Узлуксиз ўқиш: ёқилди";
+            if (turnOn && pageLoop) {
+                setPageLoop(false);
+                msg += " · Саҳифа такрори ўчирилди";
+            }
+            showStatus(msg, 2500);
         }
 
         audio.ontimeupdate = () => {
