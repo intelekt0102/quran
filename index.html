@@ -4553,6 +4553,7 @@
 
 
         function setPointA() {
+            const wasLooping = isABLooping;
             pointA = Math.max(segStart(), audio.currentTime - OFFSET);
             btnA.classList.add("active");
             btnB.classList.remove("active");
@@ -4561,6 +4562,11 @@
             abRepeatCount = 0;
             if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
             if (abGapTimer) { clearTimeout(abGapTimer); abGapTimer = null; }
+            if (wasLooping && audio.paused) {
+                audio.play()
+                    .then(() => { playBtn.innerHTML = ICONS.pause; })
+                    .catch(() => { playBtn.innerHTML = ICONS.play; });
+            }
             showStatus(`А: ${format(pointA - segStart())}`);
         }
 
@@ -4647,9 +4653,9 @@
         }
 
 
-        function clearABLoop(silent = false) {
+        function clearABLoop(silent = false, resumeIfGap = false) {
             const hadAB = (pointA !== null || pointB !== null || isABLooping);
-
+            const wasLooping = isABLooping;
 
             pointA = null;
             pointB = null;
@@ -4660,12 +4666,10 @@
             btnA.classList.remove("active");
             btnB.classList.remove("active");
 
-
             if (hadAB || !silent) {
                 verseLoop = false;
                 verseLoopBtn.classList.remove("active");
             }
-
 
             if (!silent) {
                 if (selectedVersesRange.length > 1 && currentVerse) {
@@ -4676,6 +4680,13 @@
                 } else {
                     showStatus("Такрорлаш ўчирилди");
                 }
+            }
+
+            // A-B orasidagi pauzada bekor qilinsa, audio jim qolib ketmasin
+            if (wasLooping && audio.paused && (!silent || resumeIfGap)) {
+                audio.play()
+                    .then(() => { playBtn.innerHTML = ICONS.pause; })
+                    .catch(() => { playBtn.innerHTML = ICONS.play; });
             }
         }
 
@@ -4688,7 +4699,7 @@
             if (!isABSet()) return false;
             const EPS = 0.1;   // progress yurgizgichining qadami
             if (t >= pointA - EPS && t <= pointB + EPS) return false;
-            clearABLoop(true);
+            clearABLoop(true, true);
             showStatus("А-Б бекор қилинди", 2000);
             return true;
         }
@@ -4871,7 +4882,7 @@
                     cancelled.push("тўхташ");
                 }
                 if (isABLooping || pointA !== null || pointB !== null) {
-                    clearABLoop(true);
+                    clearABLoop(true, true);
                     cancelled.push("А-Б");
                 }
                 if (selectedVersesRange.length > 1) {
@@ -4934,6 +4945,7 @@
             if (seg && segFinished) return;
             if (seg) segFinished = true;
             handleVerseEnded();
+            if (audio.paused || audio.ended) playBtn.innerHTML = ICONS.play;
         };
 
 
@@ -5053,8 +5065,8 @@
                 case "0": e.preventDefault(); restartVerse(); break;
                 case "4": e.preventDefault(); seekBy(-2); break;
                 case "6": e.preventDefault(); seekBy(2); break;
-                case "2": e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
-                case "8": e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
+                case "2": e.preventDefault(); setVolume(audio.volume - 0.1); break;
+                case "8": e.preventDefault(); setVolume(audio.volume + 0.1); break;
             }
         };
 
@@ -5402,6 +5414,12 @@
             }, 250);
         }
 
+        function setVolume(v) {
+            v = Math.min(1, Math.max(0, Math.round(v * 100) / 100));
+            audio.volume = v;
+            volume.value = v;
+            updateMuteIcon(v);
+        }
 
         function initQuranApp() {
             if (appInitialized) return;
