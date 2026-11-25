@@ -4054,6 +4054,16 @@
             audio.currentTime = segStart();
         }
 
+        function restartVerse() {
+            const wasPaused = audio.paused;
+            seekVerseStart();
+            if (wasPaused) {
+                audio.play()
+                    .then(() => { playBtn.innerHTML = ICONS.pause; })
+                    .catch(() => { playBtn.innerHTML = ICONS.play; });
+            }
+            showStatus("Бошига қайтиш");
+        }
 
         setInterval(() => {
             if (!seg || seg.endSec === null) return;
@@ -4989,7 +4999,7 @@
                     if (!e.ctrlKey) { e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom(); } break;
                 case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "х"; break;
                 case "9": e.preventDefault(); toggleVerseLoop(); break;
-                case "0": e.preventDefault(); seekVerseStart(); showStatus("Бошига"); break;
+                case "0": e.preventDefault(); restartVerse(); showStatus("Бошига қайтиш"); break;
                 case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2с"); break;
                 case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2с"); break;
                 case "2": e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
