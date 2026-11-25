@@ -3119,8 +3119,9 @@
 
         function seekBy(sec) {
             const t = audio.currentTime + sec;
-            audio.currentTime = sec < 0 ? Math.max(segStart(), t) : Math.min(segEnd() || t, t);
-            showStatus(sec < 0 ? `${sec}с` : `+${sec}с`);
+            const target = sec < 0 ? Math.max(segStart(), t) : Math.min(segEnd() || t, t);
+            audio.currentTime = target;
+            if (!cancelABIfOutside(target)) showStatus(sec < 0 ? `${sec}с` : `+${sec}с`);
         }
 
         function toggleFullscreen() {
@@ -3635,6 +3636,10 @@
                         setPageLoop(false);
                         msg += " · Саҳифа такрори ўчирилди";
                     }
+                    if (stopAfterVerse) {
+                        setStopAfter(false);
+                        msg += " · Тўхташ ўчирилди";
+                    }
                     showStatus(msg, 2500);
                     playVerse(firstVerse, true, false, true);
                     selectedVersesRange = lockedRange;
@@ -4069,6 +4074,15 @@
         }
 
         function restartVerse() {
+            if (!audio.src || !currentVerse) {
+                togglePlay();   // oyat tanlanmagan: sahifaning birinchi oyatidan boshlaydi
+                return;
+            }
+            // A-B bor bo'lsa: A dan boshlab B gacha
+            if (isABSet()) {
+                startABLoop();
+                return;
+            }
             const wasPaused = audio.paused;
             seekVerseStart();
             if (wasPaused) {
@@ -4665,6 +4679,19 @@
             }
         }
 
+        function isABSet() {
+            return pointA !== null && pointB !== null;
+        }
+
+        // Qo'lda siljitilgan joy A-B oralig'idan tashqarida bo'lsa, A-B ni bekor qiladi
+        function cancelABIfOutside(t) {
+            if (!isABSet()) return false;
+            const EPS = 0.1;   // progress yurgizgichining qadami
+            if (t >= pointA - EPS && t <= pointB + EPS) return false;
+            clearABLoop(true);
+            showStatus("А-Б бекор қилинди", 2000);
+            return true;
+        }
 
         function toggleMute() {
             if (audio.volume > 0) {
@@ -4866,9 +4893,17 @@
             setStopAfter(turnOn);
 
             let msg = turnOn ? "Бир оятдан кейин тўхташ: ёқилди" : "Узлуксиз ўқиш: ёқилди";
-            if (turnOn && pageLoop) {
-                setPageLoop(false);
-                msg += " · Саҳифа такрори ўчирилди";
+            if (turnOn) {
+                if (pageLoop) {
+                    setPageLoop(false);
+                    msg += " · Саҳифа такрори ўчирилди";
+                }
+                if (selectedVersesRange.length > 1) {
+                    selectedVersesRange = currentVerse ? [currentVerse] : [];
+                    currentRepeatCount = 0;
+                    updateOverlaySelectionVisuals();
+                    msg += " · Оралиқ ўчирилди";
+                }
             }
             showStatus(msg, 2500);
         }
@@ -4883,7 +4918,9 @@
             document.getElementById("durTime").innerText = format(relDur);
         };
         progress.oninput = () => {
-            audio.currentTime = segStart() + parseFloat(progress.value);
+            const target = segStart() + parseFloat(progress.value);
+            audio.currentTime = target;
+            cancelABIfOutside(target);
             const max = parseFloat(progress.max) || 0;
             progress.style.setProperty("--pct", (max > 0 ? (parseFloat(progress.value) / max) * 100 : 0) + "%");
         };
@@ -5013,9 +5050,9 @@
                     if (!e.ctrlKey) { e.preventDefault(); scale = Math.max(scale - 0.1, 0.4); applyZoom(); } break;
                 case "*": e.preventDefault(); speedIndex = (speedIndex + 1) % speeds.length; audio.playbackRate = speeds[speedIndex]; speedBtn.innerText = speeds[speedIndex] + "х"; break;
                 case "9": e.preventDefault(); toggleVerseLoop(); break;
-                case "0": e.preventDefault(); restartVerse(); showStatus("Бошига қайтиш"); break;
-                case "4": e.preventDefault(); audio.currentTime = Math.max(segStart(), audio.currentTime - 2); showStatus("-2с"); break;
-                case "6": e.preventDefault(); audio.currentTime = Math.min(segEnd(), audio.currentTime + 2); showStatus("+2с"); break;
+                case "0": e.preventDefault(); restartVerse(); break;
+                case "4": e.preventDefault(); seekBy(-2); break;
+                case "6": e.preventDefault(); seekBy(2); break;
                 case "2": e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
                 case "8": e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.1); volume.value = audio.volume; updateMuteIcon(audio.volume); break;
             }
